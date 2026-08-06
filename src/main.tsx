@@ -1,4 +1,5 @@
 import React from "react";
+import App from "./pages/App";
 import ReactDOM from "react-dom/client";
 import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
@@ -19,7 +20,7 @@ ReactDOM.createRoot(document.body).render(
       <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <>hello</>
+        <App />
       </ThemeProvider>
     </StyledEngineProvider>
   </React.StrictMode>

@@ -5,13 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "icon:16": "sharp -i public/icon/icon.svg -o public/icon/16.png resize 16",
+    "icon:32": "sharp -i public/icon/icon.svg -o public/icon/32.png resize 32",
+    "icon:48": "sharp -i public/icon/icon.svg -o public/icon/48.png resize 48",
+    "icon:96": "sharp -i public/icon/icon.svg -o public/icon/96.png resize 96",
+    "icon:128": "sharp -i public/icon/icon.svg -o public/icon/128.png resize 128",
+    "generate-icons": "pnpm run icon:16 && pnpm run icon:32 && pnpm run icon:48 && pnpm run icon:96 && pnpm run icon:128"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^9.2.0",
-    "@mui/material": "^9.2.0",
+    "@mui/icons-material": "^9.3.0",
+    "@mui/material": "^9.3.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
@@ -21,6 +27,7 @@
     "@types/react-dom": "^19.2.4",
     "@types/webextension-polyfill": "^0.12.5",
     "@vitejs/plugin-react": "^6.0.5",
+    "sharp-cli": "^5.2.0",
     "tailwindcss": "^4.3.3",
     "typescript": "~7.0.2",
     "vite": "^8.2.0",

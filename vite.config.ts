@@ -6,6 +6,7 @@ import webExtension, { readJsonFile } from "vite-plugin-web-extension";
 function generateManifest() {
   const manifest = readJsonFile("src/manifest.json");
   const pkg = readJsonFile("package.json");
+  console.log("Manifest:", manifest);
   return {
     name: pkg.name,
     description: pkg.description,
