@@ -1,28 +1,29 @@
-# SiteBlocker
+# SiteBlocker Overview
 
-> ## manifest.json
+## Easy way to block distracting websites to prevent access while you work
 
-```json
-{
-  "{{chrome}}.manifest_version": 3,
-  "{{firefox}}.manifest_version": 2,
-  "icons": {
-    "16": "icon/16.png",
-    "32": "icon/32.png",
-    "48": "icon/48.png",
-    "96": "icon/96.png",
-    "128": "icon/128.png"
-  },
-  "{{chrome}}.action": {
-    "default_popup": "src/popup.html"
-  },
-  "{{firefox}}.browser_action": {
-    "default_popup": "src/popup.html"
-  },
-  "background": {
-    "{{chrome}}.service_worker": "src/background.ts",
-    "{{firefox}}.scripts": ["src/background.ts"]
-  }
-}
+> ## Key Features :-
 
-```
+- URL Blocking:
+Block distracting and harmful websites, including subdomains.
+
+- Keyword Blocking:
+Specify keywords or phrases; all websites containing these words will be blocked.
+
+- White List:
+Activate this option to block all websites except those included in the whitelist.
+
+- Redirect Option:
+Redirect blocked sites to any specified URL
+
+- Password Protection:
+Secure the options page with a password to prevent easy removal of blocked sites.
+
+- Custom Rules
+Keyword based control. Allow or block access to a specific site only if the URL contains specific keyword
+
+- Advanced Rules
+Block specific resource types based on URL patterns.
+
+- White & Black Time Configuration:
+Customize your daily schedule with the Scheduling feature, allowing you to set specific days and times for accessing certain sites. Stay focused and maintain daily routines effortlessly.

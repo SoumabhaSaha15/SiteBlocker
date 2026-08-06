@@ -1,26 +1,27 @@
+import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import webExtension, { readJsonFile } from "vite-plugin-web-extension";
 
-function generateManifest() {
-  const manifest = readJsonFile("src/manifest.json");
-  const pkg = readJsonFile("package.json");
-  console.log("Manifest:", manifest);
-  return {
-    name: pkg.name,
-    description: pkg.description,
-    version: pkg.version,
-    ...manifest,
-  };
-}
-export default defineConfig({
-  plugins: [
-    tailwindcss(),
-    react(),
-    webExtension({
-      manifest: generateManifest,
-      additionalInputs: ["src/index.html"],
-    }),
-  ],
+const pkg = readJsonFile("package.json");
+const manifest = readJsonFile("src/manifest.json");
+
+export default defineConfig((_) => {
+  return ({
+    plugins: [
+      tailwindcss(),
+      react(),
+      svgr(),
+      webExtension({
+        manifest: () => ({
+          name: pkg.name,
+          description: pkg.description,
+          version: pkg.version,
+          ...manifest,
+        }),
+        additionalInputs: ["src/index.html"],
+      }),
+    ],
+  })
 });
