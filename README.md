@@ -1,4 +1,4 @@
-# SiteBlocker Overview
+# ![icon](./public/icon/32.png)  SiteBlocker Overview
 
 ## Easy way to block distracting websites to prevent access while you work
 

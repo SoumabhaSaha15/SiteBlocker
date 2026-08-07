@@ -1,3 +1,4 @@
+import path from "path";
 import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
@@ -9,6 +10,11 @@ const manifest = readJsonFile("src/manifest.json");
 
 export default defineConfig((_) => {
   return ({
+    resolve: {
+      alias: {
+        "@": path.resolve("./src"),
+      },
+    },
     plugins: [
       tailwindcss(),
       react(),
