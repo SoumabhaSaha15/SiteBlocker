@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { SnackbarProvider } from 'notistack';
 const darkTheme = createTheme({
   colorSchemes: {
     dark: true,
@@ -20,7 +21,9 @@ ReactDOM.createRoot(document.body).render(
       <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <App />
+        <SnackbarProvider maxSnack={3}>
+          <App />
+        </SnackbarProvider>
       </ThemeProvider>
     </StyledEngineProvider>
   </React.StrictMode>
