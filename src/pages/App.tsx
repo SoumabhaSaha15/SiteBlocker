@@ -1,12 +1,16 @@
 import { useState } from 'react';
-import BrandIcon from "./../icon.svg?react";
+import BrandIcon from "@/icon.svg?react";
+import { DevTool } from "@hookform/devtools";
+import DoneIcon from '@mui/icons-material/Done';
+import LockIcon from '@mui/icons-material/Lock';
 import Typography from '@mui/material/Typography';
 import { zodResolver } from "@hookform/resolvers/zod";
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useSnackbar, type OptionsObject } from 'notistack';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { AppList, MENU_LIST, APP_MAP } from '@/utils/constants';
-import { verifyAppPassword, DEFAULT_PASSWORD } from "@/utils/password";
+import { verifyAppPassword, DEFAULT_PASSWORD, isPasswordUpdated } from "@/utils/password";
 import { passwordSchema, type PasswordFormData } from "@/validator/password";
 import { Drawer, AppBar, SvgIcon, Toolbar, ListItem, ListItemText, ListItemButton, Box, List, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from '@mui/material';
 
@@ -25,13 +29,16 @@ type PasswordProtectorProps = {
 }
 export default function App() {
   const [isAppDisabled, setIsAppDisabled] = useState<boolean>(true);
-  const [app, setApp] = useState<AppList>(AppList.DEFAULT);
+  const [app, setApp] = useState<AppList>(AppList.HOME);
   return (
     <Box className="flex">
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <AppBar position="fixed" sx={{
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        backgroundColor: (theme) => theme.palette.primary.main
+      }}>
         <Toolbar>
-          <SvgIcon className='text-3xl mx-1.5' viewBox='0 0 32 32' component={BrandIcon} />
-          <Typography variant="h6" noWrap component="div">
+          <SvgIcon className='text-3xl mx-1.5' viewBox='0 0 32 32' component={BrandIcon} sx={{ border: (theme) => theme.palette.primary.contrastText }} />
+          <Typography variant="h6" noWrap component="div" sx={{ color: (theme) => theme.palette.primary.contrastText }}>
             Site Blocker
           </Typography>
         </Toolbar>
@@ -45,11 +52,11 @@ export default function App() {
         <Box className="overflow-auto">
           <List>
             {MENU_LIST.map(({ name, icon, appKey }) => (
-              <ListItem key={name} disablePadding>
+              <ListItem key={name} disablePadding >
                 <ListItemButton disabled={isAppDisabled} onClick={() => {
                   setApp(appKey);
                 }}>
-                  <ListItemIcon>
+                  <ListItemIcon sx={{ color: (theme) => theme.palette.primary.dark }}>
                     {icon}
                   </ListItemIcon>
                   <ListItemText primary={name} />
@@ -70,6 +77,7 @@ export default function App() {
 function PasswordProtection(props: PasswordProtectorProps) {
 
   const { enqueueSnackbar } = useSnackbar();
+
   const onSubmit: SubmitHandler<PasswordFormData> = async (data: PasswordFormData) => {
     const isValid = await verifyAppPassword(data.password);
     if (isValid) {
@@ -93,6 +101,7 @@ function PasswordProtection(props: PasswordProtectorProps) {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<PasswordFormData>({
     resolver: zodResolver(passwordSchema),
@@ -106,7 +115,6 @@ function PasswordProtection(props: PasswordProtectorProps) {
       {(!props.open) && APP_MAP[props.app]}
       <Dialog
         open={props.open}
-        onClose={() => { }}
         slotProps={{
           paper: {
             className: "min-w-96"
@@ -124,26 +132,45 @@ function PasswordProtection(props: PasswordProtectorProps) {
               autoFocus
               margin="dense"
               id="Password"
-              name="Password"
               label="Password"
               type="password"
               fullWidth
-              variant="filled"
+              slotProps={{
+                input: {
+                  endAdornment: <LockIcon />
+                }
+              }}
+              variant="outlined"
               disabled={isSubmitting}
               error={!!errors.password}
               helperText={errors.password?.message}
             />
           </form>
         </DialogContent>
-        <DialogActions className='flex w-full justify-center items-center'>
-          <Button type="button" variant='contained' className='w-full'>
+        <DialogActions
+          className='flex w-full justify-center items-center'
+        >
+          <Button
+            type="button"
+            variant='outlined'
+            startIcon={<FileDownloadIcon />}
+            // sx={{ backgroundColor: (theme) => theme.palette.secondary.dark }}
+            className='w-full'
+          >
             export
           </Button>
-          <Button variant='contained' type='submit' className='w-full' form='password-form'>
+          <Button
+            type='submit'
+            variant='contained'
+            startIcon={<DoneIcon />}
+            className='w-full'
+            form='password-form'
+          >
             submit
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog >
+      <DevTool control={control} />
     </>
   );
 }

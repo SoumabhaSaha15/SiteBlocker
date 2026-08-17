@@ -9,21 +9,26 @@ export async function hashPassword(password: string): Promise<string> {
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
-const PASSWORD_KEY = 'site_blocker_password_hash_15_09_2003';
+const PASSWORD_KEY = 'SITE_BLOCKER_HASH';
 
 export async function setAppPassword(newPassword: string): Promise<void> {
   const hash = await hashPassword(newPassword);
   await browser.storage.local.set({ [PASSWORD_KEY]: hash });
 }
 
+export async function isPasswordUpdated() {
+  const result = await browser.storage.local.get(PASSWORD_KEY);
+  const storedHash = result[PASSWORD_KEY];
+  return !!storedHash;
+}
+
 export async function verifyAppPassword(inputPassword: string): Promise<boolean> {
-  try {
-    const result = await browser.storage.local.get(PASSWORD_KEY);
-    const storedHash = result[PASSWORD_KEY];
+  const result = await browser.storage.local.get(PASSWORD_KEY);
+  const storedHash = result[PASSWORD_KEY];
+  if (storedHash) {
     const inputHash = await hashPassword(inputPassword);
     return inputHash === storedHash;
-  } catch (error) {
-    const defaultHash = await hashPassword(DEFAULT_PASSWORD);
-    return (await hashPassword(inputPassword)) === defaultHash;
   }
+  const defaultHash = await hashPassword(DEFAULT_PASSWORD);
+  return (await hashPassword(inputPassword)) === defaultHash;
 }
