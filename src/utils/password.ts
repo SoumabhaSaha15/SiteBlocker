@@ -1,7 +1,5 @@
 import browser from 'webextension-polyfill';
 
-export const DEFAULT_PASSWORD = "site_blocker_webdude";
-
 export async function hashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
@@ -10,25 +8,26 @@ export async function hashPassword(password: string): Promise<string> {
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 const PASSWORD_KEY = 'SITE_BLOCKER_HASH';
+const PASSWORD_PROTECTED_KEY = 'PasswordProtected';
 
 export async function setAppPassword(newPassword: string): Promise<void> {
   const hash = await hashPassword(newPassword);
   await browser.storage.local.set({ [PASSWORD_KEY]: hash });
 }
 
-export async function isPasswordUpdated() {
-  const result = await browser.storage.local.get(PASSWORD_KEY);
-  const storedHash = result[PASSWORD_KEY];
-  return !!storedHash;
+export async function getPasswordProtected(): Promise<boolean> {
+  const result = await browser.storage.local.get(PASSWORD_PROTECTED_KEY);
+  return result[PASSWORD_PROTECTED_KEY] === true;
+}
+
+export async function setPasswordProtected(passwordProtected: boolean): Promise<void> {
+  await browser.storage.local.set({ [PASSWORD_PROTECTED_KEY]: passwordProtected });
 }
 
 export async function verifyAppPassword(inputPassword: string): Promise<boolean> {
   const result = await browser.storage.local.get(PASSWORD_KEY);
   const storedHash = result[PASSWORD_KEY];
-  if (storedHash) {
-    const inputHash = await hashPassword(inputPassword);
-    return inputHash === storedHash;
-  }
-  const defaultHash = await hashPassword(DEFAULT_PASSWORD);
-  return (await hashPassword(inputPassword)) === defaultHash;
+  if (!storedHash) return false;
+  const inputHash = await hashPassword(inputPassword);
+  return inputHash === storedHash;
 }

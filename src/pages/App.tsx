@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import browser from 'webextension-polyfill';
 import BrandIcon from "@/icon.svg?react";
-import { DevTool } from "@hookform/devtools";
 import MenuIcon from '@mui/icons-material/Menu';
 import DoneIcon from '@mui/icons-material/Done';
 import LockIcon from '@mui/icons-material/Lock';
@@ -13,7 +13,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useSnackbar, type OptionsObject } from 'notistack';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { AppList, MENU_LIST, APP_MAP } from '@/utils/constants';
-import { verifyAppPassword, DEFAULT_PASSWORD } from "@/utils/password";
+import { getPasswordProtected, verifyAppPassword } from "@/utils/password";
 import { passwordSchema, type PasswordFormData } from "@/validator/password";
 import {
   Drawer,
@@ -42,9 +42,11 @@ const SNACK_OPTION: OptionsObject = {
 const DRAWER_WIDTH = 240;
 
 type PasswordProtectorProps = {
-  app: AppList;
-  execute: (value: boolean | ((prevState: boolean) => boolean)) => void;
-  open: boolean;
+  passwordProtected: boolean;
+  unlocked: boolean;
+  setUnlocked: (value: boolean) => void;
+  dismissed: boolean;
+  setDismissed: (value: boolean) => void;
 };
 
 interface AppProps {
@@ -53,7 +55,10 @@ interface AppProps {
 
 export default function App(props: AppProps) {
   const { window } = props;
-  const [isAppDisabled, setIsAppDisabled] = useState<boolean>(true);
+  const [passwordProtected, setPasswordProtectedState] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(true);
+  const [isPasswordStateLoaded, setIsPasswordStateLoaded] = useState(false);
+  const [passwordDialogDismissed, setPasswordDialogDismissed] = useState(false);
   const [app, setApp] = useState<AppList>(AppList.HOME);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -73,6 +78,29 @@ export default function App(props: AppProps) {
     }
   };
 
+  useEffect(() => {
+    getPasswordProtected().then((protectedState) => {
+      setPasswordProtectedState(protectedState);
+      setIsUnlocked(!protectedState);
+      setIsPasswordStateLoaded(true);
+    });
+
+    const handleStorageChange = (changes: Record<string, { newValue?: unknown }>) => {
+      const change = changes.PasswordProtected;
+      if (change) {
+        const protectedState = change.newValue === true;
+        setPasswordProtectedState(protectedState);
+        setIsUnlocked(!protectedState);
+        setPasswordDialogDismissed(false);
+      }
+    };
+
+    browser.storage.onChanged.addListener(handleStorageChange);
+    return () => browser.storage.onChanged.removeListener(handleStorageChange);
+  }, []);
+
+  const isAppLocked = passwordProtected && !isUnlocked;
+
   const drawerContent = (
     <div>
       <Toolbar />
@@ -81,7 +109,7 @@ export default function App(props: AppProps) {
           {MENU_LIST.map(({ name, icon, appKey }) => (
             <ListItem key={name} disablePadding>
               <ListItemButton
-                disabled={isAppDisabled}
+                disabled={!isPasswordStateLoaded || isAppLocked}
                 onClick={() => {
                   setApp(appKey);
                   setMobileOpen(false);
@@ -189,7 +217,14 @@ export default function App(props: AppProps) {
         }}
       >
         <Toolbar />
-        <PasswordProtection app={app} open={isAppDisabled} execute={setIsAppDisabled} />
+        {isPasswordStateLoaded && (isAppLocked ? <ExportData /> : APP_MAP[app])}
+        <PasswordProtection
+          passwordProtected={passwordProtected}
+          unlocked={isUnlocked}
+          setUnlocked={setIsUnlocked}
+          dismissed={passwordDialogDismissed}
+          setDismissed={setPasswordDialogDismissed}
+        />
       </Box>
     </Box>
   );
@@ -202,19 +237,15 @@ function PasswordProtection(props: PasswordProtectorProps) {
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors, isSubmitting },
   } = useForm<PasswordFormData>({
     resolver: zodResolver(passwordSchema),
-    defaultValues: {
-      password: DEFAULT_PASSWORD,
-    },
   });
 
   const onSubmit: SubmitHandler<PasswordFormData> = async (data: PasswordFormData) => {
     const isValid = await verifyAppPassword(data.password);
     if (isValid) {
-      props.execute(false);
+      props.setUnlocked(true);
       reset();
       enqueueSnackbar({
         key: crypto.randomUUID(),
@@ -232,9 +263,9 @@ function PasswordProtection(props: PasswordProtectorProps) {
 
   return (
     <>
-      {!props.open && APP_MAP[props.app]}
       <Dialog
-        open={props.open}
+        open={props.passwordProtected && !props.unlocked && !props.dismissed}
+        onClose={() => props.setDismissed(true)}
         slotProps={{
           paper: {
             className: "min-w-96",
@@ -266,14 +297,6 @@ function PasswordProtection(props: PasswordProtectorProps) {
         </DialogContent>
         <DialogActions className="flex w-full justify-center items-center">
           <Button
-            type="button"
-            variant="outlined"
-            startIcon={<FileDownloadIcon />}
-            className="w-full"
-          >
-            export
-          </Button>
-          <Button
             type="submit"
             variant="contained"
             startIcon={<DoneIcon />}
@@ -285,7 +308,27 @@ function PasswordProtection(props: PasswordProtectorProps) {
           </Button>
         </DialogActions>
       </Dialog>
-      <DevTool control={control} />
     </>
+  );
+}
+
+function ExportData() {
+  const exportData = async () => {
+    const data = await browser.storage.local.get(null);
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'site-blocker-data.json';
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <Box className="flex min-h-full items-center justify-center">
+      <Button variant="contained" startIcon={<FileDownloadIcon />} onClick={exportData}>
+        Export data
+      </Button>
+    </Box>
   );
 }

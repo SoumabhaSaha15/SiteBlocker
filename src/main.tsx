@@ -10,15 +10,15 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const darkTheme = createTheme(
   {
-    colorSchemes: { ...m3Tokens, dark: true },
+    colorSchemes: { ...m3Tokens, },
     palette: { mode: "dark" },
     typography: { fontFamily: '"Roboto", serif' },
-    shape: { borderRadius: 20 },
+    shape: { borderRadius: 12 },
     components: {
       MuiButton: {
         styleOverrides: {
           root: {
-            borderRadius: 50, // Pill-shaped buttons
+            borderRadius: 12, // Pill-shaped buttons
             textTransform: 'none', // MD3 drops all-caps button text
           },
         },
