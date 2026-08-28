@@ -1,5 +1,5 @@
 import z from "zod";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import Add from "@mui/icons-material/AddRounded";
 import Android12Switch from "@/pages/shared/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -52,20 +52,21 @@ export default function Home() {
         }}
       >
         <ListItem
+          secondaryAction={<Android12Switch />}
           sx={{
             padding: 1,
             height: 56,
             borderRadius: 1,
             borderWidth: 1,
             borderColor: (theme) => theme.palette.text.disabled
-          }}>
+          }}
+        >
           <ListItemAvatar>
-            <Avatar>
+            <Avatar variant="rounded" sx={{ borderRadius: .5 }}>
               <PowerSettingsNewIcon fontSize="medium" />
             </Avatar>
           </ListItemAvatar>
           <ListItemText id="switch-list-label-working-status" primary="Working status" />
-          <Android12Switch />
         </ListItem>
       </List>
       <TextField
@@ -76,7 +77,14 @@ export default function Home() {
                 <IconButton
                   size="medium"
                   edge="start"
-                  sx={{ backgroundColor: (theme) => theme.palette.primary.main }}
+                  sx={{
+                    color: (theme) => theme.palette.primary.contrastText,
+                    backgroundColor: (theme) => theme.palette.primary.main,
+                    borderRadius: 0.5,
+                    ":hover": {
+                      backgroundColor: "primary.main"
+                    }
+                  }}
                   children={<Add fontSize="medium" color="inherit" />}
                   onClick={addUrl}
                 />
@@ -85,11 +93,7 @@ export default function Home() {
           }
         }}
         onChange={({ target }) => setUrl(target.value)}
-        onKeyUp={({ key }) => {
-          if (key === "Enter") {
-            addUrl();
-          }
-        }}
+        onKeyUp={({ key }) => (key === "Enter") && addUrl()}
         type='url'
         value={url}
         sx={{ minWidth: "min(640px,80%)" }}
@@ -105,7 +109,8 @@ export default function Home() {
         sx={{
           minWidth: "min(640px,80%)",
           borderWidth: 1,
-          borderRadius: 1
+          borderRadius: 1,
+          borderColor: (theme) => theme.palette.text.disabled
         }}
       >
         {(!sites.length) && (
@@ -114,11 +119,10 @@ export default function Home() {
               padding: 1,
               borderRadius: 1,
               height: 56,
-              boxShadow: (theme) => theme.palette.primary.main
             }}
           >
             <ListItemAvatar>
-              <Avatar children={<NotInterestedIcon />} variant="circular" />
+              <Avatar children={<NotInterestedIcon />} variant="rounded" sx={{ borderRadius: .5 }} />
             </ListItemAvatar>
             <ListItemText
               primary={"Empty list"}
@@ -130,26 +134,29 @@ export default function Home() {
           const urlObject = new URL(item);
 
           return (
-            <>
+            <Fragment key={index}>
               <ListItem
                 secondaryAction={
                   <IconButton edge="start" aria-label="delete" onClick={() => deleteUrl(item)} color="error">
                     <DeleteIcon />
                   </IconButton>
                 }
-                key={index}
-                sx={{ padding: 1, borderRadius: 1, height: 56, boxShadow: (theme) => theme.palette.primary.main }}
+                sx={{
+                  padding: 1,
+                  borderRadius: 1,
+                  height: 56,
+                }}
               >
                 <ListItemAvatar>
-                  <Avatar alt={urlObject.host} src={getIcon(urlObject.hostname)} variant="square" />
+                  <Avatar alt={urlObject.host} src={getIcon(urlObject.hostname)} sx={{ borderRadius: 0.5 }} />
                 </ListItemAvatar>
                 <ListItemText
                   primary={urlObject.hostname}
                   secondary={urlObject.href}
                 />
               </ListItem>
-              <Divider component={"li"} />
-            </>
+              {((sites.length - 1) !== index) && (<Divider component={"li"} sx={{ borderColor: (theme) => theme.palette.text.disabled }} />)}
+            </Fragment>
           )
         })}
       </List>

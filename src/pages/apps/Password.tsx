@@ -94,13 +94,15 @@ export default function Password() {
             borderColor: (theme) => theme.palette.text.disabled
           }}
         >
-          <ListItem sx={{ padding: 1, height: 56, }}>
+          <ListItem sx={{ padding: 1, height: 56, }} secondaryAction={<Android12Switch checked={passwordProtected} onChange={handleProtectionChange} />}>
             <ListItemIcon>
               <PasswordIcon />
             </ListItemIcon>
-            <ListItemText id="switch-list-label-password" primary="Protection"
-              secondary={passwordProtected ? "On" : "Off"} />
-            <Android12Switch checked={passwordProtected} onChange={handleProtectionChange} />
+            <ListItemText
+              id="switch-list-label-password"
+              primary="Protection"
+              secondary={passwordProtected ? "On" : "Off"}
+            />
           </ListItem>
         </List>
 
