@@ -8,3 +8,5 @@ browser.action.onClicked.addListener(() => {
     url: browser.runtime.getURL("src/index.html"),
   });
 });
+
+// browser.action.

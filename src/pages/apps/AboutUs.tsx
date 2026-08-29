@@ -1,135 +1,177 @@
 import { Fragment } from 'react';
 import { getIcon } from '@/utils/links';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { Box, Divider, List, ListItemAvatar, ListItem, ListItemText, Avatar, IconButton, Typography, Card, CardContent, CardMedia } from "@mui/material";
+import {
+  Box,
+  Divider,
+  List,
+  ListItemAvatar,
+  ListItem,
+  ListItemText,
+  Avatar,
+  IconButton,
+  Typography,
+  Card,
+  CardContent,
+  CardMedia,
+  Tooltip,
+  Chip
+} from '@mui/material';
+
+const PRIMARY_LINKS = [
+  {
+    tooltip: "My website",
+    link: 'https://soumabha-saha15.vercel.app',
+    image: 'https://soumabha-saha15.vercel.app/logo.svg',
+  },
+  {
+    tooltip: "My leetcode",
+    link: 'https://leetcode.com/u/SoumabhaSaha',
+    image: 'https://leetcode.com/favicon.ico',
+  },
+  {
+    tooltip: "My gmail",
+    link: 'mailto:soumabhasaha1509+portfolio@gmail.com',
+    image: 'https://ssl.gstatic.com/ui/v1/icons/mail/images/favicon_gmail_2026_v2.ico',
+  },
+];
 
 const MY_LINKS = [
-  // "mailto://soumabhasaha1509+portfolio@gmail.com",
-  "https://github.com/soumabhasaha15",
-  "https://www.linkedin.com/in/soumabha-saha-663816253",
-  "https://hashnode.com/@soumabhasaha15",
-  "https://x.com/SoumabhaSaha15",
-  "https://www.instagram.com/webdude1509",
-  "https://www.facebook.com/WebDude1509",
+  'https://github.com/soumabhasaha15',
+  'https://www.linkedin.com/in/soumabha-saha-663816253',
+  'https://hashnode.com/@soumabhasaha15',
+  'https://x.com/SoumabhaSaha15',
+  'https://www.instagram.com/webdude1509',
+  'https://www.facebook.com/WebDude1509',
 ];
-const WEBSITE = "https://soumabha-saha15.vercel.app"
-const LEETCODE = "https://leetcode.com/u/SoumabhaSaha";
+
+const openLink = (url: string) => window.open(url, '_blank')?.focus();
+
 export default function AboutUs() {
   return (
-    <Box className="flex flex-col min-h-full justify-around items-center">
+    <Box className="flex flex-col items-center gap-6 p-4 w-full">
+      {/* Profile Card */}
       <Card
+        elevation={0}
+        className="flex flex-row-reverse w-full max-w-160 rounded-2xl overflow-hidden"
         sx={{
-          display: 'flex',
-          flexDirection: "row-reverse",
-          maxWidth: "min(640px,80%)",
-          borderWidth: 1,
-          borderRadius: 1,
-          borderColor: (theme) => theme.palette.text.disabled
+          border: 1,
+          borderColor: 'divider',
+          bgcolor: 'background.paper',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            flex: 1,
-            minWidth: 0
-          }}
-        >
-          <CardContent sx={{ flex: '1 0 auto' }}>
-            <Typography component="div" variant="h5">
+        <Box className="flex flex-col flex-1 min-w-0 justify-between p-2">
+          <CardContent className="p-4 pb-2">
+            <Typography variant="h6" className="font-semibold">
               Soumabha Saha
             </Typography>
-            <Typography
-              variant="subtitle1"
-              component="div"
-              sx={{ color: 'text.secondary' }}
-            >
+            <Typography variant="body2" color="text.secondary" className="mt-1">
               Welcome to my site-blocker browser extension. My links are provided below.
             </Typography>
           </CardContent>
-          <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-            <IconButton aria-label="previous" onClick={() => window.open(WEBSITE, '_blank')?.focus()}>
-              <Avatar
-                alt={WEBSITE}
-                src={"https://soumabha-saha15.vercel.app/logo.svg"}
-                sx={{
-                  borderRadius: "50%",
-                  backgroundColor: (theme) => theme.palette.background.default,
-                }}
-              />
-            </IconButton>
-            <IconButton aria-label="previous" onClick={() => window.open(LEETCODE, '_blank')?.focus()}>
-              <Avatar
-                alt={LEETCODE}
-                src={"https://leetcode.com/favicon.ico"}
-                sx={{
-                  borderRadius: "50%",
-                  backgroundColor: (theme) => theme.palette.background.default,
-                }}
-              />
-            </IconButton>
+
+          {/* Primary Action Buttons */}
+          <Box className="flex items-center gap-1.5 px-4 pb-3">
+            {PRIMARY_LINKS.map((item) => (
+              <Tooltip title={item.tooltip} key={item.link} placement='top'>
+                <IconButton
+                  onClick={() => openLink(item.link)}
+                  size="small"
+                >
+                  <Avatar
+                    alt={item.link}
+                    src={item.image}
+                    className="w-8 h-8 rounded-lg"
+                    slotProps={{ img: { className: "object-contain p-0.5" } }}
+                    sx={{
+                      border: 0.5,
+                      borderColor: 'divider',
+                      bgcolor: theme => theme.palette.common.white,
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+            ))}
           </Box>
         </Box>
+
         <CardMedia
           component="img"
-          sx={{ width: 'min(240px,60%)', flexShrink: 0 }}
           image="/picture.png"
           alt="Soumabha Saha"
+          className="w-36 sm:w-44 object-cover shrink-0"
         />
       </Card>
-      <Divider
-        sx={{
-          minWidth: "min(640px,80%)",
-          borderColor: (theme) => theme.palette.text.disabled,
-        }}
-      />
+
+      <Divider className="w-full max-w-160" children={<Chip label="Other links" size="small" />} sx={{ borderColor: (theme) => theme.palette.text.disabled }} />
+
+      {/* Social / Portfolio Links List */}
       <List
         dense={false}
+        className="w-full max-w-160 rounded-2xl overflow-clip"
         sx={{
-          minWidth: "min(640px,80%)",
-          borderWidth: 1,
-          borderRadius: 1,
-          borderColor: (theme) => theme.palette.text.disabled
+          border: 1,
+          borderColor: 'divider',
+          bgcolor: 'background.paper',
         }}
       >
         {MY_LINKS.map((item, index) => {
-          const urlObject = new URL(item);
-          console.log(item, urlObject.hostname);
+          const { hostname, href } = new URL(item);
+
           return (
-            <Fragment key={`my-links-${index}`}>
+            <Fragment key={item}>
               <ListItem
+                className="px-3"
+                sx={{
+                  '&:hover': {
+                    bgcolor: 'action.hover',
+                  },
+                }}
                 secondaryAction={
                   <IconButton
-                    edge="start"
-                    aria-label="delete"
-                    onClick={() => window.open(item, '_blank')?.focus()}
-                    color="default"
+                    edge="end"
+                    size="small"
+                    onClick={() => openLink(item)}
+                    className='rounded-md!'
+                    sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main' } }}
                   >
-                    <OpenInNewIcon />
+                    <OpenInNewIcon fontSize="small" />
                   </IconButton>
                 }
-                sx={{
-                  padding: 1,
-                  borderRadius: 1,
-                  height: 56,
-                }}
               >
-                <ListItemAvatar>
+                <ListItemAvatar className="min-w-0 mr-3">
                   <Avatar
-                    alt={urlObject.host}
-                    src={getIcon(urlObject.hostname)}
+                    alt={hostname}
+                    src={getIcon(hostname)}
+                    variant='square'
+                    className="w-10 h-10 rounded-md"
                     sx={{
-                      borderRadius: "50%",
-                      backgroundColor: (theme) => theme.palette.common.white,
+                      border: 1,
+                      borderColor: 'divider',
+                      bgcolor: theme => theme.palette.common.white,
                     }}
                   />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={urlObject.hostname}
-                  secondary={urlObject.href}
+                  primary={
+                    <Typography variant="body2" className="font-medium capitalize truncate">
+                      {hostname}
+                    </Typography>
+                  }
+                  secondary={
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      className="truncate max-w-70 sm:max-w-none block"
+                    >
+                      {href}
+                    </Typography>
+                  }
                 />
               </ListItem>
-              {((MY_LINKS.length - 1) !== index) && (<Divider component={"li"} sx={{ borderColor: (theme) => theme.palette.text.disabled }} />)}
+              {MY_LINKS.length - 1 !== index && (
+                <Divider component="li" sx={{ borderColor: 'divider', width: "100%" }} />
+              )}
             </Fragment>
           );
         })}

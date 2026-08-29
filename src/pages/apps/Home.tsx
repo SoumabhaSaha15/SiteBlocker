@@ -1,23 +1,37 @@
 import z from "zod";
-import { useState, useEffect, Fragment } from "react";
 import Add from "@mui/icons-material/AddRounded";
 import Android12Switch from "@/pages/shared/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useState, useEffect, Fragment } from "react";
 import { getIcon, getLinks, setLinks } from "@/utils/links";
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
-import { Box, TextField, Button, Divider, List, ListItemAvatar, ListItem, ListItemText, Avatar, IconButton, InputAdornment } from "@mui/material";
+import { getWorkingStatus, setWorkingStatus, type WorkingStatus } from "@/utils/blocker";
+import {
+  Box,
+  TextField,
+  Divider,
+  List,
+  ListItemAvatar,
+  ListItem,
+  ListItemText,
+  Avatar,
+  IconButton,
+  InputAdornment,
+  Typography,
+} from "@mui/material";
 
 export default function Home() {
   const [url, setUrl] = useState("");
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [sites, setSites] = useState<string[]>([]);
+  const [isActive, setIsActive] = useState<WorkingStatus>("OFF");
 
   const addUrl = () => {
     try {
       z.url().parse(url);
-      setSites(prev => {
+      setSites((prev) => {
         const linkSet = Array.from(new Set([...prev, url]));
         setLinks(linkSet);
         return linkSet;
@@ -31,135 +45,215 @@ export default function Home() {
         setError(true);
       }
     }
-  }
+  };
 
   const deleteUrl = (selectedUrl: string) => {
-    setSites(prev => {
-      const linkSet = prev.filter(item => item !== selectedUrl);
+    setSites((prev) => {
+      const linkSet = prev.filter((item) => item !== selectedUrl);
       setLinks(linkSet);
       return linkSet;
     });
-  }
+  };
 
   useEffect(() => void getLinks().then(setSites), []);
+  useEffect(() => void getWorkingStatus().then(setIsActive), []);
 
-  return (<>
-    <Box className="flex flex-col min-h-full justify-around items-center">
+  return (
+    <Box className="flex flex-col items-center gap-6 p-4 w-full">
+      {/* Working Status Toggle */}
       <List
         dense={false}
+        className="w-full max-w-160 rounded-2xl p-1"
         sx={{
-          minWidth: "min(640px,80%)",
+          border: 1,
+          borderColor: "divider",
+          bgcolor: "background.paper",
         }}
       >
         <ListItem
-          secondaryAction={<Android12Switch />}
-          sx={{
-            padding: 1,
-            height: 56,
-            borderRadius: 1,
-            borderWidth: 1,
-            borderColor: (theme) => theme.palette.text.disabled
-          }}
+          className="h-14 px-3"
+          secondaryAction={<Android12Switch onChange={(_, checked) => setWorkingStatus(checked ? "ON" : "OFF").then(setIsActive)} checked={isActive == "ON"} />}
         >
-          <ListItemAvatar>
-            <Avatar variant="rounded" sx={{ borderRadius: .5 }}>
+          <ListItemAvatar className="min-w-0 mr-3">
+            <Avatar
+              variant="rounded"
+              className="w-12 h-12 rounded-box"
+              sx={{ bgcolor: (isActive == "ON" ? "green" : "red") }}
+            >
               <PowerSettingsNewIcon fontSize="medium" />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText id="switch-list-label-working-status" primary="Working status" />
+          <ListItemText
+            id="switch-list-label-working-status"
+            primary={
+              <Typography variant="body1" className="font-medium">
+                Working status
+              </Typography>
+            }
+            secondary={
+              <Typography
+                variant="body2"
+                className="font-medium"
+                sx={{
+                  textTransform: "lowercase",
+                  "::first-letter": {
+                    textTransform: "capitalize"
+                  }
+                }}
+              >
+                {isActive}
+              </Typography>
+            }
+          />
         </ListItem>
       </List>
+
+      {/* URL Input */}
       <TextField
+        fullWidth
+        className="max-w-160"
         slotProps={{
           input: {
+            className: "rounded-2xl",
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  size="medium"
+                  size="small"
                   edge="start"
-                  sx={{
-                    color: (theme) => theme.palette.primary.contrastText,
-                    backgroundColor: (theme) => theme.palette.primary.main,
-                    borderRadius: 0.5,
-                    ":hover": {
-                      backgroundColor: "primary.main"
-                    }
-                  }}
-                  children={<Add fontSize="medium" color="inherit" />}
+                  disabled={!url}
                   onClick={addUrl}
-                />
+                  className="rounded-lg! transition-all"
+                  sx={{
+                    color: "primary.contrastText",
+                    bgcolor: "primary.main",
+                    "&:hover": {
+                      bgcolor: "primary.dark",
+                    },
+                    "&.Mui-disabled": {
+                      bgcolor: "action.disabledBackground",
+                      color: "action.disabled",
+                    },
+                  }}
+                >
+                  <Add fontSize="small" />
+                </IconButton>
               </InputAdornment>
-            )
-          }
+            ),
+          },
         }}
         onChange={({ target }) => setUrl(target.value)}
-        onKeyUp={({ key }) => (key === "Enter") && addUrl()}
-        type='url'
+        onKeyUp={({ key }) => key === "Enter" && addUrl()}
+        type="url"
         value={url}
-        sx={{ minWidth: "min(640px,80%)" }}
         label="Add sites"
-        variant='outlined'
-        placeholder="xyz.com"
+        variant="outlined"
+        placeholder="https://example.com"
         error={error}
         helperText={errorText}
       />
-      <Divider sx={{ minWidth: "min(640px,80%)", borderWidth: 1 }} />
+
+      <Divider className="w-full max-w-160" sx={{ borderColor: "divider", borderWidth: 1 }} />
+
+      {/* Blocked Sites List */}
       <List
         dense={false}
+        className="w-full max-w-160 rounded-2xl overflow-clip"
         sx={{
-          minWidth: "min(640px,80%)",
-          borderWidth: 1,
-          borderRadius: 1,
-          borderColor: (theme) => theme.palette.text.disabled
+          border: 1,
+          borderColor: "divider",
+          bgcolor: "background.paper",
         }}
       >
-        {(!sites.length) && (
-          <ListItem
-            sx={{
-              padding: 1,
-              borderRadius: 1,
-              height: 56,
-            }}
-          >
-            <ListItemAvatar>
-              <Avatar children={<NotInterestedIcon />} variant="rounded" sx={{ borderRadius: .5 }} />
+        {!sites.length && (
+          <ListItem className="h-14">
+            <ListItemAvatar className="min-w-0 mr-3">
+              <Avatar
+                variant="rounded"
+                className="w-10 h-10 rounded-lg"
+                sx={{ bgcolor: "action.hover", color: "text.secondary" }}
+              >
+                <NotInterestedIcon fontSize="small" />
+              </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={"Empty list"}
-              secondary={"There is no blacklisted site."}
+              primary={
+                <Typography variant="body2" className="font-medium" color="text.secondary">
+                  Empty list
+                </Typography>
+              }
+              secondary={
+                <Typography variant="caption" color="text.disabled" className="block">
+                  There is no blacklisted site.
+                </Typography>
+              }
             />
           </ListItem>
         )}
+
         {sites.map((item, index) => {
           const urlObject = new URL(item);
 
           return (
-            <Fragment key={index}>
+            <Fragment key={item}>
               <ListItem
+                className="px-3"
+                sx={{
+                  "&:hover": {
+                    bgcolor: "action.hover",
+                  },
+                }}
                 secondaryAction={
-                  <IconButton edge="start" aria-label="delete" onClick={() => deleteUrl(item)} color="error">
-                    <DeleteIcon />
+                  <IconButton
+                    edge="end"
+                    size="small"
+                    aria-label="delete"
+                    onClick={() => deleteUrl(item)}
+                    color="error"
+                    className="rounded-md!"
+                    sx={{ "&:hover": { bgcolor: "error.lighter" } }}
+                  >
+                    <DeleteIcon fontSize="small" />
                   </IconButton>
                 }
-                sx={{
-                  padding: 1,
-                  borderRadius: 1,
-                  height: 56,
-                }}
               >
-                <ListItemAvatar>
-                  <Avatar alt={urlObject.host} src={getIcon(urlObject.hostname)} sx={{ borderRadius: 0.5 }} />
+                <ListItemAvatar className="min-w-0 mr-3">
+                  <Avatar
+                    alt={urlObject.host}
+                    src={getIcon(urlObject.hostname)}
+                    variant="square"
+                    className="w-10 h-10 rounded-md"
+                    slotProps={{ img: { className: "object-contain" } }}
+                    sx={{
+                      border: 1,
+                      borderColor: "divider",
+                      bgcolor: (theme) => theme.palette.common.white,
+                    }}
+                  />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={urlObject.hostname}
-                  secondary={urlObject.href}
+                  primary={
+                    <Typography variant="body2" className="font-medium capitalize truncate">
+                      {urlObject.hostname}
+                    </Typography>
+                  }
+                  secondary={
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      className="truncate max-w-70 sm:max-w-none block"
+                    >
+                      {urlObject.href}
+                    </Typography>
+                  }
                 />
               </ListItem>
-              {((sites.length - 1) !== index) && (<Divider component={"li"} sx={{ borderColor: (theme) => theme.palette.text.disabled }} />)}
+              {sites.length - 1 !== index && (
+                <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1 }} />
+              )}
             </Fragment>
-          )
+          );
         })}
       </List>
     </Box>
-  </>);
+  );
 }

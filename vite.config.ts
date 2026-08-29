@@ -26,7 +26,7 @@ export default defineConfig((_) => {
           version: pkg.version,
           ...manifest,
         }),
-        additionalInputs: ["src/index.html"],
+        additionalInputs: ["src/index.html", "src/redirect.html"],
       }),
     ],
   })

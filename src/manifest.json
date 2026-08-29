@@ -12,7 +12,11 @@
     "service_worker": "src/background.ts"
   },
   "permissions": [
+    "declarativeNetRequestFeedback",
+    "declarativeNetRequest",
     "storage",
-    "favicon"
+    "favicon",
+    "tabs",
+    "webNavigation"
   ]
 }
