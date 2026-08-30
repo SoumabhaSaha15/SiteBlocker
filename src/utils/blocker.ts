@@ -1,7 +1,7 @@
 import z from 'zod';
 import browser from 'webextension-polyfill';
 
-const statusParser = z.enum(["ON", "OFF"]).catch("OFF");
+const statusParser = z.boolean().catch(false);
 export type WorkingStatus = z.infer<typeof statusParser>;
 const STATUS_KEY = "working-status";
 
