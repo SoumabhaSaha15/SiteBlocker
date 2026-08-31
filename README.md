@@ -2,7 +2,7 @@
 
 ## Easy way to block distracting websites to prevent access while you work
 
-> ## Key Features :-
+> ### Key Features :-
 
 - URL Blocking:
 Block distracting and harmful websites, including subdomains.
@@ -27,3 +27,7 @@ Block specific resource types based on URL patterns.
 
 - White & Black Time Configuration:
 Customize your daily schedule with the Scheduling feature, allowing you to set specific days and times for accessing certain sites. Stay focused and maintain daily routines effortlessly.
+
+---
+
+> ![image](./screenshots/image.png)

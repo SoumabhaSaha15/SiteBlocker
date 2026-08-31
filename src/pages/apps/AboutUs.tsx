@@ -1,6 +1,8 @@
 import { Fragment } from 'react';
 import { getIcon } from '@/utils/links';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import LanguageIcon from '@mui/icons-material/Language';
+import EmailIcon from '@mui/icons-material/Email';
 import {
   Box,
   Divider,
@@ -22,21 +24,17 @@ const PRIMARY_LINKS = [
   {
     tooltip: "My website",
     link: 'https://soumabha-saha15.vercel.app',
-    image: 'https://soumabha-saha15.vercel.app/logo.svg',
-  },
-  {
-    tooltip: "My leetcode",
-    link: 'https://leetcode.com/u/SoumabhaSaha',
-    image: 'https://leetcode.com/favicon.ico',
+    image: LanguageIcon,
   },
   {
     tooltip: "My gmail",
     link: 'mailto:soumabhasaha1509+portfolio@gmail.com',
-    image: 'https://ssl.gstatic.com/ui/v1/icons/mail/images/favicon_gmail_2026_v2.ico',
+    image: EmailIcon,
   },
 ];
 
 const MY_LINKS = [
+  'https://leetcode.com/u/SoumabhaSaha',
   'https://github.com/soumabhasaha15',
   'https://www.linkedin.com/in/soumabha-saha-663816253',
   'https://hashnode.com/@soumabhasaha15',
@@ -79,15 +77,15 @@ export default function AboutUs() {
                   size="small"
                 >
                   <Avatar
-                    alt={item.link}
-                    src={item.image}
-                    className="w-8 h-8 rounded-lg"
-                    slotProps={{ img: { className: "object-contain p-0.5" } }}
+                    // alt={item.link}
+                    // src={item.image}
+                    className="w-10 h-10 rounded-full"
                     sx={{
-                      border: 0.5,
+                      border: 1,
                       borderColor: 'divider',
-                      bgcolor: theme => theme.palette.common.white,
+                      bgcolor: theme => theme.palette.background.paper,
                     }}
+                    children={<item.image sx={{ color: "primary.dark" }} />}
                   />
                 </IconButton>
               </Tooltip>
@@ -116,8 +114,7 @@ export default function AboutUs() {
         }}
       >
         {MY_LINKS.map((item, index) => {
-          const { hostname, href } = new URL(item);
-
+          const { hostname, href, origin } = new URL(item);
           return (
             <Fragment key={item}>
               <ListItem
@@ -142,19 +139,17 @@ export default function AboutUs() {
                 <ListItemAvatar className="min-w-0 mr-3">
                   <Avatar
                     alt={hostname}
-                    src={getIcon(hostname)}
+                    src={getIcon(origin)}
                     variant='square'
-                    className="w-10 h-10 rounded-md"
+                    className="w-10 h-10 rounded-xl"
                     sx={{
-                      border: 1,
-                      borderColor: 'divider',
-                      bgcolor: theme => theme.palette.common.white,
+                      bgcolor: theme => theme.palette.background.paper,
                     }}
                   />
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <Typography variant="body2" className="font-medium capitalize truncate">
+                    <Typography variant="body2" className="font-medium">
                       {hostname}
                     </Typography>
                   }

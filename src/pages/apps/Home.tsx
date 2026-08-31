@@ -36,7 +36,7 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
       {!sites.length && (
         <ListItem className="h-14">
           <ListItemAvatar className="min-w-0 mx-3">
-            <Avatar variant="rounded" className="w-10 h-10 rounded-lg">
+            <Avatar variant="rounded" className="w-10 h-10 rounded-xl" sx={{ backgroundColor: "red" }}>
               <NotInterestedIcon fontSize="medium" />
             </Avatar>
           </ListItemAvatar>
@@ -71,11 +71,11 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
               <ListItemAvatar className="min-w-0 mr-3">
                 <Avatar
                   alt={urlObject.host}
-                  src={getIcon(urlObject.hostname)}
+                  src={getIcon(urlObject.href)}
                   variant="square"
-                  className="w-10 h-10 rounded-md"
+                  className="w-10 h-10 rounded-xl"
                   slotProps={{ img: { className: "object-contain" } }}
-                  sx={{ border: 1, borderColor: "divider", bgcolor: (theme) => theme.palette.common.white }}
+                  sx={{ bgcolor: (theme) => theme.palette.background.paper }}
                 />
               </ListItemAvatar>
               <ListItemText
@@ -94,6 +94,7 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
 });
 
 export default function Home() {
+
   const [url, setUrl] = useState("");
   const [error, setError] = useState<null | string>(null);
   const [sites, setSites] = useState<Sites>([]);
@@ -102,6 +103,7 @@ export default function Home() {
   const addUrl = (urlString: string) => {
     addLink(urlString)
       .then((data) => {
+        setUrl("");
         setError(null);
         setSites(data);
       })
@@ -137,12 +139,17 @@ export default function Home() {
       >
         <ListItem
           className="h-14 px-3"
-          secondaryAction={<Android12Switch onChange={(_, checked) => setWorkingStatus(checked).then(setIsActive)} checked={isActive} />}
+          secondaryAction={
+            <Android12Switch
+              onChange={(_, checked) => setWorkingStatus(checked).then(setIsActive)}
+              checked={isActive}
+            />
+          }
         >
           <ListItemAvatar className="min-w-0 mr-3">
             <Avatar
               variant="rounded"
-              className="w-12 h-12 rounded-box"
+              className="w-12 h-12 rounded-xl"
               sx={{ bgcolor: (isActive ? "green" : "red") }}
             >
               <PowerSettingsNewIcon fontSize="medium" />
@@ -152,7 +159,7 @@ export default function Home() {
             id="switch-list-label-working-status"
             primary={
               <Typography variant="body1" className="font-medium">
-                Working status
+                Running
               </Typography>
             }
             secondary={
@@ -160,7 +167,7 @@ export default function Home() {
                 variant="body2"
                 className="font-medium"
               >
-                {isActive ? "On" : "Off"}
+                {isActive ? "Yes" : "No"}
               </Typography>
             }
           />

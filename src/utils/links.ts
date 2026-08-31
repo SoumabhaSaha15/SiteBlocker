@@ -6,8 +6,8 @@ export const sitesValidator = z.array(siteParser).transform(v => [... new Set(v)
 export type Sites = z.infer<typeof sitesValidator>;
 export type Site = z.infer<typeof siteParser>;
 const LINK_KEYS = "link-store";
-
-export const getIcon: (hostname: string) => string = (hostname) => `https://icons.duckduckgo.com/ip3/${hostname}.ico`;
+const ICON_SIZE = 64
+export const getIcon: (origin: string, sz?: number) => string = (origin, sz = ICON_SIZE) => `https://www.google.com/s2/favicons?domain=${origin}&sz=${sz}`;
 
 export const getLinks: () => Promise<Sites> = async () => {
   const result = (await browser.storage.local.get({ [LINK_KEYS]: [] }));

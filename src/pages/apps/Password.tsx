@@ -7,7 +7,8 @@ import { useEffect, useState, type ChangeEvent } from "react";
 import { enqueueSnackbar, type OptionsObject } from "notistack";
 import { getPasswordProtected, setAppPassword, setPasswordProtected, verifyAppPassword } from "@/utils/password";
 import { passwordSetupSchema, resetPasswordSchema, type PasswordSetupFormData, type ResetPasswordSchema } from '@/validator/password';
-import { Box, TextField, Button, Typography, List, ListItem, ListItemIcon, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Box, TextField, Button, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions, Divider } from '@mui/material';
+import { theme } from 'webextension-polyfill';
 
 const SNACK_OPTION: OptionsObject = {
   variant: "default",
@@ -84,32 +85,59 @@ export default function Password() {
 
   return (
     <>
-      <Box component={"form"} className="flex flex-col min-h-full justify-around items-center" onSubmit={handleSubmit(formSubmit)} >
+      <Box component={"form"} className="flex flex-col min-h-full items-center w-full p-4 gap-6" onSubmit={handleSubmit(formSubmit)} >
         <List
           dense={false}
+          className="w-full max-w-160 rounded-2xl p-1"
           sx={{
-            minWidth: "min(640px,80%)",
-            borderRadius: 1,
-            borderWidth: 1,
-            borderColor: (theme) => theme.palette.text.disabled
+            border: 1,
+            borderColor: "divider",
+            bgcolor: "background.paper",
           }}
         >
-          <ListItem sx={{ padding: 1, height: 56, }} secondaryAction={<Android12Switch checked={passwordProtected} onChange={handleProtectionChange} />}>
-            <ListItemIcon>
-              <PasswordIcon />
-            </ListItemIcon>
+          <ListItem
+            className="h-14 px-3"
+            secondaryAction={
+              <Android12Switch
+                checked={passwordProtected}
+                onChange={handleProtectionChange}
+              />
+            }>
+            <ListItemAvatar className="min-w-0 mr-3">
+              <Avatar
+                variant="rounded"
+                className="w-12 h-12 rounded-xl"
+                sx={{ bgcolor: (passwordProtected ? "green" : "red") }}
+              >
+                <PasswordIcon fontSize='medium' />
+              </Avatar>
+            </ListItemAvatar>
             <ListItemText
               id="switch-list-label-password"
-              primary="Protection"
-              secondary={passwordProtected ? "On" : "Off"}
+              primary={
+                <Typography variant="body1" className="font-medium">
+                  Protected
+                </Typography>
+              }
+              secondary={
+                <Typography
+                  variant="body2"
+                  className="font-medium"
+                >
+                  {passwordProtected ? "Yes" : "No"}
+                </Typography>
+              }
             />
           </ListItem>
         </List>
-
-        <Typography variant='h5' component="h5" sx={{ minWidth: "min(640px,80%)" }}>
-          {"Reset password 🔐"}
-        </Typography>
-
+        <Divider className="w-full max-w-160" sx={{ borderColor: "divider", borderWidth: 1 }} />
+        <Typography
+          variant='h5'
+          component="h5"
+          sx={{ borderColor: "divider", borderWidth: 1 }}
+          className='w-full max-w-160 p-2 rounded-xl text-center'
+          children={"Reset password 🔐"}
+        />
         <TextField
           {...register("oldPassword")}
           slotProps={{
@@ -118,7 +146,7 @@ export default function Password() {
             }
           }}
           type='password'
-          sx={{ minWidth: "min(640px,80%)" }}
+          sx={{ minWidth: "min(640px,100%)" }}
           label="Current password"
           variant='outlined'
           disabled={isSubmitting}
@@ -133,7 +161,7 @@ export default function Password() {
               endAdornment: <PasswordIcon />
             }
           }}
-          sx={{ minWidth: "min(640px,80%)" }}
+          sx={{ minWidth: "min(640px,100%)" }}
           label="New password"
           variant='outlined'
           disabled={isSubmitting}
@@ -148,7 +176,7 @@ export default function Password() {
             }
           }}
           type='password'
-          sx={{ minWidth: "min(640px,80%)" }}
+          sx={{ minWidth: "min(640px,100%)" }}
           label="Confirm password"
           variant='outlined'
           error={!!errors.confirmPassword}
@@ -156,7 +184,7 @@ export default function Password() {
         />
         <Button
           variant='contained'
-          sx={{ minWidth: "min(640px,80%)" }}
+          sx={{ minWidth: "min(640px,100%)" }}
           size='large'
           type='submit'
           startIcon={<Save />}
@@ -164,6 +192,7 @@ export default function Password() {
           Save
         </Button>
       </Box>
+
       <Dialog open={setupOpen} onClose={() => setSetupOpen(false)}>
         <DialogTitle>Set password</DialogTitle>
         <DialogContent>
