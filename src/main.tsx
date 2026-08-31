@@ -8,7 +8,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-const darkTheme = createTheme(
+export const darkTheme = createTheme(
   {
     colorSchemes: { ...m3Tokens, },
     palette: { mode: "dark" },

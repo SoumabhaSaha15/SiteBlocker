@@ -3,7 +3,7 @@ import Add from "@mui/icons-material/AddRounded";
 import Android12Switch from "@/pages/shared/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState, useEffect, useCallback, Fragment, memo } from "react";
-import { addLink, getIcon, getLinks, setLinks, Sites } from "@/utils/links";
+import { blacklistSite, getIcon, getBlockedSites, type Sites, setBlockedSites } from "@/utils/links";
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
 import { getWorkingStatus, setWorkingStatus, type WorkingStatus } from "@/utils/blocker";
@@ -101,7 +101,7 @@ export default function Home() {
   const [isActive, setIsActive] = useState<WorkingStatus>(false);
 
   const addUrl = (urlString: string) => {
-    addLink(urlString)
+    blacklistSite(urlString)
       .then((data) => {
         setUrl("");
         setError(null);
@@ -114,13 +114,13 @@ export default function Home() {
   };
 
   const deleteUrl = useCallback((selectedUrl: string) => {
-    setLinks(sites.filter(item => item !== selectedUrl))
+    setBlockedSites(sites.filter(item => item !== selectedUrl))
       .then(setSites)
       .catch(console.error);
   }, [sites]);
 
   useEffect(() => {
-    getLinks().then(setSites);
+    getBlockedSites().then(setSites);
     getWorkingStatus().then(setIsActive);
   }, []);
 

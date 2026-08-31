@@ -9,11 +9,16 @@ const LINK_KEYS = "link-store";
 const ICON_SIZE = 64
 export const getIcon: (origin: string, sz?: number) => string = (origin, sz = ICON_SIZE) => `https://www.google.com/s2/favicons?domain=${origin}&sz=${sz}`;
 
-export const getLinks: () => Promise<Sites> = async () => {
+export const getBlockedSites: () => Promise<Sites> = async () => {
   const result = (await browser.storage.local.get({ [LINK_KEYS]: [] }));
   return (sitesValidator.parse(result[LINK_KEYS]));
 }
-export const addLink: (url: Site) => Promise<Sites> = async (url) => {
+export const isSiteBlocked: (href: Site) => Promise<boolean> = async (href) => {
+  const result = (await browser.storage.local.get({ [LINK_KEYS]: [] }));
+  return (result[LINK_KEYS] as Sites).includes(href);
+}
+
+export const blacklistSite: (url: Site) => Promise<Sites> = async (url) => {
   const site = siteParser.parse(url, { reportInput: true });
   const result = (await browser.storage.local.get({ [LINK_KEYS]: [] }));
   (result[LINK_KEYS] as Sites).push(site);
@@ -21,8 +26,10 @@ export const addLink: (url: Site) => Promise<Sites> = async (url) => {
   await browser.storage.local.set({ [LINK_KEYS]: sites });
   return sites;
 }
-export const setLinks: (url: Sites) => Promise<Sites> = async (urls) => {
+export const setBlockedSites: (url: Sites) => Promise<Sites> = async (urls) => {
   const sites = sitesValidator.parse(urls, { reportInput: true });
   await browser.storage.local.set({ [LINK_KEYS]: sites });
   return sites;
 }
+
+
