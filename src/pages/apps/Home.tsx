@@ -2,11 +2,11 @@ import z from "zod";
 import Add from "@mui/icons-material/AddRounded";
 import Android12Switch from "@/pages/shared/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useState, useEffect, useCallback, Fragment, memo } from "react";
-import { blacklistSite, getIcon, getBlockedSites, type Sites, setBlockedSites } from "@/utils/links";
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
+import { useState, useEffect, useCallback, Fragment, memo } from "react";
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
 import { getWorkingStatus, setWorkingStatus, type WorkingStatus } from "@/utils/blocker";
+import { blacklistSite, getIcon, getBlockedSites, type Sites, setBlockedSites } from "@/utils/links";
 import {
   Box,
   TextField,
@@ -19,6 +19,7 @@ import {
   IconButton,
   InputAdornment,
   Typography,
+  Link,
 } from "@mui/material";
 
 interface SiteListProps {
@@ -80,7 +81,15 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
               </ListItemAvatar>
               <ListItemText
                 primary={<Typography variant="body2" className="font-medium">{urlObject.hostname}</Typography>}
-                secondary={<Typography variant="caption" color="text.secondary" className="truncate max-w-70 sm:max-w-none block">{urlObject.href}</Typography>}
+                secondary={
+                  <Link
+                    variant="caption"
+                    href={urlObject.href}
+                    className="truncate max-w-70 sm:max-w-none block"
+                    target="_blank"
+                    children={urlObject.host}
+                  />
+                }
               />
             </ListItem>
             {sites.length - 1 !== index && (

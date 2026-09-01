@@ -1,15 +1,13 @@
-const fn = () => {
+const init = () => {
   const params = new URLSearchParams(window.location.search);
-  const blockedUrl = params.get('blockedUrl') || 'Unknown URL';
-
-  const mainEl = document.querySelector('main');
-  if (mainEl) {
-    mainEl.textContent = blockedUrl; // or innerHTML / setHTML if sanitized
-  }
+  const blockedUrlString = params.get('blockedUrl');
+  const siteName = document.querySelector('h1#site-name')!;
+  const blockedUrl = new URL(blockedUrlString!);
+  siteName.textContent = blockedUrl.hostname;
 };
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', fn);
+  document.addEventListener('DOMContentLoaded', init);
 } else {
-  fn();
+  init();
 }

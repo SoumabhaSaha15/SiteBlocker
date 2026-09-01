@@ -30,4 +30,12 @@ Customize your daily schedule with the Scheduling feature, allowing you to set s
 
 ---
 
-> ![image](./screenshots/image.png)
+> ### Home
+>
+> ![image](./screenshots/home.png)
+
+---
+
+> ### Site-guard
+>
+> ![image](./screenshots/sites-guard.png)

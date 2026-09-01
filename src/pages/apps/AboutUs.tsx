@@ -17,7 +17,8 @@ import {
   CardContent,
   CardMedia,
   Tooltip,
-  Chip
+  Chip,
+  Link,
 } from '@mui/material';
 
 const PRIMARY_LINKS = [
@@ -124,17 +125,6 @@ export default function AboutUs() {
                     bgcolor: 'action.hover',
                   },
                 }}
-                secondaryAction={
-                  <IconButton
-                    edge="end"
-                    size="small"
-                    onClick={() => openLink(item)}
-                    className='rounded-md!'
-                    sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main' } }}
-                  >
-                    <OpenInNewIcon fontSize="small" />
-                  </IconButton>
-                }
               >
                 <ListItemAvatar className="min-w-0 mr-3">
                   <Avatar
@@ -154,13 +144,14 @@ export default function AboutUs() {
                     </Typography>
                   }
                   secondary={
-                    <Typography
+                    <Link
                       variant="caption"
-                      color="text.secondary"
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      children={origin}
                       className="truncate max-w-70 sm:max-w-none block"
-                    >
-                      {href}
-                    </Typography>
+                    />
                   }
                 />
               </ListItem>

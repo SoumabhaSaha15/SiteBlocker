@@ -13,8 +13,36 @@
   <title>Siteblocker</title>
 </head>
 
-<body>
-  <main class="min-h-dvh text-center">
+<body class="bg-[#F8F9FF] text-[#181C22] antialiased transition-colors dark:bg-[#0F141A] dark:text-[#DFE2EB]">
+  <main class="flex min-h-dvh flex-col items-center justify-center p-6 text-center">
+    <!-- Card Container -->
+    <div
+      class="flex w-full max-w-md flex-col items-center rounded-2xl border border-[#BFC7D5] bg-[#EBEEF7] p-8 shadow-xl transition-colors dark:border-[#404753] dark:bg-[#1C2026] dark:shadow-2xl">
+
+      <!-- Icon Container -->
+      <div
+        class="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-[#D2E4FF] ring-1 ring-[#0061A7]/20 dark:bg-[#002E54] dark:ring-[#1497FE]/30">
+        <img src="../icon/icon.svg" alt="SiteBlocker Logo" class="h-12 w-12" />
+      </div>
+
+      <!-- Blocked Domain Tag -->
+      <span
+        class="mb-3 inline-block rounded-2xl bg-[#B0D1FE] px-4 py-1 text-xs font-semibold tracking-wider text-[#395A81] uppercase dark:bg-[#26486E] dark:text-[#A8C9F6]">
+        Access Restricted
+      </span>
+
+      <!-- Target Site Hostname -->
+      <h1 id="site-name"
+        class="break-all text-2xl font-normal tracking-tight text-[#0061A7] sm:text-3xl dark:text-[#A1C9FF]">
+        Loading...
+      </h1>
+
+      <!-- Blocked Notice -->
+      <p class="mt-2 text-sm font-medium text-[#404753] dark:text-[#BFC7D5]">
+        is blocked by <a href="https://github.com/SoumabhaSaha15/SiteBlocker" target="_blank"
+          class="font-semibold text-[#0061A7] underline decoration-2 transition-colors hover:text-[#007AD0] focus:outline-hidden focus:underline dark:text-[#A1C9FF] dark:hover:text-[#1497FE]">SiteBlocker</a>
+      </p>
+    </div>
   </main>
 </body>
 <script type="module" src="./redirect-script.ts"></script>
