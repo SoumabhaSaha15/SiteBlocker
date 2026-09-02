@@ -7,8 +7,8 @@ export async function hashPassword(password: string): Promise<string> {
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
-const PASSWORD_KEY = 'SITE_BLOCKER_HASH';
-const PASSWORD_PROTECTED_KEY = 'PasswordProtected';
+const PASSWORD_KEY = 'SITE-BLOCKER-HASH';
+const PASSWORD_PROTECTED_KEY = 'PASSWORD-PROTECTED';
 
 export async function setAppPassword(newPassword: string): Promise<void> {
   const hash = await hashPassword(newPassword);

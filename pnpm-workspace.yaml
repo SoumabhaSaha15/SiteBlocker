@@ -17,3 +17,4 @@ minimumReleaseAgeExclude:
   - '@vitejs/plugin-react@6.1.1'
   - zod@4.5.2
   - sharp-cli@6.1.0
+  - '@types/webextension-polyfill@0.12.6'

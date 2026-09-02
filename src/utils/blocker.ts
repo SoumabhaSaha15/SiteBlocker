@@ -3,7 +3,7 @@ import browser from 'webextension-polyfill';
 
 const statusParser = z.boolean().catch(false);
 export type WorkingStatus = z.infer<typeof statusParser>;
-const STATUS_KEY = "working-status";
+const STATUS_KEY = "WORKING-STATUS";
 
 export const getWorkingStatus: () => Promise<WorkingStatus> = async () => {
   const result = (await browser.storage.local.get(STATUS_KEY));
