@@ -139,7 +139,7 @@ export default function Home() {
       {/* Working Status Toggle */}
       <List
         dense={false}
-        className="w-full max-w-160 rounded-2xl p-1"
+        className="w-full max-w-160 rounded-2xl py-2"
         sx={{
           border: 1,
           borderColor: "divider",

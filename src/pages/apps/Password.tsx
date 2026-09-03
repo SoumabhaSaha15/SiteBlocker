@@ -8,7 +8,6 @@ import { enqueueSnackbar, type OptionsObject } from "notistack";
 import { getPasswordProtected, setAppPassword, setPasswordProtected, verifyAppPassword } from "@/utils/password";
 import { passwordSetupSchema, resetPasswordSchema, type PasswordSetupFormData, type ResetPasswordSchema } from '@/validator/password';
 import { Box, TextField, Button, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions, Divider } from '@mui/material';
-import { theme } from 'webextension-polyfill';
 
 const SNACK_OPTION: OptionsObject = {
   variant: "default",
@@ -88,7 +87,7 @@ export default function Password() {
       <Box component={"form"} className="flex flex-col min-h-full items-center w-full p-4 gap-6" onSubmit={handleSubmit(formSubmit)} >
         <List
           dense={false}
-          className="w-full max-w-160 rounded-2xl p-1"
+          className="w-full max-w-160 rounded-2xl py-2"
           sx={{
             border: 1,
             borderColor: "divider",
