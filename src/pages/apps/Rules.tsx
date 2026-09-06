@@ -1,22 +1,81 @@
-// import React from 'react'
+import { Activity, useState } from 'react';
 import Switch from '@/pages/shared/Switch';
 import Save from '@mui/icons-material/Save';
 import DoneIcon from '@mui/icons-material/Done';
 import LinkIcon from '@mui/icons-material/Link';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { rulesSchema, type Rules } from '@/utils/rules';
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { rulesSchema, type RulesType } from '@/validator/rules';
+import AddIcon from '@mui/icons-material/FormatListBulletedAdd';
+import { useForm, Controller, SubmitHandler, UseFormReset } from "react-hook-form";
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
-import { Box, TextField, Button, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions, Divider } from '@mui/material';
+import { Box, TextField, Button, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Chip, Divider, IconButton, InputAdornment, Stack, Autocomplete, Fab } from '@mui/material';
+
 export default function Rules() {
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting }, control } = useForm<Rules>({ resolver: zodResolver(rulesSchema) });
+
+  const [mode, setMode] = useState<"visible" | "hidden">("hidden");
+  const [data, setData] = useState<RulesType>({ blocked: false, blockedKeys: [], isActive: false, site: "" });
+
+  return (
+    <>
+      <Activity mode={mode} >
+        <RulesForm
+          defaultData={data}
+          setData={(data, resetData) => {
+            console.log(data);
+            setData(data);
+            resetData();
+          }}
+        />
+      </Activity>
+      <Fab
+        variant="extended"
+        color='primary'
+        sx={{ position: 'absolute', bottom: 16, right: 16 }}
+        onClick={() => setMode(prev => prev === "hidden" ? "visible" : "hidden")}
+      >
+        <AddIcon sx={{ mr: 1 }} />
+        Add rules
+      </Fab>
+    </>
+  );
+}
+
+const RulesForm = ({ defaultData, setData }: {
+  defaultData: RulesType, setData: (data: RulesType, reset: UseFormReset<RulesType>) => void
+}) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: {
+      errors,
+      isSubmitting,
+      isDirty,
+    },
+    control
+  } = useForm<RulesType>({
+    resolver: zodResolver(rulesSchema),
+    defaultValues: defaultData
+  });
+
+  const formSubmit: SubmitHandler<RulesType> = async (data) => {
+    setData(data, reset);
+  };
   return (
     <Box
       component={"form"}
       className="flex flex-col min-h-full items-center w-full p-4 gap-6"
-    // onSubmit={handleSubmit(formSubmit)}
+      onSubmit={handleSubmit(formSubmit, console.dir)}
     >
+      <Typography
+        variant='h5'
+        component="h5"
+        sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
+        className='w-full max-w-160 p-2 rounded-xl text-center'
+        children={"Rules form"}
+      />
+
       <TextField
         {...register("site")}
         slotProps={{
@@ -33,9 +92,38 @@ export default function Rules() {
         helperText={errors.site?.message}
       />
 
+      <Controller
+        name="blockedKeys"
+        control={control}
+        render={({ field, fieldState: { error, invalid } }) => {
+          return (
+            <Autocomplete
+              multiple
+              freeSolo
+              options={[]}
+              value={field.value}
+              sx={{ minWidth: "min(640px,100%)" }}
+              onChange={(_, newValue) => field.onChange(newValue)}
+              renderValue={(props, getProps) => (props.map((option, index) => {
+                const { key, ...tagProps } = getProps({ index });
+                return (<Chip label={option} size="small" key={key} {...tagProps} />);
+              }))}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="URL Contains (keywords)"
+                  error={invalid}
+                  helperText={Array.isArray(error) ? error.map(e => e.message).filter(item => item !== "").join(",") : error?.message}
+                />
+              )}
+            />
+          )
+        }}
+      />
+
       <List
         dense={false}
-        className="w-full max-w-160 rounded-2xl py-1"
+        className="w-full max-w-160 rounded-2xl py-1.5"
         sx={{
           border: 1,
           borderColor: "divider",
@@ -46,11 +134,10 @@ export default function Rules() {
           name="isActive"
           control={control}
           render={({ field }) => (
-
             <ListItem
               className="h-14 px-3"
               secondaryAction={
-                <Switch {...field} checked={field.value} />
+                <Switch {...field} checked={Boolean(field.value)} />
               }>
               <ListItemAvatar className="min-w-0 mr-3">
                 <Avatar
@@ -88,13 +175,12 @@ export default function Rules() {
             <ListItem
               className="h-14 px-3"
               secondaryAction={
-                <Switch {...field} checked={field.value} />
+                <Switch {...field} checked={Boolean(field.value)} />
               }>
               <ListItemAvatar className="min-w-0 mr-3">
                 <Avatar
                   variant="rounded"
                   className="w-12 h-12 rounded-xl"
-                  sx={{ bgcolor: "primary.main" }}
                 >
                   {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />}
                 </Avatar>
@@ -125,6 +211,7 @@ export default function Rules() {
         sx={{ minWidth: "min(640px,100%)" }}
         size='large'
         type='submit'
+        disabled={isSubmitting || !isDirty}
         startIcon={<Save />}
       >
         Save

@@ -133,7 +133,7 @@ export default function Password() {
         <Typography
           variant='h5'
           component="h5"
-          sx={{ borderColor: "divider", borderWidth: 1 }}
+          sx={{ borderColor: "divider", borderWidth: 1, backgroundColor: "secondary.main", color: "secondary.contrastText" }}
           className='w-full max-w-160 p-2 rounded-xl text-center'
           children={"Reset password 🔐"}
         />
