@@ -3,6 +3,8 @@ import { isSiteBlocked } from "@/utils/links";
 import { tryRedirect } from "@/utils/redirect";
 import { getWorkingStatus } from "@/utils/blocker";
 
+const CTX_MENU_ID = "webdude-site_blocker";
+
 browser.runtime.onInstalled.addListener(console.dir);
 
 browser.action.onClicked.addListener(() => {
@@ -30,5 +32,21 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         browser.tabs.update(tabId, { url: defaultGuard });
       });
     }
+  }
+});
+
+
+browser.runtime.onInstalled.addListener(() => {
+  browser.contextMenus.create({
+    id: CTX_MENU_ID,
+    title: "Block this site",
+    contexts: ["selection", "page", "link"] // Choose where it appears
+  });
+});
+
+browser.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === CTX_MENU_ID) {
+    console.log("Context menu clicked:", info);
+    // Add your action here (e.g., info.selectionText)
   }
 });

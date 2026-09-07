@@ -12,5 +12,7 @@ export const rulesSchema = z.strictObject({
 });
 
 export const rulesArraySchema = z.array(rulesSchema);
-
+export const purgeArray = rulesArraySchema.transform<RulesType[]>((data) => {
+  return [];
+});
 export type RulesType = z.infer<typeof rulesSchema>;

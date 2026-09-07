@@ -60,6 +60,13 @@ export const darkTheme = createTheme(
           },
         },
       },
+      MuiFab: {
+        styleOverrides: {
+          extended: {
+            textTransform: 'none',
+          },
+        },
+      },
     }
   }
 );

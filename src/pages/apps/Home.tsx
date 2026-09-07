@@ -34,10 +34,10 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
       className="w-full max-w-160 rounded-2xl overflow-clip"
       sx={{ border: 1, borderColor: "divider", bgcolor: "background.paper" }}
     >
-      {!sites.length && (
-        <ListItem className="h-14">
+      {(!sites.length) ? (
+        <ListItem className="px-3">
           <ListItemAvatar className="min-w-0 mx-3">
-            <Avatar variant="rounded" className="w-10 h-10 rounded-xl" sx={{ backgroundColor: "red" }}>
+            <Avatar variant="square" className="w-10 h-10 rounded-xl" sx={{ backgroundColor: "red" }}>
               <NotInterestedIcon fontSize="medium" />
             </Avatar>
           </ListItemAvatar>
@@ -46,9 +46,7 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
             secondary={<Typography variant="caption" color="text.disabled" className="block">There is no blacklisted site.</Typography>}
           />
         </ListItem>
-      )}
-
-      {sites.map((item, index) => {
+      ) : sites.map((item, index) => {
         const urlObject = new URL(item);
         return (
           <Fragment key={item}>
@@ -232,8 +230,3 @@ export default function Home() {
     </Box>
   );
 }
-
-
-
-
-
