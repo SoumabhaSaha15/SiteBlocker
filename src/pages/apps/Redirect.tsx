@@ -1,10 +1,10 @@
 import z from "zod";
-import { useState, useEffect, useCallback, memo } from "react";
 import SaveIcon from "@mui/icons-material/Save";
+import LinkIcon from "@mui/icons-material/Link";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import LinkIcon from "@mui/icons-material/Link";
+import { useState, useEffect, useCallback, memo } from "react";
 import {
   Box,
   TextField,
@@ -31,9 +31,9 @@ interface RedirectSiteProps {
 
 const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSiteProps) {
   const id = "redirect";
+  const [link, setLink] = useState<URL | null>(null);
   const buttonId = `${id}-button`, menuId = `${id}-menu`;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [link, setLink] = useState<URL | null>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);

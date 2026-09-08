@@ -5,7 +5,10 @@ import { getWorkingStatus } from "@/utils/blocker";
 
 const CTX_MENU_ID = "webdude-site_blocker";
 
-browser.runtime.onInstalled.addListener(console.dir);
+browser.runtime.onInstalled.addListener((info) => {
+  console.dir(info);
+  // browser.storage.local.getKeys().then(console.dir);
+});
 
 browser.action.onClicked.addListener(() => {
   browser.tabs.create({

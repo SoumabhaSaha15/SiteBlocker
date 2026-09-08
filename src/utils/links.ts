@@ -1,10 +1,6 @@
-import z from "zod";
 import browser from 'webextension-polyfill';
+import { sitesValidator, siteParser, type Sites, type Site } from "@/validator/links";
 
-export const siteParser = z.httpUrl().transform((val: string) => (new URL(val)).origin);
-export const sitesValidator = z.array(siteParser).transform(v => [... new Set(v)]);
-export type Sites = z.infer<typeof sitesValidator>;
-export type Site = z.infer<typeof siteParser>;
 const LINK_KEYS = "LINK-STORE";
 const ICON_SIZE = 64
 export const getIcon: (origin: string, sz?: number) => string = (origin, sz = ICON_SIZE) => `https://www.google.com/s2/favicons?domain=${origin}&sz=${sz}`;

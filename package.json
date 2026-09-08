@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "clear": "rm -rf dist",
     "icon:16": "sharp -i public/icon/icon.svg -o public/icon/16.png resize 16",
     "icon:32": "sharp -i public/icon/icon.svg -o public/icon/32.png resize 32",
     "icon:48": "sharp -i public/icon/icon.svg -o public/icon/48.png resize 48",
