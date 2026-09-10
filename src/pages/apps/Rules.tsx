@@ -1,6 +1,7 @@
 import { getIcon } from '@/utils/links';
 import Switch from '@/pages/shared/Switch';
 import Save from '@mui/icons-material/Save';
+import { enqueueSnackbar } from 'notistack';
 import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from "@mui/icons-material/Edit";
 import LinkIcon from '@mui/icons-material/Link';
@@ -31,8 +32,16 @@ export default function Rules() {
       {mode ? (<RulesForm
         defaultData={formData}
         setData={(data, resetData) => {
-          saveRule(data).then(setRules);
-          resetData();
+          saveRule(data)
+            .then(rules => {
+              setRules(rules)
+              resetData();
+              enqueueSnackbar("Rule saved ✅.");
+            })
+            .catch((err: Error) => {
+              enqueueSnackbar(err.message, { variant: "error" });
+            })
+            .finally(() => { setMode(prev => !prev); });
         }}
       />) : (
         <Box className="flex flex-col min-h-full items-center w-full p-4 gap-6">

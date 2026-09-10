@@ -75,9 +75,13 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
       sx={{ border: 1, borderColor: "divider", bgcolor: "background.paper" }}
     >
       {(!link) ? (
-        <ListItem className="h-14">
-          <ListItemAvatar className="min-w-0 mx-3">
-            <Avatar variant="rounded" className="w-10 h-10 rounded-xl" sx={{ backgroundColor: "red" }}>
+        <ListItem className="px-3">
+          <ListItemAvatar className="min-w-0 mr-3">
+            <Avatar
+              variant="square"
+              className="w-10 h-10 rounded-xl"
+              sx={{ backgroundColor: "red" }}
+            >
               <LinkIcon fontSize="medium" />
             </Avatar>
           </ListItemAvatar>
@@ -95,7 +99,7 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
           />
         </ListItem>
       ) : (
-        <ListItem className="h-14"
+        <ListItem className="px-3"
           secondaryAction={
             <>
               <IconButton
@@ -142,8 +146,12 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
             </>
           }
         >
-          <ListItemAvatar className="min-w-0 mx-3">
-            <Avatar variant="rounded" className="w-10 h-10 rounded-xl" sx={{ backgroundColor: "green" }}>
+          <ListItemAvatar className="min-w-0 mr-3">
+            <Avatar
+              variant="square"
+              className="w-10 h-10 rounded-xl"
+              sx={{ backgroundColor: "green" }}
+            >
               <LinkIcon fontSize="medium" />
             </Avatar>
           </ListItemAvatar>
