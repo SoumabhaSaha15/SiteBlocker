@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useSnackbar, type OptionsObject } from 'notistack';
+import { getSyncedData, downloadJSONFile } from "@/utils/sync";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { AppList, MENU_LIST, APP_MAP } from '@/utils/constants';
 import { getPasswordProtected, verifyAppPassword } from "@/utils/password";
@@ -313,20 +314,12 @@ function PasswordProtection(props: PasswordProtectorProps) {
 }
 
 function ExportData() {
-  const exportData = async () => {
-    const data = await browser.storage.local.get(null);
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = 'site-blocker-data.json';
-    anchor.click();
-    URL.revokeObjectURL(url);
-  };
 
   return (
     <Box className="flex min-h-full items-center justify-center">
-      <Button variant="contained" startIcon={<FileDownloadIcon />} onClick={exportData}>
+      <Button variant="contained" startIcon={<FileDownloadIcon />} onClick={() => {
+        getSyncedData().then(data => downloadJSONFile('site_blocker.json', data))
+      }}>
         Export data
       </Button>
     </Box>

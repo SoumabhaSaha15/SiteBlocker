@@ -1,14 +1,16 @@
+import { KEYS } from '@/keys';
 import browser from 'webextension-polyfill';
 import { sitesValidator, siteParser, type Sites, type Site } from "@/validator/links";
 
-const LINK_KEYS = "LINK-STORE";
+const LINK_KEYS = KEYS.blockedSites;
 const ICON_SIZE = 64
 export const getIcon: (origin: string, sz?: number) => string = (origin, sz = ICON_SIZE) => `https://www.google.com/s2/favicons?domain=${origin}&sz=${sz}`;
 
 export const getBlockedSites: () => Promise<Sites> = async () => {
   const result = (await browser.storage.local.get({ [LINK_KEYS]: [] }));
-  return (sitesValidator.parse(result[LINK_KEYS]));
+  return (result[LINK_KEYS] as Sites);
 }
+
 export const isSiteBlocked: (href: Site) => Promise<boolean> = async (href) => {
   const result = (await browser.storage.local.get({ [LINK_KEYS]: [] }));
   return (result[LINK_KEYS] as Sites).includes(href);
@@ -22,10 +24,20 @@ export const blacklistSite: (url: Site) => Promise<Sites> = async (url) => {
   await browser.storage.local.set({ [LINK_KEYS]: sites });
   return sites;
 }
-export const setBlockedSites: (url: Sites) => Promise<Sites> = async (urls) => {
+
+export const setBlockedSites: (url: Sites) => Promise<void> = async (urls) => {
   const sites = sitesValidator.parse(urls, { reportInput: true });
   await browser.storage.local.set({ [LINK_KEYS]: sites });
-  return sites;
 }
 
-
+export const listenBlockedSitesChanges = (setSites: (v: string[] | ((prev: string[]) => string[])) => void) => {
+  const event = (changes: Record<string, browser.Storage.StorageChange>, area: string) => {
+    if (area !== "local") return;
+    if (changes[LINK_KEYS]) {
+      const v = (changes[LINK_KEYS].newValue as Sites) ?? [];
+      setSites(v);
+    }
+  }
+  browser.storage.onChanged.addListener(event);
+  return () => browser.storage.onChanged.removeListener(event);
+}

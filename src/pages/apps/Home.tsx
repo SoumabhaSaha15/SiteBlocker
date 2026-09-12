@@ -6,8 +6,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import { useState, useEffect, useCallback, Fragment, memo } from "react";
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
-import { getWorkingStatus, setWorkingStatus, type WorkingStatus } from "@/utils/blocker";
-import { blacklistSite, getIcon, getBlockedSites, setBlockedSites } from "@/utils/links";
+import { getWorkingStatus, setWorkingStatus, type WorkingStatus, listenStatusChanges } from "@/utils/blocker";
+import { blacklistSite, getIcon, getBlockedSites, setBlockedSites, listenBlockedSitesChanges } from "@/utils/links";
 import {
   Box,
   TextField,
@@ -123,13 +123,18 @@ export default function Home() {
 
   const deleteUrl = useCallback((selectedUrl: string) => {
     setBlockedSites(sites.filter(item => item !== selectedUrl))
-      .then(setSites)
       .catch(console.error);
   }, [sites]);
 
   useEffect(() => {
     getBlockedSites().then(setSites);
     getWorkingStatus().then(setIsActive);
+    let rl1 = listenBlockedSitesChanges(setSites);
+    let rl2 = listenStatusChanges(setIsActive);
+    return () => {
+      rl1();
+      rl2();
+    };
   }, []);
 
 
@@ -149,7 +154,7 @@ export default function Home() {
           className="h-14 px-3"
           secondaryAction={
             <Android12Switch
-              onChange={(_, checked) => setWorkingStatus(checked).then(setIsActive)}
+              onChange={(_, checked) => setWorkingStatus(checked)}
               checked={isActive}
             />
           }

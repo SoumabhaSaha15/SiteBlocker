@@ -7,12 +7,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import LinkIcon from '@mui/icons-material/Link';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { saveRule, fetchRuleList } from "@/utils/rules";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import RuleIcon from '@mui/icons-material/FormatListBulleted';
 import { rulesSchema, type RulesType } from '@/validator/rules';
 import AddRuleIcon from '@mui/icons-material/FormatListBulletedAdd';
 import { useEffect, useState, Fragment, Activity, useId, } from 'react';
+import { saveRule, fetchRuleList, listenRulesChanges } from "@/utils/rules";
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
 import { useForm, Controller, SubmitHandler, UseFormReset } from "react-hook-form";
@@ -25,16 +25,20 @@ export default function Rules() {
   const [rules, setRules] = useState<RulesType[]>([]);
   const [formData, setFormData] = useState<RulesType>(EMPTY_RULE);
 
-  useEffect(() => { fetchRuleList().then(data => setRules(data)) }, []);
+  useEffect(() => {
+    fetchRuleList().then(data => setRules(data));
+    const removeListener = listenRulesChanges(setRules);
+    return removeListener;
+  }, []);
 
   return (
     <>
       {mode ? (<RulesForm
         defaultData={formData}
         setData={(data, resetData) => {
+          console.log(data);
           saveRule(data)
-            .then(rules => {
-              setRules(rules)
+            .then(() => {
               resetData();
               enqueueSnackbar("Rule saved ✅.");
             })

@@ -25,8 +25,8 @@
     "notistack": "^3.0.2",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "react-hook-form": "^7.87.0",
-    "zod": "^4.6.1"
+    "react-hook-form": "^7.88.0",
+    "zod": "^4.6.2"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.4.0",
@@ -38,7 +38,7 @@
     "sharp-cli": "^6.1.0",
     "tailwindcss": "^4.3.3",
     "typescript": "~7.0.2",
-    "vite": "^8.2.2",
+    "vite": "^8.3.0",
     "vite-plugin-svgr": "^5.2.0",
     "vite-plugin-web-extension": "^4.5.1",
     "webextension-polyfill": "^0.12.0"

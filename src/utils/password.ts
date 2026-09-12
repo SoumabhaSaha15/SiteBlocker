@@ -1,3 +1,4 @@
+import { KEYS } from '@/keys';
 import browser from 'webextension-polyfill';
 
 export async function hashPassword(password: string): Promise<string> {
@@ -7,8 +8,9 @@ export async function hashPassword(password: string): Promise<string> {
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
-const PASSWORD_KEY = 'SITE-BLOCKER-HASH';
-const PASSWORD_PROTECTED_KEY = 'PASSWORD-PROTECTED';
+const PASSWORD_KEY = KEYS.passwordHash;
+const PASSWORD_PROTECTED_KEY = KEYS.passwordProtected;
+
 
 export async function setAppPassword(newPassword: string): Promise<void> {
   const hash = await hashPassword(newPassword);

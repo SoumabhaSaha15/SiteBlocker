@@ -22,7 +22,7 @@ import {
   Typography,
   ListItemIcon,
 } from "@mui/material";
-import { setRedirect, deleteRedirect, getRedirect, type Redirect } from "@/utils/redirect";
+import { setRedirect, deleteRedirect, getRedirect, type Redirect, listenRedirectChanges } from "@/utils/redirect";
 
 interface RedirectSiteProps {
   site: Redirect | null;
@@ -176,10 +176,9 @@ export default function Redirect() {
   const [redirectSite, setRedirectSite] = useState<Redirect | null>(null);
   const [error, setError] = useState<null | string>(null);
 
-  const setRedirectUrl = (urL: string) => {
-    setRedirect(urL)
-      .then((url) => {
-        setRedirectSite(url);
+  const setRedirectUrl = (url: string) => {
+    setRedirect(url)
+      .then(() => {
         setUrl("");
         setError(null);
       })
@@ -188,7 +187,11 @@ export default function Redirect() {
       });
   };
 
-  useEffect(() => { getRedirect().then(setRedirectSite); }, []);
+  useEffect(() => {
+    getRedirect().then(setRedirectSite);
+    let removeListener = listenRedirectChanges(setRedirectSite);
+    return removeListener;
+  }, []);
 
   return (
     <Box className="flex flex-col items-center gap-6 p-4 w-full">
@@ -204,7 +207,9 @@ export default function Redirect() {
                   size="small"
                   edge="start"
                   disabled={!url}
-                  onClick={() => { }}
+                  onClick={() => {
+                    setRedirectUrl(url);
+                  }}
                   className="rounded-lg! transition-all"
                   sx={{
                     color: "primary.contrastText",
