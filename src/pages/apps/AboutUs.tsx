@@ -1,8 +1,7 @@
 import { Fragment } from 'react';
-import { getIcon } from '@/utils/links';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import LanguageIcon from '@mui/icons-material/Language';
+import { getIcon } from '@/utils/sites';
 import EmailIcon from '@mui/icons-material/Email';
+import LanguageIcon from '@mui/icons-material/Language';
 import {
   Box,
   Divider,

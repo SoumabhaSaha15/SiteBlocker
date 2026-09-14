@@ -1,14 +1,12 @@
 import browser from "webextension-polyfill";
-import { isSiteBlocked } from "@/utils/links";
+import { blacklistSite } from "@/utils/sites"
 import { tryRedirect } from "@/utils/redirect";
 import { getWorkingStatus } from "@/utils/blocker";
+import { getBlockedSites, isSiteBlocked } from "@/utils/sites";
 
 const CTX_MENU_ID = "webdude-site_blocker";
 
-browser.runtime.onInstalled.addListener((info) => {
-  console.dir(info);
-  // browser.storage.local.getKeys().then(console.dir);
-});
+browser.runtime.onInstalled.addListener(console.dir);
 
 browser.action.onClicked.addListener(() => {
   browser.tabs.create({
@@ -39,6 +37,8 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 });
 
 
+browser.webNavigation.onBeforeNavigate.addListener(console.dir, { url: [{ schemes: ["http", "https"] }] });
+
 browser.runtime.onInstalled.addListener(() => {
   browser.contextMenus.create({
     id: CTX_MENU_ID,
@@ -49,7 +49,7 @@ browser.runtime.onInstalled.addListener(() => {
 
 browser.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === CTX_MENU_ID) {
-    console.log("Context menu clicked:", info);
-    // Add your action here (e.g., info.selectionText)
+    const url = URL.parse(info.pageUrl!);
+    url && blacklistSite(url.origin);
   }
 });

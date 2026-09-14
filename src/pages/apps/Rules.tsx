@@ -1,4 +1,4 @@
-import { getIcon } from '@/utils/links';
+import { getIcon } from '@/utils/sites';
 import Switch from '@/pages/shared/Switch';
 import Save from '@mui/icons-material/Save';
 import { enqueueSnackbar } from 'notistack';

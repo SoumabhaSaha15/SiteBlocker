@@ -1,10 +1,17 @@
 import { KEYS } from '@/keys';
 import browser from 'webextension-polyfill';
-import { sitesValidator, siteParser, type Sites, type Site } from "@/validator/links";
+import { sitesValidator, siteParser, type Sites, type Site } from "@/validator/sites";
 
 const LINK_KEYS = KEYS.blockedSites;
 const ICON_SIZE = 64
-export const getIcon: (origin: string, sz?: number) => string = (origin, sz = ICON_SIZE) => `https://www.google.com/s2/favicons?domain=${origin}&sz=${sz}`;
+export const getIcon: (origin: string, size?: number) => string = (origin, size = ICON_SIZE) => {
+  const url = new URL(browser.runtime.getURL("/_favicon/"));
+  url.searchParams.set("pageUrl", origin);
+  url.searchParams.set("size", String(size));
+  return url.toString();
+}
+
+
 
 export const getBlockedSites: () => Promise<Sites> = async () => {
   const result = (await browser.storage.local.get({ [LINK_KEYS]: [] }));

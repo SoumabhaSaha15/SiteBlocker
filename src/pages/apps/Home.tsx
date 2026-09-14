@@ -1,5 +1,5 @@
 import z from "zod";
-import { type Sites } from "@/validator/links";
+import { type Sites } from "@/validator/sites";
 import Add from "@mui/icons-material/AddRounded";
 import Android12Switch from "@/pages/shared/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -7,7 +7,7 @@ import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import { useState, useEffect, useCallback, Fragment, memo } from "react";
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
 import { getWorkingStatus, setWorkingStatus, type WorkingStatus, listenStatusChanges } from "@/utils/blocker";
-import { blacklistSite, getIcon, getBlockedSites, setBlockedSites, listenBlockedSitesChanges } from "@/utils/links";
+import { blacklistSite, getIcon, getBlockedSites, setBlockedSites, listenBlockedSitesChanges } from "@/utils/sites";
 import {
   Box,
   TextField,

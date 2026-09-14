@@ -1,7 +1,7 @@
 import z from 'zod';
 import { KEYS } from '@/keys';
 import browser from 'webextension-polyfill';
-import { isSiteBlocked } from "@/utils/links";
+import { isSiteBlocked } from "@/utils/sites";
 
 const redirectParser = z.httpUrl();
 export type Redirect = z.infer<typeof redirectParser>;
