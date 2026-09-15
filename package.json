@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "Block distracting and harmful websites, including subdomains.",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -29,6 +30,7 @@
     "zod": "^4.6.4"
   },
   "devDependencies": {
+    "@crxjs/vite-plugin": "^2.7.1",
     "@hookform/devtools": "^4.4.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.3.0",
