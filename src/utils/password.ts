@@ -1,4 +1,4 @@
-import { KEYS } from '@/keys';
+import { KEYS } from '@/config/storage-keys';
 import browser from 'webextension-polyfill';
 
 export async function hashPassword(password: string): Promise<string> {

@@ -1,5 +1,5 @@
 import z from 'zod';
-import { KEYS } from '@/keys';
+import { KEYS } from '@/config/storage-keys';
 import browser from 'webextension-polyfill';
 import { isSiteBlocked } from "@/utils/sites";
 

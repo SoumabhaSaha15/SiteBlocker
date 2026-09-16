@@ -1,6 +1,6 @@
 import Save from '@mui/icons-material/Save';
 import PasswordIcon from '@mui/icons-material/Lock';
-import Android12Switch from '@/pages/shared/Switch';
+import Android12Switch from '@/shared/Switch';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState, type ChangeEvent } from "react";

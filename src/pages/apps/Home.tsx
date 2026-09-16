@@ -1,7 +1,7 @@
 import z from "zod";
 import { type Sites } from "@/validator/sites";
 import Add from "@mui/icons-material/AddRounded";
-import Android12Switch from "@/pages/shared/Switch";
+import Android12Switch from "@/shared/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import { useState, useEffect, useCallback, Fragment, memo } from "react";
@@ -74,7 +74,17 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
                   src={getIcon(urlObject.href)}
                   variant="square"
                   className="w-10 h-10 rounded-xl"
-                  slotProps={{ img: { className: "object-contain" } }}
+                  slotProps={{
+                    img: {
+                      className: "object-contain",
+                      // onError: (e) => {
+                      //   const target = e.currentTarget;
+                      //   target.onerror = null; // prevents infinite loop if fallback fails
+                      //   target.src = getFallbackIcon(target.src);
+                      // },
+                    }
+                  }}
+
                   sx={{ bgcolor: (theme) => theme.palette.background.paper }}
                 />
               </ListItemAvatar>

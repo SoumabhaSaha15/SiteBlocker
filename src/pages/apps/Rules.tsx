@@ -1,5 +1,5 @@
 import { getIcon } from '@/utils/sites';
-import Switch from '@/pages/shared/Switch';
+import Switch from '@/shared/Switch';
 import Save from '@mui/icons-material/Save';
 import { enqueueSnackbar } from 'notistack';
 import DoneIcon from '@mui/icons-material/Done';

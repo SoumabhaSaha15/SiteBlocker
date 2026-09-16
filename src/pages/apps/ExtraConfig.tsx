@@ -1,7 +1,7 @@
 import React from 'react';
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
-import Switch from '@/pages/shared/Switch';
+import Switch from '@/shared/Switch';
 import { Box, TextField, Button, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Chip, Divider, Autocomplete, Fab, IconButton, Menu, MenuItem, ListItemIcon, Stack } from '@mui/material';
 export default function ExtraConfig() {
   return (

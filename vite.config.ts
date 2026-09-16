@@ -6,9 +6,34 @@ import tailwindcss from "@tailwindcss/vite";
 import pkg from './package.json' with { type: "json" };
 import { crx, defineManifest } from "@crxjs/vite-plugin";
 import baseManifest from './src/manifest.json' with { type: "json" };
-// import webExtension, { readJsonFile } from "vite-plugin-web-extension";
-// const pkg = readJsonFile("package.json");
-// const manifest = readJsonFile("src/manifest.json");
+
+/*
+import webExtension, { readJsonFile } from "vite-plugin-web-extension";
+const pkg = readJsonFile("package.json");
+const manifest = readJsonFile("src/manifest.json");
+  webExtension({
+    manifest: () => ({
+      name: pkg.name,
+      description: pkg.description,
+      version: pkg.version,
+      ...manifest,
+    }),
+    additionalInputs: ["src/index.html", "src/redirect.html"],
+  })
+
+  //
+  "content_scripts": [
+    {
+      "js": [
+        "src/content/BlockOverlay.tsx"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+*/
 const manifest = defineManifest({
   name: pkg.name,
   description: pkg.description,
@@ -33,21 +58,10 @@ export default defineConfig((_) => {
         },
       }),
       crx({ manifest }),
-      // webExtension({
-      //   manifest: () => ({
-      //     name: pkg.name,
-      //     description: pkg.description,
-      //     version: pkg.version,
-      //     ...manifest,
-      //   }),
-      //   additionalInputs: ["src/index.html", "src/redirect.html"],
-      // }),
     ],
     build: {
-      // build.rolldownOptions.output.codeSplitting
       rollupOptions: {
         input: {
-          // Use relative paths from project root
           index: "src/index.html",
           redirect: "src/redirect.html",
         },

@@ -1,4 +1,4 @@
-import { RESTRICTED_KEYS } from "@/keys";
+import { RESTRICTED_KEYS } from "@/config/storage-keys";
 import browser from "webextension-polyfill";
 
 export const getSyncedData: () => Promise<Record<string, any>> = async () => {

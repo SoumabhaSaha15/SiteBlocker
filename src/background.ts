@@ -1,8 +1,8 @@
 import browser from "webextension-polyfill";
 import { blacklistSite } from "@/utils/sites"
+import { isSiteBlocked } from "@/utils/sites";
 import { tryRedirect } from "@/utils/redirect";
 import { getWorkingStatus } from "@/utils/blocker";
-import { getBlockedSites, isSiteBlocked } from "@/utils/sites";
 
 const CTX_MENU_ID = "webdude-site_blocker";
 
