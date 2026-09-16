@@ -12,7 +12,7 @@ import RuleIcon from '@mui/icons-material/FormatListBulleted';
 import { rulesSchema, type RulesType } from '@/validator/rules';
 import AddRuleIcon from '@mui/icons-material/FormatListBulletedAdd';
 import { useEffect, useState, Fragment, Activity, useId, } from 'react';
-import { saveRule, fetchRuleList, listenRulesChanges } from "@/utils/rules";
+import { saveRule, getRuleList, listenRulesChanges } from "@/utils/rules";
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
 import { useForm, Controller, SubmitHandler, UseFormReset } from "react-hook-form";
@@ -26,7 +26,7 @@ export default function Rules() {
   const [formData, setFormData] = useState<RulesType>(EMPTY_RULE);
 
   useEffect(() => {
-    fetchRuleList().then(data => setRules(data));
+    getRuleList().then(data => setRules(data));
     const removeListener = listenRulesChanges(setRules);
     return removeListener;
   }, []);

@@ -4,7 +4,7 @@ import { type RulesType, rulesSchema, rulesArraySchema } from "@/validator/rules
 
 const RULES_KEY = KEYS.rules;
 
-export const fetchRuleList: () => Promise<RulesType[]> = async () => {
+export const getRuleList: () => Promise<RulesType[]> = async () => {
   const result = (await browser.storage.local.get({ [RULES_KEY]: [] }));
   return (result[RULES_KEY] as RulesType[]);
 }
