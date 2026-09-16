@@ -81,12 +81,12 @@ A prioritized checklist for moving the project forward. Items are ordered so eac
 
 ### Finish the Redirect page
 
-- [ ] Wire the Save button `onClick` — currently `() => { }` in `Redirect.tsx`
-- [ ] Ensure the redirect URL is saved on Enter and button click
+- [x] Wire the Save button `onClick` — currently `() => { }` in `Redirect.tsx`
+- [x] Ensure the redirect URL is saved on Enter and button click
 
 ### Finish the Sync page
 
-- [ ] Wire "Download as json" button — export `browser.storage.local.get(null)` as a JSON file (the logic already exists in `App.tsx`'s `ExportData` component, reuse it)
+- [x] Wire "Download as json" button — export `browser.storage.local.get(null)` as a JSON file (the logic already exists in `App.tsx`'s `ExportData` component, reuse it)
 - [ ] Wire "Upload json" button — file input that reads a JSON file and writes it back to `storage.local`
 - [ ] Replace `getSyncedData`'s N+1 key loop with a single `browser.storage.local.get(null)`
 - [ ] Consider renaming "Sync" to "Backup" or "Data" since it doesn't use `storage.sync`

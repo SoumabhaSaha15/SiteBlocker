@@ -8,6 +8,13 @@ import { crx, defineManifest } from "@crxjs/vite-plugin";
 import baseManifest from './src/manifest.json' with { type: "json" };
 
 /*
+
+
+    // "scripting"
+    // "favicon",
+    // "declarativeNetRequestFeedback",
+    // "declarativeNetRequest",
+
 import webExtension, { readJsonFile } from "vite-plugin-web-extension";
 const pkg = readJsonFile("package.json");
 const manifest = readJsonFile("src/manifest.json");

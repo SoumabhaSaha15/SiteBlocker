@@ -1,4 +1,4 @@
-import { SiteBlockerError } from "@/helper/site-blocker-error";
+import SiteBlockerError from "@/helper/site-blocker-error";
 
 /**
  * @throws {SiteBlockerError}

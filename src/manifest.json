@@ -13,12 +13,8 @@
   },
   "permissions": [
     "contextMenus",
-    "declarativeNetRequestFeedback",
-    "declarativeNetRequest",
     "storage",
-    "favicon",
     "tabs",
-    "webNavigation",
-    "scripting"
+    "webNavigation"
   ]
 }
