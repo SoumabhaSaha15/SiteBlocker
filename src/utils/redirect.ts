@@ -1,18 +1,8 @@
-import z from 'zod';
-import { KEYS } from '@/config/storage-keys';
 import browser from 'webextension-polyfill';
-import { isSiteBlocked } from "@/utils/sites";
+import { KEYS } from '@/config/storage-keys';
+import { redirectParser, type Redirect } from "@/validator/redirect";
 
-const redirectParser = z.httpUrl();
-export type Redirect = z.infer<typeof redirectParser>;
 const REDIRECT_KEY = KEYS.redirectUrl;
-
-export const tryRedirect: () => Promise<Redirect> = async () => {
-  const result = (await browser.storage.local.get(REDIRECT_KEY));
-  const redirectLink = redirectParser.parse(result[REDIRECT_KEY], { reportInput: true });
-  if (await isSiteBlocked(URL.parse(redirectLink)!.origin)) throw new Error("Redirect URL is blocked!");
-  return redirectLink;
-}
 
 export const deleteRedirect: () => Promise<void> = async () => {
   await browser.storage.local.remove(REDIRECT_KEY);

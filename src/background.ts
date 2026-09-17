@@ -1,10 +1,10 @@
 import browser from "webextension-polyfill";
 import { blacklistSite } from "@/utils/sites"
-import { isSiteBlocked } from "@/utils/sites";
-import { tryRedirect } from "@/utils/redirect";
+import ResolveSite from "@/helper/resolve-site";
+import { getRedirect } from "@/utils/redirect";
 import { getWorkingStatus } from "@/utils/blocker";
+import type { ResolvedResult } from "@/types/interfaces";
 
-const CTX_MENU_ID = "webdude-site_blocker";
 
 browser.runtime.onInstalled.addListener(console.dir);
 
@@ -21,23 +21,23 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (tab.url.startsWith(extensionUrlPrefix)) return; // Prevent recursive redirect loops on internal extension pages
     const isRunning = await getWorkingStatus();
     if (!isRunning) return;
-    const tabURL = URL.parse(tab.url);
-
-    const blockResult = await isSiteBlocked(tabURL!.origin);
-    if (blockResult) {
-      let defaultGuard = browser.runtime.getURL(`src/redirect.html?blockedUrl=${encodeURIComponent(tab.url)}`);
-      tryRedirect().then(url => {
-        browser.tabs.update(tabId, { url });
-      }).catch((_) => {
-        browser.tabs.update(tabId, { url: defaultGuard });
-      });
+    let result: ResolvedResult = await ResolveSite(tab.url);
+    if (!result.blocked) return;
+    const defaultGuard = browser.runtime.getURL(
+      `src/redirect.html?blockedUrl=${encodeURIComponent(tab.url)}`
+    );
+    const redirect = await getRedirect();
+    let target = defaultGuard;
+    if (redirect) {
+      result = await ResolveSite(redirect);
+      if (!result.blocked) target = redirect;
     }
+    await browser.tabs.update(tabId, { url: target });
+    return;
   }
 });
 
-
-// browser.webNavigation.onBeforeNavigate.addListener(console.dir, { url: [{ schemes: ["http", "https"] }] });
-
+const CTX_MENU_ID = "webdude-site_blocker";
 browser.runtime.onInstalled.addListener(() => {
   browser.contextMenus.create({
     id: CTX_MENU_ID,

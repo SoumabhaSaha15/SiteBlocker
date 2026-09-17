@@ -1,16 +1,18 @@
-import RuleEvaluator from "@/resolver/rule-resolver";
-import { type ResolvedResult } from "@/types/interfaces";
-import BlacklistEvaluator from "@/resolver/blacklist-resolver";
+import createKeywordSet from "@/helper/search-set";
+import RuleEvaluator from "@/evaluator/rule-evaluator";
+import BlacklistEvaluator from "@/evaluator/blacklist-evaluator";
+import type { ResolvedResult } from "@/types/interfaces";
 
-const ResolveSite: (url: string) => Promise<ResolvedResult> = async (url: string) => {
-  const requested_url = new URL(url);
-  const blacklistEvaluator = await BlacklistEvaluator.create();
-  let result: ResolvedResult = blacklistEvaluator.resolve({ url: requested_url });
-  if (result.blocked) return result;
-  const ruleEvaluator = await RuleEvaluator.create();
-  result = ruleEvaluator.resolve({ url: requested_url });
-  if (result.blocked) return result;
-  return result;
-}
+const ResolveSite = async (url: string): Promise<ResolvedResult> => {
+  const requestedUrl = new URL(url);
+  const blacklistCheck = await BlacklistEvaluator();
+  const blacklistResult = blacklistCheck(requestedUrl);
+  if (blacklistResult.blocked) return blacklistResult;
+  const search = createKeywordSet(requestedUrl.searchParams);
+  const ruleCheck = await RuleEvaluator(search);
+  const ruleResult = ruleCheck(requestedUrl);
+  if (ruleResult.blocked) return ruleResult;
+  return { blocked: false };
+};
 
 export default ResolveSite;

@@ -3,6 +3,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import LinkIcon from "@mui/icons-material/Link";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import type { Redirect } from "@/validator/redirect";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState, useEffect, useCallback, memo } from "react";
 import {
@@ -22,7 +23,7 @@ import {
   Typography,
   ListItemIcon,
 } from "@mui/material";
-import { setRedirect, deleteRedirect, getRedirect, type Redirect, listenRedirectChanges } from "@/utils/redirect";
+import { setRedirect, deleteRedirect, getRedirect, listenRedirectChanges } from "@/utils/redirect";
 
 interface RedirectSiteProps {
   site: Redirect | null;
