@@ -1,18 +1,16 @@
-import { getRuleList } from "@/utils/rules";
-import { getRedirect } from "@/utils/redirect";
-import { getBlockedSites } from "@/utils/sites";
-import SiteBlockerError from "@/helper/site-blocker-error";
-/**
- * @throws {SiteBlockerError}
- */
-const ResolveSite = async (url: string) => {
+import RuleEvaluator from "@/resolver/rule-resolver";
+import { type ResolvedResult } from "@/types/interfaces";
+import BlacklistEvaluator from "@/resolver/blacklist-resolver";
+
+const ResolveSite: (url: string) => Promise<ResolvedResult> = async (url: string) => {
   const requested_url = new URL(url);
-  // const search_query = new URLSearchParams(requested_url.search);
-  const redirect_url = await getRedirect();
-  const blockedSites = await getBlockedSites();
-  // const rules = await getRuleList();
-
-  if (blockedSites.includes(requested_url.origin)) {
-
-  }
+  const blacklistEvaluator = await BlacklistEvaluator.create();
+  let result: ResolvedResult = blacklistEvaluator.resolve({ url: requested_url });
+  if (result.blocked) return result;
+  const ruleEvaluator = await RuleEvaluator.create();
+  result = ruleEvaluator.resolve({ url: requested_url });
+  if (result.blocked) return result;
+  return result;
 }
+
+export default ResolveSite;
