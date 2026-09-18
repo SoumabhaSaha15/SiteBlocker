@@ -1,14 +1,15 @@
 # ![icon](./public/icon/32.png)  SiteBlocker Overview
 
-
-> ### Site-guard
-
-<img src="./screenshots/sites-guard.png" alt="preview" width="100%"/>
----
-
 ## Easy way to block distracting websites to prevent access while you work
 
-> ### Key Features :-
+> ### Site-block
+
+<img src="./screenshots/sites-guard.png" alt="preview" width="100%"/>
+
+---
+
+
+> ### Key Features (ongoing) :-
 - [x] URL Blocking:
 Block distracting and harmful websites, including subdomains.
 
