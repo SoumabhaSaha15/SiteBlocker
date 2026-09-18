@@ -1,9 +1,11 @@
 const init = () => {
   const params = new URLSearchParams(window.location.search);
-  const blockedUrlString = params.get('blockedUrl');
+  const matchedPattern = params.get('matchedPattern');
+  const reason = params.get('reason');
   const siteName = document.querySelector('h1#site-name')!;
-  const blockedUrl = new URL(blockedUrlString!);
-  siteName.textContent = blockedUrl.hostname;
+  const reasonBadge = document.querySelector('span#reason')!;
+  siteName.textContent = matchedPattern ?? "";
+  reasonBadge.textContent = reason ?? "Access Restricted";
 };
 
 if (document.readyState === 'loading') {

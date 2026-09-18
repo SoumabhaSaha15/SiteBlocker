@@ -1,9 +1,8 @@
-import { RESTRICTED_KEYS } from "@/config/storage-keys";
+import { ALLOWED_KEYS } from "@/config/storage-keys";
 import browser from "webextension-polyfill";
 
 export const getSyncedData: () => Promise<Record<string, any>> = async () => {
-  const keys = (await browser.storage.local.getKeys()).filter(item => !RESTRICTED_KEYS.includes(item));
-  const result = await browser.storage.local.get(keys);
+  const result = await browser.storage.local.get(ALLOWED_KEYS);
   return result as Record<string, any>;
 }
 

@@ -1,6 +1,6 @@
+import BrandIcon from "@/shared/BrandIcon";
 import { useEffect, useState } from 'react';
 import browser from 'webextension-polyfill';
-import BrandIcon from "@/icon.svg?react";
 import MenuIcon from '@mui/icons-material/Menu';
 import DoneIcon from '@mui/icons-material/Done';
 import LockIcon from '@mui/icons-material/Lock';
@@ -155,6 +155,7 @@ export default function App(props: AppProps) {
           <SvgIcon
             className="text-3xl mr-1"
             viewBox="0 0 32 32"
+
             component={BrandIcon}
             sx={{ border: (theme) => theme.palette.primary.contrastText }}
           />

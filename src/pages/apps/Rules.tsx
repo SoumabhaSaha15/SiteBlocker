@@ -27,8 +27,7 @@ export default function Rules() {
 
   useEffect(() => {
     getRuleList().then(data => setRules(data));
-    const removeListener = listenRulesChanges(setRules);
-    return removeListener;
+    return listenRulesChanges(setRules);
   }, []);
 
   return (

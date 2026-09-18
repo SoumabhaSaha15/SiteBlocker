@@ -7,4 +7,9 @@ export const KEYS = {
   passwordProtected: "PASSWORD-PROTECTED",
 } as const;
 
-export const RESTRICTED_KEYS: string[] = [KEYS.passwordHash, KEYS.passwordProtected, KEYS.workingStatus];
+// export const RESTRICTED_KEYS: string[] = [KEYS.passwordHash, KEYS.passwordProtected, KEYS.workingStatus];
+export const ALLOWED_KEYS: string[] = [
+  KEYS.blockedSites,
+  KEYS.redirectUrl,
+  KEYS.rules
+];

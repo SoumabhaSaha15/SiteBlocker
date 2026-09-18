@@ -16,7 +16,6 @@
     "generate-icons": "pnpm run icon:16 && pnpm run icon:32 && pnpm run icon:48 && pnpm run icon:96 && pnpm run icon:128"
   },
   "dependencies": {
-    "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@hookform/resolvers": "^5.9.1",
@@ -34,6 +33,7 @@
     "@crxjs/vite-plugin": "^2.7.1",
     "@hookform/devtools": "^4.4.0",
     "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/webextension-polyfill": "^0.12.6",
@@ -42,7 +42,6 @@
     "tailwindcss": "^4.3.3",
     "typescript": "~7.0.2",
     "vite": "^8.3.0",
-    "vite-plugin-svgr": "^5.2.0",
     "webextension-polyfill": "^0.12.0"
   }
 }

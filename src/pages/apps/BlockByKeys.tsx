@@ -1,10 +1,17 @@
 // import React from 'react'
-import { TextField, Divider, InputAdornment, IconButton, Box } from '@mui/material';
+import { TextField, Divider, InputAdornment, IconButton, Box, Typography } from '@mui/material';
 import AbcIcon from '@mui/icons-material/Abc';
 import Add from '@mui/icons-material/Add';
 export default function BlockByKeys() {
   return (
     <Box className="flex flex-col items-center gap-6 p-4 w-full">
+      <Typography
+        variant='h5'
+        component="h5"
+        sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
+        className='w-full max-w-160 p-2 rounded-xl text-center'
+        children={"Block Keys/Words"}
+      />
       <TextField
         fullWidth
         className="max-w-160"

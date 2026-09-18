@@ -59,6 +59,13 @@ const darkTheme = createTheme(
           },
         },
       },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+          },
+        },
+      },
     }
   }
 );

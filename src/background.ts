@@ -5,9 +5,6 @@ import { getRedirect } from "@/utils/redirect";
 import { getWorkingStatus } from "@/utils/blocker";
 import type { ResolvedResult } from "@/types/interfaces";
 
-
-browser.runtime.onInstalled.addListener(console.dir);
-
 browser.action.onClicked.addListener(() => {
   browser.tabs.create({
     url: browser.runtime.getURL("src/index.html"),
@@ -18,16 +15,15 @@ browser.action.onClicked.addListener(() => {
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === "loading" && tab.url) {
     const extensionUrlPrefix = browser.runtime.getURL("");
-    if (tab.url.startsWith(extensionUrlPrefix)) return; // Prevent recursive redirect loops on internal extension pages
+    if (tab.url.startsWith(extensionUrlPrefix)) return;
     const isRunning = await getWorkingStatus();
     if (!isRunning) return;
     let result: ResolvedResult = await ResolveSite(tab.url);
     if (!result.blocked) return;
-    const defaultGuard = browser.runtime.getURL(
-      `src/redirect.html?blockedUrl=${encodeURIComponent(tab.url)}`
-    );
+    const defaultGuard = new URL(browser.runtime.getURL("src/redirect.html"));
+    defaultGuard.search = (new URLSearchParams(result as unknown as Record<string, any>)).toString();
     const redirect = await getRedirect();
-    let target = defaultGuard;
+    let target = defaultGuard.toString();
     if (redirect) {
       result = await ResolveSite(redirect);
       if (!result.blocked) target = redirect;
@@ -38,17 +34,33 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 });
 
 const CTX_MENU_ID = "webdude-site_blocker";
+const CTX_ACTION_REPO_ID = "webdude-action-repo";
+
 browser.runtime.onInstalled.addListener(() => {
   browser.contextMenus.create({
     id: CTX_MENU_ID,
     title: "Block this site",
     contexts: ["selection", "page", "link"] // Choose where it appears
   });
+  browser.contextMenus.create({
+    id: CTX_ACTION_REPO_ID,
+    title: "Visit GitHub Repository",
+    contexts: ["action"]
+  });
 });
 
 browser.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === CTX_MENU_ID) {
-    const url = URL.parse(info.pageUrl!);
-    url && blacklistSite(url.origin);
+  switch (info.menuItemId) {
+    case CTX_MENU_ID: {
+      const url = URL.parse(info.pageUrl!);
+      url && blacklistSite(url.origin);
+      break;
+    }
+    case CTX_ACTION_REPO_ID: {
+      browser.tabs.create({
+        url: "https://github.com/SoumabhaSaha15/SiteBlocker"
+      });
+      break;
+    }
   }
 });

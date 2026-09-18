@@ -8,7 +8,7 @@ const BlacklistEvaluator = async (): Promise<BlacklistEvaluatorFn> => {
   return (url: URL) => {
     const isBlacklisted = blacklist.has(url.origin);
     return isBlacklisted
-      ? { blocked: true, reason: 'DOMAIN_BLACKLIST', matchedPattern: url.hostname }
+      ? { blocked: true, reason: 'DOMAIN_BLACKLISTED', matchedPattern: url.hostname }
       : { blocked: false };
   };
 };

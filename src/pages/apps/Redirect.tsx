@@ -190,12 +190,18 @@ export default function Redirect() {
 
   useEffect(() => {
     getRedirect().then(setRedirectSite);
-    let removeListener = listenRedirectChanges(setRedirectSite);
-    return removeListener;
+    return listenRedirectChanges(setRedirectSite);
   }, []);
 
   return (
     <Box className="flex flex-col items-center gap-6 p-4 w-full">
+      <Typography
+        variant='h5'
+        component="h5"
+        sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
+        className='w-full max-w-160 p-2 rounded-xl text-center'
+        children={"Redirect"}
+      />
       <TextField
         fullWidth
         className="max-w-160"

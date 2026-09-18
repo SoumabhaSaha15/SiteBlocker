@@ -1,12 +1,9 @@
 import z from "zod";
 import { type Sites } from "@/validator/sites";
 import Add from "@mui/icons-material/AddRounded";
-import Android12Switch from "@/shared/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import { useState, useEffect, useCallback, Fragment, memo } from "react";
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
-import { getWorkingStatus, setWorkingStatus, type WorkingStatus, listenStatusChanges } from "@/utils/blocker";
 import { blacklistSite, getIcon, getBlockedSites, setBlockedSites, listenBlockedSitesChanges } from "@/utils/sites";
 import {
   Box,
@@ -77,11 +74,6 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
                   slotProps={{
                     img: {
                       className: "object-contain",
-                      // onError: (e) => {
-                      //   const target = e.currentTarget;
-                      //   target.onerror = null; // prevents infinite loop if fallback fails
-                      //   target.src = getFallbackIcon(target.src);
-                      // },
                     }
                   }}
 
@@ -111,12 +103,10 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
   );
 });
 
-export default function Home() {
-
+export default function BlockedSites() {
   const [url, setUrl] = useState("");
   const [error, setError] = useState<null | string>(null);
   const [sites, setSites] = useState<Sites>([]);
-  const [isActive, setIsActive] = useState<WorkingStatus>(false);
 
   const addUrl = (urlString: string) => {
     blacklistSite(urlString)
@@ -138,65 +128,18 @@ export default function Home() {
 
   useEffect(() => {
     getBlockedSites().then(setSites);
-    getWorkingStatus().then(setIsActive);
-    let rl1 = listenBlockedSitesChanges(setSites);
-    let rl2 = listenStatusChanges(setIsActive);
-    return () => {
-      rl1();
-      rl2();
-    };
+    return listenBlockedSitesChanges(setSites);
   }, []);
-
 
   return (
     <Box className="flex flex-col items-center gap-6 p-4 w-full">
-      {/* Working Status Toggle */}
-      <List
-        dense={false}
-        className="w-full max-w-160 rounded-2xl py-2"
-        sx={{
-          border: 1,
-          borderColor: "divider",
-          bgcolor: "background.paper",
-        }}
-      >
-        <ListItem
-          className="h-14 px-3"
-          secondaryAction={
-            <Android12Switch
-              onChange={(_, checked) => setWorkingStatus(checked)}
-              checked={isActive}
-            />
-          }
-        >
-          <ListItemAvatar className="min-w-0 mr-3">
-            <Avatar
-              variant="rounded"
-              className="w-12 h-12 rounded-xl"
-              sx={{ bgcolor: (isActive ? "green" : "red") }}
-            >
-              <PowerSettingsNewIcon fontSize="medium" />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            id="switch-list-label-working-status"
-            primary={
-              <Typography variant="body1" className="font-medium">
-                Running
-              </Typography>
-            }
-            secondary={
-              <Typography
-                variant="body2"
-                className="font-medium"
-              >
-                {isActive ? "Yes" : "No"}
-              </Typography>
-            }
-          />
-        </ListItem>
-      </List>
-
+      <Typography
+        variant='h5'
+        component="h5"
+        sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
+        className='w-full max-w-160 p-2 rounded-xl text-center'
+        children={"Blocked Sites"}
+      />
       {/* URL Input */}
       <TextField
         fullWidth
@@ -240,7 +183,6 @@ export default function Home() {
         error={!!error}
         helperText={error}
       />
-
       <Divider className="w-full max-w-160" sx={{ borderColor: "divider", borderWidth: 1 }} />
       <SiteList sites={sites} onDelete={deleteUrl} />
     </Box>

@@ -2,13 +2,14 @@ import { JSX } from "react";
 import Apps from "@/pages/apps/index";
 import Avatar from "@mui/material/Avatar";
 import AbcIcon from '@mui/icons-material/Abc';
-import HomeIcon from '@mui/icons-material/Home';
+// import HomeIcon from '@mui/icons-material/Home';
 import SyncIcon from '@mui/icons-material/Sync';
 import LockIcon from '@mui/icons-material/Lock';
 import RepeatIcon from '@mui/icons-material/Repeat';
 // import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import BulletedIcon from '@mui/icons-material/FormatListBulleted';
-import ExtraSettingsIcon from '@mui/icons-material/SettingsSuggest';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export enum AppList {
   HOME,
@@ -24,9 +25,9 @@ export enum AppList {
 };
 
 export const MENU_LIST = [
-  { name: 'Home', icon: <HomeIcon />, appKey: AppList.HOME },
+  { name: 'Blocked Sites', icon: <NotInterestedIcon />, appKey: AppList.HOME },
   { name: 'Rules', icon: <BulletedIcon />, appKey: AppList.RULES },
-  { name: 'Extra config', icon: <ExtraSettingsIcon />, appKey: AppList.EXTRA_CONFIG },
+  { name: 'Settings', icon: <SettingsIcon />, appKey: AppList.EXTRA_CONFIG },
   { name: 'Redirect', icon: <RepeatIcon />, appKey: AppList.REDIRECT },
   // { name: 'Active Hours', icon: <AccessTimeIcon />, appKey: AppList.ACTIVE_HOURS },
   { name: 'Block keys', icon: <AbcIcon />, appKey: AppList.BLOCK_KEYS },
