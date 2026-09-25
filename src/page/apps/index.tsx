@@ -1,15 +1,29 @@
-import { JSX } from "react";
-import Apps from "@/pages/apps/index";
+import Sync from './Sync';
+import React from "react";
+import Rules from './Rules';
+import AboutUs from './AboutUs';
+import Password from './Password';
+import Home from './BlockedSites';
+import Redirect from './Redirect';
+import ExtraConfig from './Settings';
+import ActiveHours from './ActiveHours';
+import BlockByKeys from './BlockByKeys';
 import Avatar from "@mui/material/Avatar";
 import AbcIcon from '@mui/icons-material/Abc';
-// import HomeIcon from '@mui/icons-material/Home';
 import SyncIcon from '@mui/icons-material/Sync';
 import LockIcon from '@mui/icons-material/Lock';
 import RepeatIcon from '@mui/icons-material/Repeat';
+import SettingsIcon from '@mui/icons-material/Settings';
 // import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import BulletedIcon from '@mui/icons-material/FormatListBulleted';
-import SettingsIcon from '@mui/icons-material/Settings';
+
+const Apps = {
+  Home, Rules, ExtraConfig, Redirect, ActiveHours, BlockByKeys, Sync, AboutUs, Password
+}
+
+
+
 
 export enum AppList {
   HOME,
@@ -37,7 +51,7 @@ export const MENU_LIST = [
 ];
 
 
-export const APP_MAP: Record<AppList, JSX.Element> = {
+export const APP_MAP: Record<AppList, React.JSX.Element> = {
   0: <Apps.Home />,
   1: <Apps.Rules />,
   2: <Apps.ExtraConfig />,

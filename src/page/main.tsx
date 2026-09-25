@@ -1,5 +1,5 @@
 import React from "react";
-import App from "@/pages/App";
+import App from "@/page/App";
 import ReactDOM from "react-dom/client";
 import darkTheme from "@/config/theme";
 import { SnackbarProvider } from 'notistack';

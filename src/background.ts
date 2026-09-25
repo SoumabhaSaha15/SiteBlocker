@@ -7,7 +7,7 @@ import type { ResolvedResult } from "@/types/interfaces";
 
 browser.action.onClicked.addListener(() => {
   browser.tabs.create({
-    url: browser.runtime.getURL("src/index.html"),
+    url: browser.runtime.getURL("src/page/index.html"),
   });
 });
 
@@ -20,7 +20,7 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (!isRunning) return;
     let result: ResolvedResult = await ResolveSite(tab.url);
     if (!result.blocked) return;
-    const defaultGuard = new URL(browser.runtime.getURL("src/redirect.html"));
+    const defaultGuard = new URL(browser.runtime.getURL("src/redirect/index.html"));
     defaultGuard.search = (new URLSearchParams(result as unknown as Record<string, any>)).toString();
     const redirect = await getRedirect();
     let target = defaultGuard.toString();

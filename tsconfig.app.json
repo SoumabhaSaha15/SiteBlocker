@@ -1,13 +1,26 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "target": "ES2022",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2020",
+    "jsx": "react-jsx",
     "lib": [
-      "ES2023"
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
     ],
     "moduleDetection": "force",
+    "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "types": [
+      "vite/client",
+      "@crxjs/vite-plugin/client",
+    ],
     "allowImportingTsExtensions": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
@@ -19,7 +32,6 @@
     "noUncheckedSideEffectImports": true
   },
   "include": [
-    "vite.config.ts",
-    "manifest.config.ts"
+    "src"
   ]
 }

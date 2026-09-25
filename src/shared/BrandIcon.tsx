@@ -1,6 +1,5 @@
-import * as React from "react";
-
-const Icon = () => (
+import React from "react";
+const Icon: React.FC = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlSpace="preserve"

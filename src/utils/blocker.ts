@@ -1,6 +1,6 @@
 import z from 'zod';
-import { KEYS } from '@/config/storage-keys';
 import browser from 'webextension-polyfill';
+import { KEYS } from '@/config/storage-keys';
 
 const statusParser = z.boolean().catch(false);
 export type WorkingStatus = z.infer<typeof statusParser>;

@@ -84,7 +84,12 @@ export default function Password() {
 
   return (
     <>
-      <Box component={"form"} className="flex flex-col min-h-full items-center w-full p-4 gap-6" onSubmit={handleSubmit(formSubmit)} >
+      <Box
+        component={"form"}
+        // sx={{backgroundColor:"background.paper"}}
+        className="flex flex-col min-h-full items-center w-full p-4 gap-6"
+        onSubmit={handleSubmit(formSubmit)}
+      >
         <List
           dense={false}
           className="w-full max-w-160 rounded-2xl py-2"

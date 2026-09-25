@@ -13,7 +13,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useSnackbar, type OptionsObject } from 'notistack';
 import { getSyncedData, downloadJSONFile } from "@/utils/sync";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { AppList, MENU_LIST, APP_MAP } from '@/utils/constants';
+import { AppList, MENU_LIST, APP_MAP } from '@/page/apps/index';
 import { getPasswordProtected, verifyAppPassword } from "@/utils/password";
 import { passwordSchema, type PasswordFormData } from "@/validator/password";
 import {
@@ -138,7 +138,7 @@ export default function App(props: AppProps) {
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: (theme) => theme.palette.primary.main,
+          backgroundColor: (theme) => theme.palette.secondary.main,
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
@@ -153,16 +153,16 @@ export default function App(props: AppProps) {
             <MenuIcon />
           </IconButton>
           <SvgIcon
-            className="text-3xl mr-1"
+            // className="text-xl mr-2"
             viewBox="0 0 32 32"
-
             component={BrandIcon}
-            sx={{ border: (theme) => theme.palette.primary.contrastText }}
+            // sx={{background:"background.paper"}}
           />
           <Typography
             variant="h6"
             noWrap
             component="div"
+            className="ml-2"
             sx={{ color: (theme) => theme.palette.primary.contrastText }}
           >
             Site Blocker
