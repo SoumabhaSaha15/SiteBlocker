@@ -3,6 +3,8 @@ import { createTheme } from '@mui/material/styles';
 const brandBlue = '#1499ff'; // Extracted from BrandIcon SVG[cite: 5]
 const darkTheme = createTheme(
   {
+    cssVariables:true,
+    spacing: 4,
     colorSchemes: {
       light: {
         palette: {
@@ -54,7 +56,7 @@ const darkTheme = createTheme(
       },
     },
     typography: { fontFamily: '"Roboto", serif' },
-    shape: { borderRadius: 12 },
+    shape: { borderRadius: 8 },
     components: {
       MuiButton: {
         styleOverrides: {

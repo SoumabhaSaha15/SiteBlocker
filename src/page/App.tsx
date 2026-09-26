@@ -31,9 +31,10 @@ import {
   DialogContent,
   TextField,
   DialogActions,
-  Button
+  Button,
+  Slide
 } from '@mui/material';
-
+import { TransitionGroup } from 'react-transition-group';
 const SNACK_OPTION: OptionsObject = {
   variant: "default",
   autoHideDuration: 2000,
@@ -116,7 +117,7 @@ export default function App(props: AppProps) {
                   setMobileOpen(false);
                 }}
               >
-                <ListItemIcon sx={{ color: (theme) => theme.palette.primary.dark }}>
+                <ListItemIcon sx={{ color: (theme) => theme.palette.primary.main }} className="mr-2">
                   {icon}
                 </ListItemIcon>
                 <ListItemText primary={name} />
@@ -156,7 +157,7 @@ export default function App(props: AppProps) {
             // className="text-xl mr-2"
             viewBox="0 0 32 32"
             component={BrandIcon}
-            // sx={{background:"background.paper"}}
+          // sx={{background:"background.paper"}}
           />
           <Typography
             variant="h6"
@@ -219,7 +220,23 @@ export default function App(props: AppProps) {
         }}
       >
         <Toolbar />
-        {isPasswordStateLoaded && (isAppLocked ? <ExportData /> : APP_MAP[app])}
+        <TransitionGroup>
+          {isPasswordStateLoaded && (
+            isAppLocked ? (
+              <Slide direction="right" timeout={500} key="locked">
+                <div>
+                  <ExportData />
+                </div>
+              </Slide>
+            ) : (
+              <Slide direction="right" timeout={500} key={app || 'unlocked'}>
+                <div>
+                  {APP_MAP[app]}
+                </div>
+              </Slide>
+            )
+          )}
+        </TransitionGroup>
         <PasswordProtection
           passwordProtected={passwordProtected}
           unlocked={isUnlocked}

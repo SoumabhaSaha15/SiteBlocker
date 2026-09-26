@@ -18,7 +18,9 @@ import {
   InputAdornment,
   Typography,
   Link,
+  Collapse
 } from "@mui/material";
+import { TransitionGroup } from 'react-transition-group';
 
 interface SiteListProps {
   sites: Sites;
@@ -32,73 +34,77 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
       className="w-full max-w-160 rounded-2xl overflow-clip"
       sx={{ border: 1, borderColor: "divider", bgcolor: "background.paper" }}
     >
-      {(!sites.length) ? (
-        <ListItem className="px-3">
-          <ListItemAvatar className="min-w-0 mx-3">
-            <Avatar variant="square" className="w-10 h-10 rounded-xl" sx={{ backgroundColor: "red" }}>
-              <NotInterestedIcon fontSize="medium" />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={<Typography variant="body2" className="font-medium" color="text.secondary">Empty list</Typography>}
-            secondary={<Typography variant="caption" color="text.disabled" className="block">There is no blacklisted site.</Typography>}
-          />
-        </ListItem>
-      ) : sites.map((item, index) => {
-        const urlObject = new URL(item);
-        return (
-          <Fragment key={item}>
-            <ListItem
-              className="px-3"
-              sx={{ "&:hover": { bgcolor: "action.hover" } }}
-              secondaryAction={
-                <IconButton
-                  edge="end"
-                  size="small"
-                  aria-label="delete"
-                  onClick={() => onDelete(item)}
-                  color="error"
-                  className="rounded-md!"
-                  sx={{ "&:hover": { bgcolor: "error.lighter" } }}
-                >
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
-              }
-            >
-              <ListItemAvatar className="min-w-0 mr-3">
-                <Avatar
-                  alt={urlObject.host}
-                  src={getIcon(urlObject.href)}
-                  variant="square"
-                  className="w-10 h-10 rounded-xl"
-                  slotProps={{
-                    img: {
-                      className: "object-contain",
-                    }
-                  }}
-
-                  sx={{ bgcolor: (theme) => theme.palette.background.paper }}
-                />
-              </ListItemAvatar>
-              <ListItemText
-                primary={<Typography variant="body2" className="font-medium">{urlObject.hostname}</Typography>}
-                secondary={
-                  <Link
-                    variant="caption"
-                    href={urlObject.href}
-                    className="truncate max-w-70 sm:max-w-none block"
-                    target="_blank"
-                    children={urlObject.host}
-                  />
-                }
+      <TransitionGroup>
+        {(!sites.length) ? (
+          <Collapse>
+          <ListItem className="px-3">
+            <ListItemAvatar className="min-w-0 mx-3">
+              <Avatar variant="square" className="w-10 h-10 rounded-xl" sx={{ backgroundColor: "red" }}>
+                <NotInterestedIcon fontSize="medium" />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={<Typography variant="body2" className="font-medium" color="text.secondary">Empty list</Typography>}
+              secondary={<Typography variant="caption" color="text.disabled" className="block">There is no blacklisted site.</Typography>}
               />
-            </ListItem>
-            {sites.length - 1 !== index && (
-              <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1 }} />
-            )}
-          </Fragment>
-        );
-      })}
+          </ListItem>
+          </Collapse>
+        ) : sites.map((item, index) => {
+          const urlObject = new URL(item);
+          return (
+            <Collapse key={item}>
+              <ListItem
+                className="px-3"
+                sx={{ "&:hover": { bgcolor: "action.hover" } }}
+                secondaryAction={
+                  <IconButton
+                    edge="end"
+                    size="small"
+                    aria-label="delete"
+                    onClick={() => onDelete(item)}
+                    color="error"
+                    className="rounded-md!"
+                    sx={{ "&:hover": { bgcolor: "error.lighter" } }}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                }
+              >
+                <ListItemAvatar className="min-w-0 mr-3">
+                  <Avatar
+                    alt={urlObject.host}
+                    src={getIcon(urlObject.href)}
+                    variant="square"
+                    className="w-10 h-10 rounded-xl"
+                    slotProps={{
+                      img: {
+                        className: "object-contain",
+                      }
+                    }}
+
+                    sx={{ bgcolor: (theme) => theme.palette.background.paper }}
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={<Typography variant="body2" className="font-medium">{urlObject.hostname}</Typography>}
+                  secondary={
+                    <Link
+                      variant="caption"
+                      href={urlObject.href}
+                      className="truncate max-w-70 sm:max-w-none block"
+                      target="_blank"
+                      children={urlObject.host}
+                    />
+                  }
+                />
+              </ListItem>
+              {sites.length - 1 !== index && (
+                <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1 }} />
+              )}
+            </Collapse>
+          );
+        })}
+      </TransitionGroup>
     </List>
   );
 });

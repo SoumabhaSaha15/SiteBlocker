@@ -17,7 +17,7 @@ export default defineConfig({
     tailwindcss(),
     react(),
     crx({ manifest }),
-    zip({ outDir: 'release', outFileName: `crx-${pkg.name}-${pkg.version}.zip` }),
+    zip({ outDir: 'release', outFileName: `site-blocker-${pkg.version}.zip` }),
   ],
   build: {
     rollupOptions: {
@@ -41,11 +41,10 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5173,
-    strictPort: true,
-    hmr: {
-      port: 5173,
-      host: 'localhost',
+    cors: {
+      origin: [
+        /chrome-extension:\/\//,
+      ],
     },
   },
 });

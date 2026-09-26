@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@theme {
+  /*
+    Tailwind v4 default spacing is already 0.25rem (4px).
+    --spacing: 0.25rem;
+    This means:
+    p-1 = 4px, p-2 = 8px, p-3 = 12px, p-4 = 16px, etc.
+  */
+
+  /* Material Design 3 Shape Tokens mapped into Tailwind v4 */
+  --radius-xs: var(--mui-shape-borderRadius-xs, 4px);
+  --radius-sm: var(--mui-shape-borderRadius-sm, 8px);
+  --radius-md: var(--mui-shape-borderRadius-md, 12px);
+  --radius-lg: var(--mui-shape-borderRadius-lg, 16px);
+  --radius-xl: var(--mui-shape-borderRadius-xl, 28px);
+  --radius-full: 9999px;
+}
+
+/* Layer priority: ensure Tailwind utilities take precedence over base MUI styles */
+@layer theme, base, components, utilities;

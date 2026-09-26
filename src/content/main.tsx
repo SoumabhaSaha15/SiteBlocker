@@ -8,21 +8,21 @@ import { ThemeProvider } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { StyledEngineProvider } from '@mui/material/styles';
 
-console.log('[CRXJS] Hello world from content script!')
-
-const container = document.createElement('div');
-container.id = 'crxjs-app';
-document.body.appendChild(container);
-createRoot(container).render(
-  <StrictMode>
-    <StyledEngineProvider enableCssLayer>
-      <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <SnackbarProvider maxSnack={3} style={{ borderRadius: 16 }}>
-          <App />
-        </SnackbarProvider>
-      </ThemeProvider>
-    </StyledEngineProvider>
-  </StrictMode>,
-)
+(()=>{
+  const container = document.createElement('div');
+  container.id = 'SiteBlockerOverlay';
+  document.body.replaceWith(container);
+  createRoot(container).render(
+    <StrictMode>
+      <StyledEngineProvider enableCssLayer>
+        <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <SnackbarProvider maxSnack={3} style={{ borderRadius: 16 }}>
+            <App />
+          </SnackbarProvider>
+        </ThemeProvider>
+      </StyledEngineProvider>
+    </StrictMode>
+  );
+})()
