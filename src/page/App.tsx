@@ -32,7 +32,7 @@ import {
   TextField,
   DialogActions,
   Button,
-  Slide
+  Collapse
 } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
 const SNACK_OPTION: OptionsObject = {
@@ -154,10 +154,8 @@ export default function App(props: AppProps) {
             <MenuIcon />
           </IconButton>
           <SvgIcon
-            // className="text-xl mr-2"
             viewBox="0 0 32 32"
             component={BrandIcon}
-          // sx={{background:"background.paper"}}
           />
           <Typography
             variant="h6"
@@ -223,17 +221,17 @@ export default function App(props: AppProps) {
         <TransitionGroup>
           {isPasswordStateLoaded && (
             isAppLocked ? (
-              <Slide direction="right" timeout={500} key="locked">
-                <div>
+              <Collapse timeout={{ enter: 500, exit: 500 }} key="locked">
+                {/* <div> */}
                   <ExportData />
-                </div>
-              </Slide>
+                {/* </div> */}
+              </Collapse>
             ) : (
-              <Slide direction="right" timeout={500} key={app || 'unlocked'}>
-                <div>
+              <Collapse timeout={{ enter: 500, exit: 500 }} key={app || 'unlocked'}>
+                {/* <div> */}
                   {APP_MAP[app]}
-                </div>
-              </Slide>
+                {/* </div> */}
+              </Collapse>
             )
           )}
         </TransitionGroup>

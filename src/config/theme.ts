@@ -3,7 +3,7 @@ import { createTheme } from '@mui/material/styles';
 const brandBlue = '#1499ff'; // Extracted from BrandIcon SVG[cite: 5]
 const darkTheme = createTheme(
   {
-    cssVariables:true,
+    // cssVariables:true,
     spacing: 4,
     colorSchemes: {
       light: {
@@ -77,20 +77,20 @@ const darkTheme = createTheme(
       MuiListItem: {
         styleOverrides: {
           root: {
-            paddingTop: '2px',
-            paddingBottom: '2px',
-            paddingLeft: '0',
-            paddingRight: '8px',
+            paddingTop: '4px',
+            paddingBottom: '4px',
+            paddingLeft: '4px',
+            paddingRight: '4px',
           },
         },
       },
       MuiListItemButton: {
         styleOverrides: {
           root: {
-            borderBottomLeftRadius: 0,
-            borderTopLeftRadius: 0,
-            borderBottomRightRadius: 50,
-            borderTopRightRadius: 50,
+            borderBottomLeftRadius: 12,
+            borderTopLeftRadius: 12,
+            borderBottomRightRadius: 12,
+            borderTopRightRadius: 12,
             boxShadow: 'none', // MD3 relies on tonal elevation over deep shadows
           },
         },

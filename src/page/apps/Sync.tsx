@@ -14,7 +14,7 @@ export default function Sync() {
   const theme = useTheme();
   const [value, setValue] = useState('1');
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
@@ -31,7 +31,7 @@ export default function Sync() {
         variant='h5'
         component="h5"
         sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-        className='w-full max-w-160 p-2 rounded-xl text-center'
+        className='w-full max-w-160 p-2 rounded-lg text-center'
         children={"Data Sync"}
       />
       <TabContext value={value}>
@@ -39,15 +39,15 @@ export default function Sync() {
           onChange={handleChange}
           aria-label="lab tabs"
           className='min-w-[min(640px,80%)]'
-          sx={{ borderBottom: 1, borderColor: 'divider' }}
+          sx={{ borderBottom: 1, borderColor: 'divider', borderRadius:1}}
         >
-          <Tab label="Export Data" value="1" />
+          <Tab label="Export Data" value="1" className='rounded-l-lg'/>
           <Tab label="Import Data" value="2" />
         </TabList>
         <TabPanel value="1" tabIndex={0} className='min-w-[min(640px,80%)] p-1'>
           <Paper
             elevation={0}
-            className="w-full rounded-2xl"
+            className="w-full rounded-lg"
             variant="outlined"
             sx={{
               p: 2,
@@ -74,7 +74,7 @@ export default function Sync() {
           <br />
           <Button
             variant='contained'
-            className='w-full'
+            className='w-full rounded-lg'
             size='large'
             type='submit'
             color='secondary'
@@ -87,7 +87,7 @@ export default function Sync() {
         <TabPanel value="2" tabIndex={0} className='min-w-[min(640px,80%)] p-1'>
           <Button
             variant='contained'
-            className='w-full'
+            className='w-full rounded-lg'
             size='large'
             type='submit'
             color='secondary'

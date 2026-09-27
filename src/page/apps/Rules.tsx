@@ -8,15 +8,16 @@ import LinkIcon from '@mui/icons-material/Link';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { zodResolver } from "@hookform/resolvers/zod";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { TransitionGroup } from 'react-transition-group';
+import { useEffect, useState, Fragment, useId } from 'react';
 import RuleIcon from '@mui/icons-material/FormatListBulleted';
 import { rulesSchema, type RulesType } from '@/validator/rules';
 import AddRuleIcon from '@mui/icons-material/FormatListBulletedAdd';
-import { useEffect, useState, Fragment, Activity, useId, } from 'react';
 import { saveRule, getRuleList, listenRulesChanges } from "@/utils/rules";
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
 import { useForm, Controller, SubmitHandler, UseFormReset } from "react-hook-form";
-import { Box, TextField, Button, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Chip, Divider, Autocomplete, Fab, IconButton, Menu, MenuItem, ListItemIcon, Stack } from '@mui/material';
+import { Box, TextField, Button, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Chip, Divider, Autocomplete, Fab, IconButton, Menu, MenuItem, ListItemIcon, Stack, Collapse } from '@mui/material';
 
 const EMPTY_RULE: RulesType = { blocked: false, blockedKeys: [], isActive: false, site: "" };
 
@@ -32,70 +33,84 @@ export default function Rules() {
 
   return (
     <>
-      {mode ? (<RulesForm
-        defaultData={formData}
-        setData={(data, resetData) => {
-          console.log(data);
-          saveRule(data)
-            .then(() => {
-              resetData();
-              enqueueSnackbar("Rule saved ✅.");
-            })
-            .catch((err: Error) => {
-              enqueueSnackbar(err.message, { variant: "error" });
-            })
-            .finally(() => { setMode(prev => !prev); });
-        }}
-      />) : (
-        <Box className="flex flex-col min-h-full items-center w-full p-4 gap-6">
-          <Typography
-            variant='h5'
-            component="h5"
-            sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-            className='w-full max-w-160 p-2 rounded-xl text-center'
-            children={"Rules list"}
-          />
-
-          <List
-            dense={false}
-            className="w-full max-w-160 rounded-2xl py-1.5"
-            sx={{
-              border: 1,
-              borderColor: "divider",
-              bgcolor: "background.paper",
-            }}
-          >
-            {(!rules.length) ? (
-              <ListItem className="h-14 px-3">
-                <ListItemAvatar className="min-w-0 mr-3">
-                  <Avatar variant="square" className="w-12 h-12 rounded-xl" sx={{ backgroundColor: "red" }}>
-                    <RuleIcon fontSize="medium" />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={<Typography variant="body2" className="font-medium" color="text.secondary">No Rules</Typography>}
-                  secondary={<Typography variant="caption" color="text.disabled" className="block">No rules created</Typography>}
+      <TransitionGroup>
+        {
+          mode ? (
+            <Collapse timeout={{ enter: 500, exit: 500 }} key="rules-form">
+              <RulesForm
+                defaultData={formData}
+                setData={(data, resetData) => {
+                  console.log(data);
+                  saveRule(data)
+                    .then(() => {
+                      resetData();
+                      enqueueSnackbar("Rule saved ✅.");
+                    })
+                    .catch((err: Error) => {
+                      enqueueSnackbar(err.message, { variant: "error" });
+                    })
+                    .finally(() => { setMode(prev => !prev); });
+                }}
+              />
+            </Collapse>
+          ) : (
+            <Collapse timeout={{ enter: 500, exit: 500 }} key="rules-list">
+              <Box className="flex flex-col min-h-full items-center w-full p-4 gap-6">
+                <Typography
+                  variant='h5'
+                  component="h5"
+                  sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
+                  className='w-full max-w-160 p-2 rounded-lg text-center'
+                  children={"Rules list"}
                 />
-              </ListItem>
-            ) : rules.map((item, index) => (
-              <Fragment key={index}>
-                <RulePreview rule={item} handleDelete={() => { }} handleEdit={() => {
-                  console.log("message");
-                  setFormData(item);
-                  setMode(prev => !prev);
-                }} />
-                {rules.length - 1 !== index && (
-                  <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1 }} />
-                )}
-              </Fragment>
-            ))}
-          </List>
-        </Box>)}
+
+                <List
+                  dense={false}
+                  className="w-full max-w-160 rounded-lg border"
+                  sx={{
+                    borderColor: "divider",
+                    bgcolor: "background.paper",
+                  }}
+                >
+                  {(!rules.length) ? (
+                    <ListItem className="h-14 px-2">
+                      <ListItemAvatar className="min-w-0 mr-3">
+                        <Avatar className="w-10 h-10 rounded-md" sx={{ backgroundColor: "red" }}>
+                          <RuleIcon fontSize="medium" />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={<Typography variant="body2" className="font-medium" color="text.secondary">No Rules</Typography>}
+                        secondary={<Typography variant="caption" color="text.disabled" className="block">No rules created</Typography>}
+                      />
+                    </ListItem>
+                  ) : rules.map((item, index) => (
+                    <Fragment key={index}>
+                      <RulePreview
+                        rule={item}
+                        handleDelete={() => { }}
+                        handleEdit={() => {
+                          setFormData(item);
+                          setMode(prev => !prev);
+                        }}
+                      />
+                      {rules.length - 1 !== index && (
+                        <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1 }} />
+                      )}
+                    </Fragment>
+                  ))}
+                </List>
+              </Box>
+            </Collapse>
+          )
+        }
+      </TransitionGroup>
 
       <Fab
         variant="extended"
         color='primary'
-        sx={{ position: 'absolute', bottom: 16, right: 16, borderRadius: 1 }}
+        className='border rounded-md'
+        sx={{ position: 'absolute', bottom: 16, right: 16, }}
         onClick={() => {
           setMode(prev => !prev);
           setFormData(EMPTY_RULE);
@@ -103,12 +118,12 @@ export default function Rules() {
       >
         {mode ? (
           <>
-            <RuleIcon sx={{ mr: 1 }} />
+            <RuleIcon className='mr-1' />
             See rules
           </>
         ) : (
           <>
-            <AddRuleIcon sx={{ mr: 1 }} />
+            <AddRuleIcon className='mr-1' />
             Add rule
           </>
         )}
@@ -253,7 +268,7 @@ const RulesForm = ({ defaultData, setData }: {
         variant='h5'
         component="h5"
         sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-        className='w-full max-w-160 p-2 rounded-xl text-center'
+        className='w-full max-w-160 p-2 rounded-lg text-center'
         children={"Rules form"}
       />
 
@@ -261,11 +276,13 @@ const RulesForm = ({ defaultData, setData }: {
         {...register("site")}
         slotProps={{
           input: {
+            className: "rounded-lg",
             endAdornment: <LinkIcon />
           }
         }}
+        fullWidth
         type='url'
-        sx={{ minWidth: "min(640px,100%)" }}
+        className='max-w-160'
         label="Site URL"
         variant='outlined'
         disabled={isSubmitting}
@@ -283,7 +300,12 @@ const RulesForm = ({ defaultData, setData }: {
               freeSolo
               options={[]}
               value={field.value}
-              sx={{ minWidth: "min(640px,100%)" }}
+              sx={{
+                minWidth: "min(640px,100%)",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "16px",
+                },
+              }}
               onChange={(_, newValue) => field.onChange(newValue)}
               renderValue={(props, getProps) => (props.map((option, index) => {
                 const { key, ...tagProps } = getProps({ index });
@@ -304,7 +326,7 @@ const RulesForm = ({ defaultData, setData }: {
 
       <List
         dense={false}
-        className="w-full max-w-160 rounded-2xl py-1.5"
+        className="w-full max-w-160 rounded-lg"
         sx={{
           border: 1,
           borderColor: "divider",
@@ -316,14 +338,14 @@ const RulesForm = ({ defaultData, setData }: {
           control={control}
           render={({ field }) => (
             <ListItem
-              className="h-14 px-3"
+              className="h-14 px-2"
               secondaryAction={
                 <Switch {...field} checked={Boolean(field.value)} />
               }>
               <ListItemAvatar className="min-w-0 mr-3">
                 <Avatar
-                  variant="rounded"
-                  className="w-12 h-12 rounded-xl"
+                  // variant="rounded"
+                  className="w-10 h-10 rounded-md"
                   sx={{ bgcolor: (field.value ? "green" : "red") }}
                 >
                   <PowerSettingsNewIcon fontSize='medium' />
@@ -354,14 +376,14 @@ const RulesForm = ({ defaultData, setData }: {
           control={control}
           render={({ field }) => (
             <ListItem
-              className="h-14 px-3"
+              className="h-14 px-2"
               secondaryAction={
                 <Switch {...field} checked={Boolean(field.value)} />
               }>
               <ListItemAvatar className="min-w-0 mr-3">
                 <Avatar
-                  variant="rounded"
-                  className="w-12 h-12 rounded-xl"
+                  // variant="rounded"
+                  className="w-10 h-10 rounded-md"
                 >
                   {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />}
                 </Avatar>
@@ -392,6 +414,7 @@ const RulesForm = ({ defaultData, setData }: {
         sx={{ minWidth: "min(640px,100%)" }}
         size='large'
         type='submit'
+        className='rounded-lg'
         disabled={isSubmitting || !isDirty}
         startIcon={<Save />}
       >

@@ -86,7 +86,6 @@ export default function Password() {
     <>
       <Box
         component={"form"}
-        // sx={{backgroundColor:"background.paper"}}
         className="flex flex-col min-h-full items-center w-full p-4 gap-6"
         onSubmit={handleSubmit(formSubmit)}
       >
@@ -139,13 +138,14 @@ export default function Password() {
           variant='h5'
           component="h5"
           sx={{ borderColor: "divider", borderWidth: 1, backgroundColor: "secondary.main", color: "secondary.contrastText" }}
-          className='w-full max-w-160 p-2 rounded-xl text-center'
+          className='w-full max-w-160 p-2 rounded-lg text-center'
           children={"Reset password 🔐"}
         />
         <TextField
           {...register("oldPassword")}
           slotProps={{
             input: {
+              className:"rounded-lg",
               endAdornment: <PasswordIcon />
             }
           }}
@@ -162,6 +162,7 @@ export default function Password() {
           {...register("newPassword")}
           slotProps={{
             input: {
+              className:"rounded-lg",
               endAdornment: <PasswordIcon />
             }
           }}
@@ -176,6 +177,7 @@ export default function Password() {
           {...register("confirmPassword")}
           slotProps={{
             input: {
+              className:"rounded-lg",
               endAdornment: <PasswordIcon />
             }
           }}
@@ -209,6 +211,7 @@ export default function Password() {
               label="Password"
               type="password"
               disabled={isSettingUp}
+              slotProps={{input:{className:"rounded-lg"}}}
               error={!!setupErrors.password}
               helperText={setupErrors.password?.message}
             />
@@ -218,6 +221,7 @@ export default function Password() {
               margin="dense"
               label="Confirm password"
               type="password"
+              slotProps={{input:{className:"rounded-lg"}}}
               disabled={isSettingUp}
               error={!!setupErrors.confirmPassword}
               helperText={setupErrors.confirmPassword?.message}
@@ -229,6 +233,8 @@ export default function Password() {
             type="submit"
             form="password-setup-form"
             variant="contained"
+            size='large'
+            className='rounded-lg'
             disabled={isSettingUp}
             sx={{ width: "100%" }}
           >

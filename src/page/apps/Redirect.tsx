@@ -72,15 +72,15 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
   return (
     <List
       dense={false}
-      className="w-full max-w-160 rounded-2xl overflow-clip"
-      sx={{ border: 1, borderColor: "divider", bgcolor: "background.paper" }}
+      className="w-full max-w-160 rounded-lg overflow-clip border"
+      sx={{ borderColor: "divider", bgcolor: "background.paper" }}
     >
       {(!link) ? (
-        <ListItem className="px-3">
+        <ListItem className="px-2">
           <ListItemAvatar className="min-w-0 mr-3">
             <Avatar
-              variant="square"
-              className="w-10 h-10 rounded-xl"
+              // variant="square"
+              className="w-10 h-10 rounded-md"
               sx={{ backgroundColor: "red" }}
             >
               <LinkIcon fontSize="medium" />
@@ -100,7 +100,7 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
           />
         </ListItem>
       ) : (
-        <ListItem className="px-3"
+        <ListItem className="px-2"
           secondaryAction={
             <>
               <IconButton
@@ -112,7 +112,7 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
                 aria-haspopup="true"
                 aria-expanded={open}
                 onClick={handleClick}
-                className="rounded-md!"
+                sx={{ borderRadius: 1 }}
               >
                 <MoreVertIcon fontSize="small" />
               </IconButton>
@@ -149,8 +149,8 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
         >
           <ListItemAvatar className="min-w-0 mr-3">
             <Avatar
-              variant="square"
-              className="w-10 h-10 rounded-xl"
+              // variant="square"
+              className="w-10 h-10 rounded-md"
               sx={{ backgroundColor: "green" }}
             >
               <LinkIcon fontSize="medium" />
@@ -199,7 +199,7 @@ export default function Redirect() {
         variant='h5'
         component="h5"
         sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-        className='w-full max-w-160 p-2 rounded-xl text-center'
+        className='w-full max-w-160 p-2 rounded-lg text-center'
         children={"Redirect"}
       />
       <TextField
@@ -207,7 +207,7 @@ export default function Redirect() {
         className="max-w-160"
         slotProps={{
           input: {
-            className: "rounded-2xl",
+            className: "rounded-lg",
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
@@ -217,8 +217,10 @@ export default function Redirect() {
                   onClick={() => {
                     setRedirectUrl(url);
                   }}
-                  className="rounded-lg! transition-all"
+                  // className="rounded-lg! transition-all"
+
                   sx={{
+                    borderRadius: 1,
                     color: "primary.contrastText",
                     bgcolor: "primary.main",
                     "&:hover": {

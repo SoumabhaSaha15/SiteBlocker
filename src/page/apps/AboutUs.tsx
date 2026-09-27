@@ -36,11 +36,11 @@ const PRIMARY_LINKS = [
 const MY_LINKS = [
   'https://leetcode.com/u/SoumabhaSaha',
   'https://github.com/soumabhasaha15',
+  'https://www.facebook.com/WebDude1509',
   'https://www.linkedin.com/in/soumabha-saha-663816253',
   'https://hashnode.com/@soumabhasaha15',
   'https://x.com/SoumabhaSaha15',
   'https://www.instagram.com/webdude1509',
-  'https://www.facebook.com/WebDude1509',
 ];
 
 const openLink = (url: string) => window.open(url, '_blank')?.focus();
@@ -77,15 +77,12 @@ export default function AboutUs() {
                   size="small"
                 >
                   <Avatar
-                    // alt={item.link}
-                    // src={item.image}
-                    className="w-10 h-10 rounded-full"
+                    className="w-10 h-10 border"
                     sx={{
-                      border: 1,
                       borderColor: 'divider',
-                      bgcolor: theme => theme.palette.background.paper,
+                      bgcolor: "background.paper",
                     }}
-                    children={<item.image sx={{ color: "primary.dark" }} />}
+                    children={<item.image sx={{ color: "primary.main" }} />}
                   />
                 </IconButton>
               </Tooltip>
@@ -101,14 +98,13 @@ export default function AboutUs() {
         />
       </Card>
 
-      <Divider className="w-full max-w-160" children={<Chip label="Other links" size="small" />} sx={{ borderColor: (theme) => theme.palette.text.disabled }} />
+      <Divider className="w-full max-w-160"  children={<Chip label="Other links" size="medium" />} sx={{ borderColor: (theme) => theme.palette.divider }} />
 
       {/* Social / Portfolio Links List */}
       <List
         dense={false}
-        className="w-full max-w-160 rounded-2xl overflow-clip"
+        className="w-full max-w-160 rounded-lg overflow-clip border"
         sx={{
-          border: 1,
           borderColor: 'divider',
           bgcolor: 'background.paper',
         }}
@@ -118,7 +114,7 @@ export default function AboutUs() {
           return (
             <Fragment key={item}>
               <ListItem
-                className="px-3"
+                className="px-2"
                 sx={{
                   '&:hover': {
                     bgcolor: 'action.hover',
@@ -130,7 +126,7 @@ export default function AboutUs() {
                     alt={hostname}
                     src={getIcon(origin)}
                     variant='square'
-                    className="w-10 h-10 rounded-xl"
+                    className="w-10 h-10 rounded-md"
                     sx={{
                       bgcolor: theme => theme.palette.background.paper,
                     }}

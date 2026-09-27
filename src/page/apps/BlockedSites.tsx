@@ -3,7 +3,7 @@ import { type Sites } from "@/validator/sites";
 import Add from "@mui/icons-material/AddRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
-import { useState, useEffect, useCallback, Fragment, memo } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { blacklistSite, getIcon, getBlockedSites, setBlockedSites, listenBlockedSitesChanges } from "@/utils/sites";
 import {
   Box,
@@ -31,30 +31,30 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
   return (
     <List
       dense={false}
-      className="w-full max-w-160 rounded-2xl overflow-clip"
-      sx={{ border: 1, borderColor: "divider", bgcolor: "background.paper" }}
+      className="w-full max-w-160 rounded-lg overflow-clip border"
+      sx={{ borderColor: "divider", backgroundColor: "background.paper" }}
     >
       <TransitionGroup>
         {(!sites.length) ? (
           <Collapse>
-          <ListItem className="px-3">
-            <ListItemAvatar className="min-w-0 mx-3">
-              <Avatar variant="square" className="w-10 h-10 rounded-xl" sx={{ backgroundColor: "red" }}>
-                <NotInterestedIcon fontSize="medium" />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={<Typography variant="body2" className="font-medium" color="text.secondary">Empty list</Typography>}
-              secondary={<Typography variant="caption" color="text.disabled" className="block">There is no blacklisted site.</Typography>}
+            <ListItem className="px-2">
+              <ListItemAvatar className="min-w-0 mx-3">
+                <Avatar variant="square" className="w-10 h-10 rounded-xl" sx={{ backgroundColor: "red" }}>
+                  <NotInterestedIcon fontSize="medium" />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={<Typography variant="body2" className="font-medium" color="text.secondary">Empty list</Typography>}
+                secondary={<Typography variant="caption" color="text.disabled" className="block">There is no blacklisted site.</Typography>}
               />
-          </ListItem>
+            </ListItem>
           </Collapse>
         ) : sites.map((item, index) => {
           const urlObject = new URL(item);
           return (
             <Collapse key={item}>
               <ListItem
-                className="px-3"
+                className="px-2"
                 sx={{ "&:hover": { bgcolor: "action.hover" } }}
                 secondaryAction={
                   <IconButton
@@ -63,8 +63,7 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
                     aria-label="delete"
                     onClick={() => onDelete(item)}
                     color="error"
-                    className="rounded-md!"
-                    sx={{ "&:hover": { bgcolor: "error.lighter" } }}
+                    sx={{ borderRadius:1 }}
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
@@ -75,10 +74,10 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
                     alt={urlObject.host}
                     src={getIcon(urlObject.href)}
                     variant="square"
-                    className="w-10 h-10 rounded-xl"
+                    className="w-10 h-10 rounded-md"
                     slotProps={{
                       img: {
-                        className: "object-contain",
+                        className: "object-cover",
                       }
                     }}
 
@@ -143,7 +142,7 @@ export default function BlockedSites() {
         variant='h5'
         component="h5"
         sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-        className='w-full max-w-160 p-2 rounded-xl text-center'
+        className='w-full max-w-160 p-2 rounded-lg text-center'
         children={"Blocked Sites"}
       />
       {/* URL Input */}
@@ -152,7 +151,7 @@ export default function BlockedSites() {
         className="max-w-160"
         slotProps={{
           input: {
-            className: "rounded-2xl",
+            className: "rounded-lg",
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
@@ -160,8 +159,9 @@ export default function BlockedSites() {
                   edge="start"
                   disabled={!url}
                   onClick={() => { addUrl(url); }}
-                  className="rounded-lg! transition-all"
+                  // className="rounded-lg! transition-all"
                   sx={{
+                    borderRadius:1,
                     color: "primary.contrastText",
                     bgcolor: "primary.main",
                     "&:hover": {

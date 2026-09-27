@@ -28,16 +28,15 @@ export default function Settings() {
 
       <List
         dense={false}
-        className="w-full max-w-160 rounded-2xl py-1.5"
+        className="w-full max-w-160 rounded-lg border"
         sx={{
-          border: 1,
           borderColor: "divider",
           bgcolor: "background.paper",
         }}
       >
 
         <ListItem
-          className="h-14 px-3"
+          className="h-14 px-2"
           secondaryAction={
             <Switch
               onChange={(_, checked) => setWorkingStatus(checked)}
@@ -47,8 +46,8 @@ export default function Settings() {
         >
           <ListItemAvatar className="min-w-0 mr-3">
             <Avatar
-              variant="rounded"
-              className="w-12 h-12 rounded-xl"
+              // variant="rounded"
+              className="w-10 h-10 rounded-md"
               sx={{ bgcolor: (isActive ? "green" : "red") }}
             >
               <PowerSettingsNewIcon fontSize="medium" />
@@ -73,14 +72,14 @@ export default function Settings() {
         </ListItem>
         <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1, my: 0.5 }} />
         <ListItem
-          className="h-14 px-3"
+          className="h-14 px-2"
           secondaryAction={
             <Switch />
           }>
           <ListItemAvatar className="min-w-0 mr-3">
             <Avatar
-              variant="rounded"
-              className="w-12 h-12 rounded-xl"
+              // variant="rounded"
+              className="w-10 h-10 rounded-md"
             // sx={{ bgcolor: (field.value ? "green" : "red") }}
             >
               <PowerSettingsNewIcon fontSize='medium' />
@@ -105,14 +104,14 @@ export default function Settings() {
         </ListItem>
         <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1, my: 0.5 }} />
         <ListItem
-          className="h-14 px-3"
+          className="h-14 px-2"
           secondaryAction={
             <Switch checked />
           }>
           <ListItemAvatar className="min-w-0 mr-3">
             <Avatar
-              variant="rounded"
-              className="w-12 h-12 rounded-xl"
+              // variant="rounded"
+              className="w-10 h-10 rounded-md"
             >
               <RemoveCircleTwoToneIcon fontSize='medium' />
               {/* {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />} */}

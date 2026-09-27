@@ -1,6 +1,6 @@
 // import React from 'react'
 import { TextField, Divider, InputAdornment, IconButton, Box, Typography } from '@mui/material';
-import AbcIcon from '@mui/icons-material/Abc';
+// import AbcIcon from '@mui/icons-material/Abc';
 import Add from '@mui/icons-material/Add';
 export default function BlockByKeys() {
   return (
@@ -9,7 +9,7 @@ export default function BlockByKeys() {
         variant='h5'
         component="h5"
         sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-        className='w-full max-w-160 p-2 rounded-xl text-center'
+        className='w-full max-w-160 p-2 rounded-lg text-center'
         children={"Block Keys/Words"}
       />
       <TextField
@@ -25,8 +25,9 @@ export default function BlockByKeys() {
                   edge="start"
                   // disabled={!url}
                   // onClick={() => { addUrl(url); }}
-                  className="rounded-lg! transition-all"
+                  // className="rounded-lg! transition-all"
                   sx={{
+                    borderRadius:1,
                     color: "primary.contrastText",
                     bgcolor: "primary.main",
                     "&:hover": {
