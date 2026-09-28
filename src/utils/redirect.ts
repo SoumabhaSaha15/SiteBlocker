@@ -9,7 +9,7 @@ export const deleteRedirect: () => Promise<void> = async () => {
 }
 
 export const getRedirect: () => Promise<Redirect | null> = async () => {
-  let result = await browser.storage.local.get(REDIRECT_KEY);
+  const result = await browser.storage.local.get(REDIRECT_KEY);
   return (result[REDIRECT_KEY] as Redirect) ?? null;
 }
 export const setRedirect: (url: Redirect) => Promise<void> = async (url) => {

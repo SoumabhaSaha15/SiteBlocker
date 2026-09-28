@@ -161,7 +161,7 @@ export default function App(props: AppProps) {
             variant="h6"
             noWrap
             component="div"
-            className="ml-2"
+            className="ml-1"
             sx={{ color: (theme) => theme.palette.primary.contrastText }}
           >
             Site Blocker

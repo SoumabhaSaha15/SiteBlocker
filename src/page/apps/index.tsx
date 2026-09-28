@@ -18,13 +18,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import BulletedIcon from '@mui/icons-material/FormatListBulleted';
 
-const Apps = {
-  Home, Rules, ExtraConfig, Redirect, ActiveHours, BlockByKeys, Sync, AboutUs, Password
-}
-
-
-
-
+// const Apps = {
+//   Home, Rules, ExtraConfig, Redirect, ActiveHours, BlockByKeys, Sync, AboutUs, Password
+// }
 export enum AppList {
   HOME,
   RULES,
@@ -52,14 +48,14 @@ export const MENU_LIST = [
 
 
 export const APP_MAP: Record<AppList, React.JSX.Element> = {
-  0: <Apps.Home />,
-  1: <Apps.Rules />,
-  2: <Apps.ExtraConfig />,
-  3: <Apps.Redirect />,
-  4: <Apps.ActiveHours />,
-  5: <Apps.BlockByKeys />,
-  6: <Apps.Sync />,
-  7: <Apps.Password />,
-  8: <Apps.AboutUs />,
-  9: <Apps.Home />
+  0: <Home />,
+  1: <Rules />,
+  2: <ExtraConfig />,
+  3: <Redirect />,
+  4: <ActiveHours />,
+  5: <BlockByKeys />,
+  6: <Sync />,
+  7: <Password />,
+  8: <AboutUs />,
+  9: <Home />
 }

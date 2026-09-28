@@ -21,7 +21,7 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     let result: ResolvedResult = await ResolveSite(tab.url);
     if (!result.blocked) return;
     const defaultGuard = new URL(browser.runtime.getURL("src/redirect/index.html"));
-    defaultGuard.search = (new URLSearchParams(result as unknown as Record<string, any>)).toString();
+    defaultGuard.search = (new URLSearchParams(result as unknown as Record<string, string>)).toString();
     const redirect = await getRedirect();
     let target = defaultGuard.toString();
     if (redirect) {
@@ -49,11 +49,12 @@ browser.runtime.onInstalled.addListener(() => {
   });
 });
 
-browser.contextMenus.onClicked.addListener((info, tab) => {
+browser.contextMenus.onClicked.addListener((info) => {
   switch (info.menuItemId) {
     case CTX_MENU_ID: {
       const url = URL.parse(info.pageUrl!);
-      url && blacklistSite(url.origin);
+      if (url)
+        return void blacklistSite(url.origin);
       break;
     }
     case CTX_ACTION_REPO_ID: {

@@ -19,7 +19,7 @@ export default function Sync() {
   };
 
   const isDarkMode = theme.palette.mode === "dark";
-  const [data, setData] = useState<Record<string, any>>({});
+  const [data, setData] = useState<Record<string, unknown>>({});
   useEffect(() => {
     getSyncedData().then(setData);
     return listenDataChanges(setData);

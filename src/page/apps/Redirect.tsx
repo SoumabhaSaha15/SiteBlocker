@@ -5,7 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import type { Redirect } from "@/validator/redirect";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useState, useEffect, useCallback, memo } from "react";
+import { useState, useEffect, memo, useMemo } from "react";
 import {
   Box,
   TextField,
@@ -32,42 +32,31 @@ interface RedirectSiteProps {
 
 const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSiteProps) {
   const id = "redirect";
-  const [link, setLink] = useState<URL | null>(null);
+  const link = useMemo(() => {
+    if (!site) return null;
+    try {
+      return new URL(site);
+    } catch {
+      return null;
+    }
+  }, [site]);
   const buttonId = `${id}-button`, menuId = `${id}-menu`;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
-  const handleDelete = useCallback(() => {
-    deleteRedirect()
-      .then(() => {
-        setLink(null);
-        handleClose();
-      });
-  }, [site]);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
 
+  const handleClose = () => setAnchorEl(null);
 
-  const handleEdit = useCallback(() => {
+  const handleDelete = () => deleteRedirect().then(() => handleClose());
+
+  const handleEdit = () => {
     if (site) {
       setUrl(site);
       handleClose();
     }
-  }, [site, setUrl]);
+  };
 
-  useEffect(() => {
-    if (site) {
-      try {
-        setLink(new URL(site));
-      } catch (e) {
-        setLink(null);
-      }
-    }
-  }, [site]);
 
   return (
     <List

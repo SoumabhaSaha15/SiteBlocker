@@ -38,8 +38,8 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
         {(!sites.length) ? (
           <Collapse>
             <ListItem className="px-2">
-              <ListItemAvatar className="min-w-0 mx-3">
-                <Avatar variant="square" className="w-10 h-10 rounded-xl" sx={{ backgroundColor: "red" }}>
+              <ListItemAvatar className="min-w-0 mr-3">
+                <Avatar variant="square" className="w-10 h-10 rounded-md" sx={{ backgroundColor: "red" }}>
                   <NotInterestedIcon fontSize="medium" />
                 </Avatar>
               </ListItemAvatar>
@@ -63,7 +63,7 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
                     aria-label="delete"
                     onClick={() => onDelete(item)}
                     color="error"
-                    sx={{ borderRadius:1 }}
+                    sx={{ borderRadius: 1 }}
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
@@ -75,12 +75,7 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
                     src={getIcon(urlObject.href)}
                     variant="square"
                     className="w-10 h-10 rounded-md"
-                    slotProps={{
-                      img: {
-                        className: "object-cover",
-                      }
-                    }}
-
+                    slotProps={{ img: { className: "object-cover" } }}
                     sx={{ bgcolor: (theme) => theme.palette.background.paper }}
                   />
                 </ListItemAvatar>
@@ -161,7 +156,7 @@ export default function BlockedSites() {
                   onClick={() => { addUrl(url); }}
                   // className="rounded-lg! transition-all"
                   sx={{
-                    borderRadius:1,
+                    borderRadius: 1,
                     color: "primary.contrastText",
                     bgcolor: "primary.main",
                     "&:hover": {

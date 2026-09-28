@@ -192,6 +192,7 @@ export default function Password() {
           variant='contained'
           sx={{ minWidth: "min(640px,100%)" }}
           size='large'
+          className='rounded-lg'
           type='submit'
           startIcon={<Save />}
         >

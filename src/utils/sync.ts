@@ -1,12 +1,12 @@
 import { ALLOWED_KEYS } from "@/config/storage-keys";
 import browser from "webextension-polyfill";
 
-export const getSyncedData: () => Promise<Record<string, any>> = async () => {
+export const getSyncedData: () => Promise<Record<string, unknown>> = async () => {
   const result = await browser.storage.local.get(ALLOWED_KEYS);
-  return result as Record<string, any>;
+  return result as Record<string, unknown>;
 }
 
-export const downloadJSONFile: (filename: string, jsonObject: Record<string, any>) => void = (filename, jsonObject) => {
+export const downloadJSONFile: (filename: string, jsonObject: Record<string, unknown>) => void = (filename, jsonObject) => {
   const jsonStr = JSON.stringify(jsonObject, null, 2);
   const blob = new Blob([jsonStr], { type: "application/json" });
   const link = document.createElement("a");
@@ -17,8 +17,8 @@ export const downloadJSONFile: (filename: string, jsonObject: Record<string, any
   document.body.removeChild(link);
 }
 
-export const listenDataChanges = (setData: (v: Record<string, any> | ((prev: Record<string, any>) => Record<string, any>)) => void) => {
-  const event = (changes: Record<string, browser.Storage.StorageChange>, area: string) => {
+export const listenDataChanges = (setData: (v: Record<string, unknown> | ((prev: Record<string, unknown>) => Record<string, unknown>)) => void) => {
+  const event = (_changes: Record<string, browser.Storage.StorageChange>, area: string) => {
     if (area !== "local") return;
     getSyncedData().then(setData);
   }
