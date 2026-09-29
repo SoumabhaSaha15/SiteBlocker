@@ -7,7 +7,22 @@ import { useEffect, useState, type ChangeEvent } from "react";
 import { enqueueSnackbar, type OptionsObject } from "notistack";
 import { getPasswordProtected, setAppPassword, setPasswordProtected, verifyAppPassword } from "@/utils/password";
 import { passwordSetupSchema, resetPasswordSchema, type PasswordSetupFormData, type ResetPasswordSchema } from '@/validator/password';
-import { Box, TextField, Button, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions, Divider } from '@mui/material';
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Divider
+} from '@mui/material';
 
 const SNACK_OPTION: OptionsObject = {
   variant: "default",
@@ -145,7 +160,7 @@ export default function Password() {
           {...register("oldPassword")}
           slotProps={{
             input: {
-              className:"rounded-lg",
+              className: "rounded-lg",
               endAdornment: <PasswordIcon />
             }
           }}
@@ -162,7 +177,7 @@ export default function Password() {
           {...register("newPassword")}
           slotProps={{
             input: {
-              className:"rounded-lg",
+              className: "rounded-lg",
               endAdornment: <PasswordIcon />
             }
           }}
@@ -177,7 +192,7 @@ export default function Password() {
           {...register("confirmPassword")}
           slotProps={{
             input: {
-              className:"rounded-lg",
+              className: "rounded-lg",
               endAdornment: <PasswordIcon />
             }
           }}
@@ -212,7 +227,7 @@ export default function Password() {
               label="Password"
               type="password"
               disabled={isSettingUp}
-              slotProps={{input:{className:"rounded-lg"}}}
+              slotProps={{ input: { className: "rounded-lg" } }}
               error={!!setupErrors.password}
               helperText={setupErrors.password?.message}
             />
@@ -222,7 +237,7 @@ export default function Password() {
               margin="dense"
               label="Confirm password"
               type="password"
-              slotProps={{input:{className:"rounded-lg"}}}
+              slotProps={{ input: { className: "rounded-lg" } }}
               disabled={isSettingUp}
               error={!!setupErrors.confirmPassword}
               helperText={setupErrors.confirmPassword?.message}

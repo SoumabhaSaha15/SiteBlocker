@@ -135,6 +135,39 @@ export default function Settings() {
             }
           />
         </ListItem>
+        <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1, my: 0.5 }} />
+        <ListItem
+          className="h-14 px-2"
+          secondaryAction={
+            <Switch checked />
+          }>
+          <ListItemAvatar className="min-w-0 mr-3">
+            <Avatar
+              // variant="rounded"
+              className="w-10 h-10 rounded-md"
+            >
+              <RemoveCircleTwoToneIcon fontSize='medium' />
+              {/* {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />} */}
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            id="switch-list-label-password"
+            primary={
+              <Typography variant="body1" className="font-medium">
+                Preffered action
+              </Typography>
+            }
+            secondary={
+              <Typography
+                variant="body2"
+                className="font-medium"
+              >
+                Block
+                {/* {field.value ? "Block" : "Allow"} */}
+              </Typography>
+            }
+          />
+        </ListItem>
       </List>
     </Box >
   )

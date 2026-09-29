@@ -34,7 +34,7 @@ export enum AppList {
   DEFAULT,
 };
 
-export const MENU_LIST = [
+export const MenuList = [
   { name: 'Blocked Sites', icon: <NotInterestedIcon />, appKey: AppList.HOME },
   { name: 'Rules', icon: <BulletedIcon />, appKey: AppList.RULES },
   { name: 'Settings', icon: <SettingsIcon />, appKey: AppList.EXTRA_CONFIG },
@@ -47,7 +47,7 @@ export const MENU_LIST = [
 ];
 
 
-export const APP_MAP: Record<AppList, React.JSX.Element> = {
+export const AppMap: Record<AppList, React.JSX.Element> = {
   0: <Home />,
   1: <Rules />,
   2: <ExtraConfig />,

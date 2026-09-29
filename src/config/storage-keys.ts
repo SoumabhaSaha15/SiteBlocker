@@ -5,11 +5,12 @@ export const KEYS = {
   rules: "RULES-STORE",
   passwordHash: "SITE-BLOCKER-HASH",
   passwordProtected: "PASSWORD-PROTECTED",
+  blockedKeys:"KEYS-STORE"
 } as const;
 
-// export const RESTRICTED_KEYS: string[] = [KEYS.passwordHash, KEYS.passwordProtected, KEYS.workingStatus];
 export const ALLOWED_KEYS: string[] = [
   KEYS.blockedSites,
   KEYS.redirectUrl,
-  KEYS.rules
+  KEYS.rules,
+  KEYS.blockedKeys
 ];

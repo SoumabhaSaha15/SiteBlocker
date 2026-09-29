@@ -19,20 +19,23 @@ export const resetPasswordSchema = z.strictObject({
   oldPassword: password,
   newPassword: password,
   confirmPassword: password
-}).refine(
-  ({ newPassword, confirmPassword }) => newPassword === confirmPassword,
-  {
-    path: ["confirmPassword"],
-    error: "Confirm your new password."
+}).superRefine(({ oldPassword, newPassword, confirmPassword }, ctx) => {
+  if (newPassword !== confirmPassword) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Confirm your new password.",
+      path: ["confirmPassword"],
+    });
   }
-).refine(
-  ({ oldPassword, newPassword }) => newPassword !== oldPassword,
-  {
-    path: ["newPassword"],
-    error: "Old and new password can't be same."
-  }
-);
 
+  if (newPassword === oldPassword) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Old and new password can't be same.",
+      path: ["newPassword"],
+    });
+  }
+});
 export type PasswordFormData = z.infer<typeof passwordSchema>;
 export type PasswordSetupFormData = z.infer<typeof passwordSetupSchema>;
 export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;

@@ -33,3 +33,17 @@ export async function verifyAppPassword(inputPassword: string): Promise<boolean>
   const inputHash = await hashPassword(inputPassword);
   return inputHash === storedHash;
 }
+
+
+export const listenProtectionChanges = (setProtection: (v: boolean ) => void) => {
+  const event = (changes: Record<string, browser.Storage.StorageChange>, area: string) => {
+    if (area !== "local") return;
+      const change = changes[PASSWORD_PROTECTED_KEY];
+      if (change) {
+        const protectedState = change.newValue === true;
+        setProtection(protectedState);
+      }
+  }
+  browser.storage.onChanged.addListener(event);
+  return () => browser.storage.onChanged.removeListener(event);
+}

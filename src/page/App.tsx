@@ -1,40 +1,36 @@
 import BrandIcon from "@/shared/BrandIcon";
 import { useEffect, useState } from 'react';
-import browser from 'webextension-polyfill';
 import MenuIcon from '@mui/icons-material/Menu';
 import DoneIcon from '@mui/icons-material/Done';
 import LockIcon from '@mui/icons-material/Lock';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import CssBaseline from '@mui/material/CssBaseline';
 import { zodResolver } from "@hookform/resolvers/zod";
 import ListItemIcon from '@mui/material/ListItemIcon';
-import { useForm, SubmitHandler } from "react-hook-form";
+import { TransitionGroup } from 'react-transition-group';
 import { useSnackbar, type OptionsObject } from 'notistack';
+import { AppList, MenuList, AppMap } from '@/page/apps/index';
 import { getSyncedData, downloadJSONFile } from "@/utils/sync";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { AppList, MENU_LIST, APP_MAP } from '@/page/apps/index';
-import { getPasswordProtected, verifyAppPassword } from "@/utils/password";
+import { useForm, SubmitHandler, UseFormReset } from "react-hook-form";
 import { passwordSchema, type PasswordFormData } from "@/validator/password";
+import { getPasswordProtected, verifyAppPassword, listenProtectionChanges } from "@/utils/password";
 import {
-  Drawer,
-  AppBar,
-  SvgIcon,
-  Toolbar,
-  ListItem,
-  ListItemText,
-  ListItemButton,
   Box,
   List,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
   Button,
-  Collapse
+  Drawer,
+  AppBar,
+  Toolbar,
+  SvgIcon,
+  Collapse,
+  ListItem,
+  TextField,
+  ListItemText,
+  ListItemButton,
+  CircularProgress
 } from '@mui/material';
-import { TransitionGroup } from 'react-transition-group';
+
 const SNACK_OPTION: OptionsObject = {
   variant: "default",
   autoHideDuration: 2000,
@@ -43,24 +39,8 @@ const SNACK_OPTION: OptionsObject = {
 
 const DRAWER_WIDTH = 240;
 
-type PasswordProtectorProps = {
-  passwordProtected: boolean;
-  unlocked: boolean;
-  setUnlocked: (value: boolean) => void;
-  dismissed: boolean;
-  setDismissed: (value: boolean) => void;
-};
+function App() {
 
-interface AppProps {
-  window?: () => Window;
-}
-
-export default function App(props: AppProps) {
-  const { window } = props;
-  const [passwordProtected, setPasswordProtectedState] = useState(false);
-  const [isUnlocked, setIsUnlocked] = useState(true);
-  const [isPasswordStateLoaded, setIsPasswordStateLoaded] = useState(false);
-  const [passwordDialogDismissed, setPasswordDialogDismissed] = useState(false);
   const [app, setApp] = useState<AppList>(AppList.HOME);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -70,48 +50,18 @@ export default function App(props: AppProps) {
     setMobileOpen(false);
   };
 
-  const handleDrawerTransitionEnd = () => {
-    setIsClosing(false);
-  };
+  const handleDrawerTransitionEnd = () => setIsClosing(false);
 
-  const handleDrawerToggle = () => {
-    if (!isClosing) {
-      setMobileOpen(!mobileOpen);
-    }
-  };
-
-  useEffect(() => {
-    getPasswordProtected().then((protectedState) => {
-      setPasswordProtectedState(protectedState);
-      setIsUnlocked(!protectedState);
-      setIsPasswordStateLoaded(true);
-    });
-
-    const handleStorageChange = (changes: Record<string, { newValue?: unknown }>) => {
-      const change = changes.PasswordProtected;
-      if (change) {
-        const protectedState = change.newValue === true;
-        setPasswordProtectedState(protectedState);
-        setIsUnlocked(!protectedState);
-        setPasswordDialogDismissed(false);
-      }
-    };
-
-    browser.storage.onChanged.addListener(handleStorageChange);
-    return () => browser.storage.onChanged.removeListener(handleStorageChange);
-  }, []);
-
-  const isAppLocked = passwordProtected && !isUnlocked;
+  const handleDrawerToggle = () => (!isClosing) && setMobileOpen(!mobileOpen);
 
   const drawerContent = (
     <div>
       <Toolbar />
       <Box className="overflow-auto">
         <List>
-          {MENU_LIST.map(({ name, icon, appKey }) => (
+          {MenuList.map(({ name, icon, appKey }) => (
             <ListItem key={name} disablePadding>
               <ListItemButton
-                disabled={!isPasswordStateLoaded || isAppLocked}
                 onClick={() => {
                   setApp(appKey);
                   setMobileOpen(false);
@@ -129,17 +79,13 @@ export default function App(props: AppProps) {
     </div>
   );
 
-  const container = window !== undefined ? () => window().document.body : undefined;
-
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-
+    <Box className="flex">
       {/* Responsive AppBar */}
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: (theme) => theme.palette.secondary.main,
+          backgroundColor: "secondary.main",
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
@@ -162,7 +108,7 @@ export default function App(props: AppProps) {
             noWrap
             component="div"
             className="ml-1"
-            sx={{ color: (theme) => theme.palette.primary.contrastText }}
+            sx={{ color: "primary.contrastText" }}
           >
             Site Blocker
           </Typography>
@@ -177,7 +123,6 @@ export default function App(props: AppProps) {
       >
         {/* Mobile Drawer (Temporary) */}
         <Drawer
-          container={container}
           variant="temporary"
           open={mobileOpen}
           onTransitionEnd={handleDrawerTransitionEnd}
@@ -219,125 +164,153 @@ export default function App(props: AppProps) {
       >
         <Toolbar />
         <TransitionGroup>
-          {isPasswordStateLoaded && (
-            isAppLocked ? (
-              <Collapse timeout={{ enter: 500, exit: 500 }} key="locked">
-                {/* <div> */}
-                  <ExportData />
-                {/* </div> */}
-              </Collapse>
-            ) : (
-              <Collapse timeout={{ enter: 500, exit: 500 }} key={app || 'unlocked'}>
-                {/* <div> */}
-                  {APP_MAP[app]}
-                {/* </div> */}
-              </Collapse>
-            )
-          )}
+          <Collapse timeout={{ enter: 500, exit: 500 }} key={app}>
+            {AppMap[app]}
+          </Collapse>
         </TransitionGroup>
-        <PasswordProtection
-          passwordProtected={passwordProtected}
-          unlocked={isUnlocked}
-          setUnlocked={setIsUnlocked}
-          dismissed={passwordDialogDismissed}
-          setDismissed={setPasswordDialogDismissed}
-        />
       </Box>
     </Box>
   );
 }
 
-function PasswordProtection(props: PasswordProtectorProps) {
-  const { enqueueSnackbar } = useSnackbar();
-
+function PasswordForm({ setData }: {
+  setData: (data: PasswordFormData, reset: UseFormReset<PasswordFormData>) => void | Promise<void>
+}) {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<PasswordFormData>({
-    resolver: zodResolver(passwordSchema),
-  });
+  } = useForm<PasswordFormData>({ resolver: zodResolver(passwordSchema) });
 
-  const onSubmit: SubmitHandler<PasswordFormData> = async (data: PasswordFormData) => {
-    const isValid = await verifyAppPassword(data.password);
-    if (isValid) {
-      props.setUnlocked(true);
-      reset();
-      enqueueSnackbar({
-        key: crypto.randomUUID(),
-        message: "App Unlocked ✅",
-        ...SNACK_OPTION,
-      });
-    } else {
-      enqueueSnackbar({
-        key: crypto.randomUUID(),
-        message: "Incorrect password ❌",
-        ...SNACK_OPTION,
-      });
-    }
-  };
+  const formSubmit: SubmitHandler<PasswordFormData> = async (data) => void setData(data, reset);
 
   return (
-    <>
-      <Dialog
-        open={props.passwordProtected && !props.unlocked && !props.dismissed}
-        onClose={() => props.setDismissed(true)}
-        slotProps={{
-          paper: {
-            className: "min-w-96",
-          },
-        }}
+    <Box className="grid min-h-dvh place-items-center w-full p-4 gap-6">
+      <Box
+        component={"form"}
+        className="flex flex-col max-w-160 items-center w-full p-4 gap-6"
+        onSubmit={handleSubmit(formSubmit, console.dir)}
       >
-        <DialogTitle>Enter Password</DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSubmit(onSubmit)} id="password-form">
-            <TextField
-              {...register("password")}
-              autoFocus
-              margin="dense"
-              id="Password"
-              label="Password"
-              type="password"
-              fullWidth
-              slotProps={{
-                input: {
-                  endAdornment: <LockIcon />,
-                },
-              }}
-              variant="outlined"
-              disabled={isSubmitting}
-              error={!!errors.password}
-              helperText={errors.password?.message}
-            />
-          </form>
-        </DialogContent>
-        <DialogActions className="flex w-full justify-center items-center">
-          <Button
-            type="submit"
-            variant="contained"
-            startIcon={<DoneIcon />}
-            className="w-full"
-            form="password-form"
-            disabled={isSubmitting}
-          >
-            submit
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+        <Typography
+          variant='h5'
+          component="h5"
+          sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
+          className='w-full max-w-160 p-2 rounded-lg text-center'
+          children={"App locked! 🔒"}
+        />
+
+        <TextField
+          {...register("password")}
+          autoFocus
+          margin="dense"
+          id="Password"
+          label="Password"
+          type="password"
+          fullWidth
+          sx={{ maxWidth: "min(640px,100%)" }}
+          slotProps={{
+            input: {
+              className: "rounded-lg",
+              endAdornment: <LockIcon />,
+            },
+          }}
+          variant="outlined"
+          disabled={isSubmitting}
+          error={!!errors.password}
+          helperText={errors.password?.message}
+        />
+
+        <Button
+          sx={{ minWidth: "min(640px,100%)" }}
+          type="submit"
+          size="large"
+          variant="contained"
+          startIcon={<DoneIcon />}
+          className="rounded-lg"
+          disabled={isSubmitting}
+        >
+          Submit
+        </Button>
+
+        <Button
+          type="button"
+          size="large"
+          variant="contained"
+          className="rounded-lg"
+          startIcon={<FileDownloadIcon />}
+          color="error"
+          sx={{ minWidth: "min(640px,100%)" }}
+          onClick={() => {
+            getSyncedData()
+              .then(data => downloadJSONFile('site_blocker.json', data));
+          }}
+        >
+          Export data
+        </Button>
+      </Box>
+    </Box>
   );
 }
 
-function ExportData() {
+export default function PasswordProtectedApp() {
+  const { enqueueSnackbar } = useSnackbar();
+  const [protection, setProtection] = useState<null | boolean>(null);
+  const [lock, setLock] = useState<boolean>(true);
+  useEffect(() => {
+    let cancelled = false; //used to get rid of race condition occurs for slow-fetch [not likely]
+    getPasswordProtected()
+      .then((protectedState) => {
+        if (cancelled) return;
+        setProtection(protectedState);
+        setLock(protectedState);
+      })
+      .catch((err: Error) => {
+        if (!cancelled) enqueueSnackbar({ key: crypto.randomUUID(), message: err.message, ...SNACK_OPTION });
+      });
 
+    const unsubscribe = listenProtectionChanges((change) => {
+      cancelled = true; // a live change is authoritative from here on
+      setProtection(change);
+      setLock(change);
+    });
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
+  }, [enqueueSnackbar]);
   return (
-    <Box className="flex min-h-full items-center justify-center">
-      <Button variant="contained" startIcon={<FileDownloadIcon />} onClick={() => {
-        getSyncedData().then(data => downloadJSONFile('site_blocker.json', data))
-      }}>
-        Export data
-      </Button>
-    </Box>
-  );
+    <TransitionGroup>
+      {protection === null ? (
+        <Collapse timeout={{ enter: 500, exit: 500 }} key="app-loading">
+          <Box className="grid min-h-dvh place-items-center">
+            <CircularProgress aria-label="Loading…" />
+          </Box>
+        </Collapse>
+      ) : (
+        (protection && lock) ? (
+          <Collapse timeout={{ enter: 500, exit: 500 }} key="password-guard">
+            <PasswordForm
+              setData={async (data, reset) => {
+                try {
+                  const isverified = await verifyAppPassword(data.password);
+                  setLock(!isverified);
+                  if (isverified) {
+                    reset();
+                    enqueueSnackbar({ key: crypto.randomUUID(), message: "App Unlocked ✅", ...SNACK_OPTION });
+                  } else enqueueSnackbar({ key: crypto.randomUUID(), message: "Incorrect password ❌", ...SNACK_OPTION });
+                } catch (err) {
+                  enqueueSnackbar({ key: crypto.randomUUID(), message: (err as Error).message, ...SNACK_OPTION });
+                }
+              }}
+            />
+          </Collapse>
+        ) : (
+          <Collapse timeout={{ enter: 500, exit: 500 }} key="app">
+            <App />
+          </Collapse>
+        ))}
+    </TransitionGroup>
+  )
 }

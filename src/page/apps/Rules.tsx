@@ -40,16 +40,14 @@ export default function Rules() {
               <RulesForm
                 defaultData={formData}
                 setData={(data, resetData) => {
-                  console.log(data);
+                  // console.log(data);
                   saveRule(data)
                     .then(() => {
                       resetData();
                       enqueueSnackbar("Rule saved ✅.");
                     })
-                    .catch((err: Error) => {
-                      enqueueSnackbar(err.message, { variant: "error" });
-                    })
-                    .finally(() => { setMode(prev => !prev); });
+                    .catch((err: Error) => enqueueSnackbar(err.message, { variant: "error" }))
+                    .finally(() => setMode(prev => !prev));
                 }}
               />
             </Collapse>
@@ -240,7 +238,8 @@ const RulePreview = ({ rule, handleDelete, handleEdit }: RulePreviewProps) => {
 }
 
 const RulesForm = ({ defaultData, setData }: {
-  defaultData: RulesType, setData: (data: RulesType, reset: UseFormReset<RulesType>) => void
+  defaultData: RulesType,
+  setData: (data: RulesType, reset: UseFormReset<RulesType>) => void
 }) => {
   const {
     register,
