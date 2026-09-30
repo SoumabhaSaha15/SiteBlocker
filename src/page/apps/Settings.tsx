@@ -1,12 +1,144 @@
 import Switch from '@/shared/Switch';
 import { useState, useEffect } from 'react';
+import PasswordIcon from '@mui/icons-material/Lock';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSnackbar, type OptionsObject } from 'notistack';
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
+import { useForm, type SubmitHandler, type UseFormReset } from "react-hook-form";
+import { passwordSetupSchema, type PasswordSetupFormData } from '@/validator/password';
 import { getWorkingStatus, setWorkingStatus, type WorkingStatus, listenStatusChanges } from "@/utils/blocker";
-import { Box, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Divider } from '@mui/material';
+import { getPasswordProtected, listenProtectionChanges, setAppPassword, setPasswordProtected } from "@/utils/password";
+import {
+  Box,
+  List,
+  Button,
+  Avatar,
+  Dialog,
+  Divider,
+  ListItem,
+  TextField,
+  Typography,
+  DialogTitle,
+  ListItemText,
+  DialogContent,
+  DialogActions,
+  ListItemAvatar,
+} from '@mui/material';
+
+const SNACK_OPTION: OptionsObject = {
+  variant: "default",
+  autoHideDuration: 2000,
+  anchorOrigin: { horizontal: "center", vertical: "bottom" },
+};
+
+
+function PasswordDialog({ dialogOpen, setData, dialogOnClose }: {
+  dialogOpen: boolean,
+  setData: (data: PasswordSetupFormData, reset: UseFormReset<PasswordSetupFormData>) => Promise<void>,
+  dialogOnClose: (e: Record<string, unknown>, reason: "backdropClick" | "escapeKeyDown") => void
+}) {
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<PasswordSetupFormData>({
+    resolver: zodResolver(passwordSetupSchema)
+  });
+
+  const setupPassword: SubmitHandler<PasswordSetupFormData> = async (data) => await setData(data, reset);
+
+  return (
+    <Dialog
+      open={dialogOpen}
+      onClose={dialogOnClose}
+      slotProps={{ paper: { className: "rounded-lg" } }}
+    >
+      <DialogTitle className='p-2'>
+        <Typography
+          variant='h5'
+          component="h5"
+          sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
+          className='w-full p-2 rounded-lg text-center'
+          children={"Setup password"}
+        />
+      </DialogTitle>
+      <DialogContent className='px-2 py-1'>
+        <Box component="form" id="password-setup-form" onSubmit={handleSubmit(setupPassword, console.dir)}>
+          <TextField
+            {...register("password")}
+            autoFocus
+            fullWidth
+            margin="dense"
+            label="Password"
+            type="password"
+            disabled={isSubmitting}
+            slotProps={{ input: { className: "rounded-lg" } }}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+          />
+          <TextField
+            {...register("confirmPassword")}
+            fullWidth
+            margin="dense"
+            label="Confirm password"
+            type="password"
+            slotProps={{ input: { className: "rounded-lg" } }}
+            disabled={isSubmitting}
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword?.message}
+          />
+        </Box>
+      </DialogContent>
+      <DialogActions className="flex w-full justify-center items-center px-2" >
+        <Button
+          type="submit"
+          form="password-setup-form"
+          variant="contained"
+          size='large'
+          className='rounded-lg w-full'
+          disabled={isSubmitting}
+        >
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 
 export default function Settings() {
+
+  const { enqueueSnackbar } = useSnackbar();
   const [isActive, setIsActive] = useState<WorkingStatus>(false);
+  const [protection, setProtection] = useState<boolean | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+
+  useEffect(() => {
+    let cancelled = false; //used to get rid of race condition occurs for slow-fetch [not likely]
+    getPasswordProtected()
+      .then((protectedState) => {
+        if (cancelled) return;
+        setProtection(protectedState);
+      })
+      .catch((err: Error) => {
+        if (!cancelled) enqueueSnackbar({ key: crypto.randomUUID(), message: err.message, ...SNACK_OPTION });
+      });
+
+    const unsubscribe = listenProtectionChanges((change) => {
+      cancelled = true; // a live change is authoritative from here on
+      setProtection(change);
+    });
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
+  }, [enqueueSnackbar]);
+
 
   useEffect(() => {
     getWorkingStatus().then(setIsActive);
@@ -14,161 +146,202 @@ export default function Settings() {
   }, []);
 
   return (
-    <Box
-      className="flex flex-col min-h-full items-center w-full p-4 gap-6"
-      color="secondary"
-    >
-      <Typography
-        variant='h5'
-        component="h5"
-        sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-        className='w-full max-w-160 p-2 rounded-lg text-center'
-        children={"Settings"}
-      />
-
-      <List
-        dense={false}
-        className="w-full max-w-160 rounded-lg border"
-        sx={{
-          borderColor: "divider",
-          bgcolor: "background.paper",
-        }}
+    <>
+      <Box
+        className="flex flex-col min-h-full items-center w-full p-4 gap-6"
+        color="secondary"
       >
+        <Typography
+          variant='h5'
+          component="h5"
+          sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
+          className='w-full max-w-160 p-2 rounded-lg text-center'
+          children={"Settings"}
+        />
 
-        <ListItem
-          className="h-14 px-2"
-          secondaryAction={
-            <Switch
-              onChange={(_, checked) => setWorkingStatus(checked)}
-              checked={isActive}
-            />
-          }
+        <List
+          dense={false}
+          className="w-full max-w-160 rounded-lg border"
+          sx={{
+            borderColor: "divider",
+            bgcolor: "background.paper",
+          }}
         >
-          <ListItemAvatar className="min-w-0 mr-3">
-            <Avatar
-              // variant="rounded"
-              className="w-10 h-10 rounded-md"
-              sx={{ bgcolor: (isActive ? "green" : "red") }}
-            >
-              <PowerSettingsNewIcon fontSize="medium" />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            id="switch-list-label-working-status"
-            primary={
-              <Typography variant="body1" className="font-medium">
-                Running
-              </Typography>
+          <ListItem
+            className="h-14 px-2"
+            secondaryAction={
+              <Switch
+                onChange={(_, checked) => setWorkingStatus(checked)}
+                checked={isActive}
+              />
             }
-            secondary={
-              <Typography
-                variant="body2"
-                className="font-medium"
+          >
+            <ListItemAvatar className="min-w-0 mr-3">
+              <Avatar
+                // variant="rounded"
+                className="w-10 h-10 rounded-md"
+                sx={{ bgcolor: (isActive ? "green" : "red") }}
               >
-                {isActive ? "Yes" : "No"}
-              </Typography>
-            }
-          />
-        </ListItem>
-        <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1, my: 0.5 }} />
-        <ListItem
-          className="h-14 px-2"
-          secondaryAction={
-            <Switch />
-          }>
-          <ListItemAvatar className="min-w-0 mr-3">
-            <Avatar
-              // variant="rounded"
-              className="w-10 h-10 rounded-md"
-            // sx={{ bgcolor: (field.value ? "green" : "red") }}
-            >
-              <PowerSettingsNewIcon fontSize='medium' />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            id="switch-list-label-password"
-            primary={
-              <Typography variant="body1" className="font-medium">
-                Is rule active?
-              </Typography>
-            }
-            secondary={
-              <Typography
-                variant="body2"
-                className="font-medium"
+                <PowerSettingsNewIcon fontSize="medium" />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              id="switch-list-label-working-status"
+              primary={
+                <Typography variant="body1" className="font-medium">
+                  Running
+                </Typography>
+              }
+              secondary={
+                <Typography
+                  variant="body2"
+                  className="font-medium"
+                >
+                  {isActive ? "Yes" : "No"}
+                </Typography>
+              }
+            />
+          </ListItem>
+          <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1, my: 0.5 }} />
+          <ListItem
+            className="h-14 px-2"
+            secondaryAction={
+              <Switch
+                onChange={(_, check) => {
+                  if (check == true) {
+                    setIsOpen(true);
+                  } else {
+                    setPasswordProtected(false);
+                  }
+                }}
+                checked={!!protection}
+                disabled={protection === null}
+              />
+            }>
+            <ListItemAvatar className="min-w-0 mr-3">
+              <Avatar
+                className="w-10 h-10 rounded-md"
+                sx={{ backgroundColor: (protection === null ? "gray" : (protection ? "green" : "red")) }}
               >
-                {/* {field.value ? "Yes" : "No"} */}
-              </Typography>
-            }
-          />
-        </ListItem>
-        <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1, my: 0.5 }} />
-        <ListItem
-          className="h-14 px-2"
-          secondaryAction={
-            <Switch checked />
-          }>
-          <ListItemAvatar className="min-w-0 mr-3">
-            <Avatar
-              // variant="rounded"
-              className="w-10 h-10 rounded-md"
-            >
-              <RemoveCircleTwoToneIcon fontSize='medium' />
-              {/* {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />} */}
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            id="switch-list-label-password"
-            primary={
-              <Typography variant="body1" className="font-medium">
-                Preffered action
-              </Typography>
-            }
-            secondary={
-              <Typography
-                variant="body2"
-                className="font-medium"
+                <PasswordIcon fontSize='medium' />
+                {/* {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />} */}
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              id="switch-list-label-password"
+              primary={
+                <Typography variant="body1" className="font-medium">
+                  App lock
+                </Typography>
+              }
+              secondary={
+                <Typography
+                  variant="body2"
+                  className="font-medium"
+                >
+                  {protection === null ? "Loading..." : (protection ? "Enabled" : "Disabled")}
+                </Typography>
+              }
+            />
+          </ListItem>
+          <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1, my: 0.5 }} />
+          <ListItem
+            className="h-14 px-2"
+            secondaryAction={
+              <Switch />
+            }>
+            <ListItemAvatar className="min-w-0 mr-3">
+              <Avatar
+                // variant="rounded"
+                className="w-10 h-10 rounded-md"
+              // sx={{ bgcolor: (field.value ? "green" : "red") }}
               >
-                Block
-                {/* {field.value ? "Block" : "Allow"} */}
-              </Typography>
-            }
-          />
-        </ListItem>
-        <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1, my: 0.5 }} />
-        <ListItem
-          className="h-14 px-2"
-          secondaryAction={
-            <Switch checked />
-          }>
-          <ListItemAvatar className="min-w-0 mr-3">
-            <Avatar
-              // variant="rounded"
-              className="w-10 h-10 rounded-md"
-            >
-              <RemoveCircleTwoToneIcon fontSize='medium' />
-              {/* {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />} */}
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            id="switch-list-label-password"
-            primary={
-              <Typography variant="body1" className="font-medium">
-                Preffered action
-              </Typography>
-            }
-            secondary={
-              <Typography
-                variant="body2"
-                className="font-medium"
+                <PowerSettingsNewIcon fontSize='medium' />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              id="switch-list-label-password"
+              primary={
+                <Typography variant="body1" className="font-medium">
+                  Is rule active?
+                </Typography>
+              }
+              secondary={
+                <Typography
+                  variant="body2"
+                  className="font-medium"
+                >
+                  {/* {field.value ? "Yes" : "No"} */}
+                </Typography>
+              }
+            />
+          </ListItem>
+          <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1, my: 0.5 }} />
+          <ListItem
+            className="h-14 px-2"
+            secondaryAction={
+              <Switch checked />
+            }>
+            <ListItemAvatar className="min-w-0 mr-3">
+              <Avatar
+                // variant="rounded"
+                className="w-10 h-10 rounded-md"
               >
-                Block
-                {/* {field.value ? "Block" : "Allow"} */}
-              </Typography>
-            }
-          />
-        </ListItem>
-      </List>
-    </Box >
+                <RemoveCircleTwoToneIcon fontSize='medium' />
+                {/* {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />} */}
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              id="switch-list-label-password"
+              primary={
+                <Typography variant="body1" className="font-medium">
+                  Preffered action
+                </Typography>
+              }
+              secondary={
+                <Typography
+                  variant="body2"
+                  className="font-medium"
+                >
+                  Block
+                  {/* {field.value ? "Block" : "Allow"} */}
+                </Typography>
+              }
+            />
+          </ListItem>
+        </List>
+      </Box >
+      <PasswordDialog
+        dialogOpen={isOpen}
+        setData={async (data, reset) => {
+          try {
+            await setAppPassword(data.password);
+            await setPasswordProtected(true);
+            reset();
+            setIsOpen(false);
+            enqueueSnackbar({
+              key: crypto.randomUUID(),
+              message: `Password updated.`,
+              ...SNACK_OPTION
+            });
+          } catch (error) {
+            console.error(error);
+            enqueueSnackbar({
+              key: crypto.randomUUID(),
+              message: `An error occured`,
+              ...SNACK_OPTION
+            });
+          }
+        }}
+        dialogOnClose={(_, reason) => {
+          enqueueSnackbar({
+            key: crypto.randomUUID(),
+            message: `Dialog closed: ${reason}.`,
+            ...SNACK_OPTION
+          });
+          setIsOpen(false);
+        }}
+      />
+    </>
   )
 }

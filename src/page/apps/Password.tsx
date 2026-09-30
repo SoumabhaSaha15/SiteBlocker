@@ -1,28 +1,12 @@
-import Switch from '@/shared/Switch';
 import Save from '@mui/icons-material/Save';
 import PasswordIcon from '@mui/icons-material/Lock';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { enqueueSnackbar, type OptionsObject } from "notistack";
-import { getPasswordProtected, setAppPassword, setPasswordProtected, verifyAppPassword } from "@/utils/password";
-import { passwordSetupSchema, resetPasswordSchema, type PasswordSetupFormData, type ResetPasswordSchema } from '@/validator/password';
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Divider
-} from '@mui/material';
+import {  Box,Button,TextField,Typography} from '@mui/material';
+import { setAppPassword, verifyAppPassword, getPasswordProtected } from "@/utils/password";
+import { resetPasswordSchema, type ResetPasswordSchema } from '@/validator/password';
+import { useEffect, useState } from 'react';
 
 const SNACK_OPTION: OptionsObject = {
   variant: "default",
@@ -30,13 +14,7 @@ const SNACK_OPTION: OptionsObject = {
   anchorOrigin: { horizontal: "center", vertical: "bottom" },
 }
 export default function Password() {
-  const [passwordProtected, setPasswordProtectedState] = useState(false);
-  const [setupOpen, setSetupOpen] = useState(false);
-
-  useEffect(() => {
-    getPasswordProtected().then(setPasswordProtectedState);
-  }, []);
-
+  const [isDisabled,setIsDisabled] = useState<boolean>(true);
   const {
     register,
     handleSubmit,
@@ -46,14 +24,10 @@ export default function Password() {
     resolver: zodResolver(resetPasswordSchema)
   });
 
-  const {
-    register: registerSetup,
-    handleSubmit: handleSetupSubmit,
-    reset: resetSetup,
-    formState: { errors: setupErrors, isSubmitting: isSettingUp },
-  } = useForm<PasswordSetupFormData>({
-    resolver: zodResolver(passwordSetupSchema)
-  });
+  useEffect(()=>{
+    getPasswordProtected()
+      .then((data)=>setIsDisabled(!data));
+  },[])
 
   const formSubmit: SubmitHandler<ResetPasswordSchema> = async ({ oldPassword, newPassword }) => {
     const verified = await verifyAppPassword(oldPassword);
@@ -75,189 +49,77 @@ export default function Password() {
     }
   }
 
-  const setupPassword: SubmitHandler<PasswordSetupFormData> = async ({ password }) => {
-    await setAppPassword(password);
-    await setPasswordProtected(true);
-    setPasswordProtectedState(true);
-    setSetupOpen(false);
-    resetSetup();
-    enqueueSnackbar({
-      key: crypto.randomUUID(),
-      message: "Password protection enabled ✅",
-      ...SNACK_OPTION
-    });
-  };
-
-  const handleProtectionChange = (_event: ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    if (checked) {
-      setSetupOpen(true);
-    } else {
-      setPasswordProtected(false);
-      setPasswordProtectedState(false);
-    }
-  };
-
   return (
-    <>
-      <Box
-        component={"form"}
-        className="flex flex-col min-h-full items-center w-full p-4 gap-6"
-        onSubmit={handleSubmit(formSubmit)}
+    <Box
+      component={"form"}
+      className="flex flex-col min-h-full items-center w-full p-4 gap-6"
+      onSubmit={handleSubmit(formSubmit)}
+    >
+      <Typography
+        variant='h5'
+        component="h5"
+        sx={{ borderColor: "divider", borderWidth: 1, backgroundColor: "secondary.main", color: "secondary.contrastText" }}
+        className='w-full max-w-160 p-2 rounded-lg text-center'
+        children={"Reset password 🔐"}
+      />
+      <TextField
+        {...register("oldPassword")}
+        slotProps={{
+          input: {
+            className: "rounded-lg",
+            endAdornment: <PasswordIcon />
+          }
+        }}
+        type='password'
+        sx={{ minWidth: "min(640px,100%)" }}
+        label="Current password"
+        variant='outlined'
+        disabled={isSubmitting}
+        error={!!errors.oldPassword}
+        helperText={errors.oldPassword?.message}
+      />
+      <TextField
+        type='password'
+        {...register("newPassword")}
+        slotProps={{
+          input: {
+            className: "rounded-lg",
+            endAdornment: <PasswordIcon />
+          }
+        }}
+        sx={{ minWidth: "min(640px,100%)" }}
+        label="New password"
+        variant='outlined'
+        disabled={isSubmitting}
+        error={!!errors.newPassword}
+        helperText={errors.newPassword?.message}
+      />
+      <TextField
+        {...register("confirmPassword")}
+        slotProps={{
+          input: {
+            className: "rounded-lg",
+            endAdornment: <PasswordIcon />
+          }
+        }}
+        type='password'
+        sx={{ minWidth: "min(640px,100%)" }}
+        label="Confirm password"
+        variant='outlined'
+        error={!!errors.confirmPassword}
+        helperText={errors.confirmPassword?.message}
+      />
+      <Button
+        variant='contained'
+        sx={{ minWidth: "min(640px,100%)" }}
+        size='large'
+        className='rounded-lg'
+        disabled={isDisabled || isSubmitting}
+        type='submit'
+        startIcon={<Save />}
       >
-        <List
-          dense={false}
-          className="w-full max-w-160 rounded-2xl py-2"
-          sx={{
-            border: 1,
-            borderColor: "divider",
-            bgcolor: "background.paper",
-          }}
-        >
-          <ListItem
-            className="h-14 px-3"
-            secondaryAction={
-              <Switch
-                checked={passwordProtected}
-                onChange={handleProtectionChange}
-              />
-            }>
-            <ListItemAvatar className="min-w-0 mr-3">
-              <Avatar
-                variant="rounded"
-                className="w-12 h-12 rounded-xl"
-                sx={{ bgcolor: (passwordProtected ? "green" : "red") }}
-              >
-                <PasswordIcon fontSize='medium' />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              id="switch-list-label-password"
-              primary={
-                <Typography variant="body1" className="font-medium">
-                  Protected
-                </Typography>
-              }
-              secondary={
-                <Typography
-                  variant="body2"
-                  className="font-medium"
-                >
-                  {passwordProtected ? "Yes" : "No"}
-                </Typography>
-              }
-            />
-          </ListItem>
-        </List>
-        <Divider className="w-full max-w-160" sx={{ borderColor: "divider", borderWidth: 1 }} />
-        <Typography
-          variant='h5'
-          component="h5"
-          sx={{ borderColor: "divider", borderWidth: 1, backgroundColor: "secondary.main", color: "secondary.contrastText" }}
-          className='w-full max-w-160 p-2 rounded-lg text-center'
-          children={"Reset password 🔐"}
-        />
-        <TextField
-          {...register("oldPassword")}
-          slotProps={{
-            input: {
-              className: "rounded-lg",
-              endAdornment: <PasswordIcon />
-            }
-          }}
-          type='password'
-          sx={{ minWidth: "min(640px,100%)" }}
-          label="Current password"
-          variant='outlined'
-          disabled={isSubmitting}
-          error={!!errors.oldPassword}
-          helperText={errors.oldPassword?.message}
-        />
-        <TextField
-          type='password'
-          {...register("newPassword")}
-          slotProps={{
-            input: {
-              className: "rounded-lg",
-              endAdornment: <PasswordIcon />
-            }
-          }}
-          sx={{ minWidth: "min(640px,100%)" }}
-          label="New password"
-          variant='outlined'
-          disabled={isSubmitting}
-          error={!!errors.newPassword}
-          helperText={errors.newPassword?.message}
-        />
-        <TextField
-          {...register("confirmPassword")}
-          slotProps={{
-            input: {
-              className: "rounded-lg",
-              endAdornment: <PasswordIcon />
-            }
-          }}
-          type='password'
-          sx={{ minWidth: "min(640px,100%)" }}
-          label="Confirm password"
-          variant='outlined'
-          error={!!errors.confirmPassword}
-          helperText={errors.confirmPassword?.message}
-        />
-        <Button
-          variant='contained'
-          sx={{ minWidth: "min(640px,100%)" }}
-          size='large'
-          className='rounded-lg'
-          type='submit'
-          startIcon={<Save />}
-        >
-          Save
-        </Button>
-      </Box>
-
-      <Dialog open={setupOpen} onClose={() => setSetupOpen(false)}>
-        <DialogTitle>Set password</DialogTitle>
-        <DialogContent>
-          <Box component="form" id="password-setup-form" onSubmit={handleSetupSubmit(setupPassword)}>
-            <TextField
-              {...registerSetup("password")}
-              autoFocus
-              fullWidth
-              margin="dense"
-              label="Password"
-              type="password"
-              disabled={isSettingUp}
-              slotProps={{ input: { className: "rounded-lg" } }}
-              error={!!setupErrors.password}
-              helperText={setupErrors.password?.message}
-            />
-            <TextField
-              {...registerSetup("confirmPassword")}
-              fullWidth
-              margin="dense"
-              label="Confirm password"
-              type="password"
-              slotProps={{ input: { className: "rounded-lg" } }}
-              disabled={isSettingUp}
-              error={!!setupErrors.confirmPassword}
-              helperText={setupErrors.confirmPassword?.message}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions className="flex w-full justify-center items-center" >
-          <Button
-            type="submit"
-            form="password-setup-form"
-            variant="contained"
-            size='large'
-            className='rounded-lg'
-            disabled={isSettingUp}
-            sx={{ width: "100%" }}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+        Save
+      </Button>
+    </Box>
   );
 }

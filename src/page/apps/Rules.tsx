@@ -16,8 +16,28 @@ import AddRuleIcon from '@mui/icons-material/FormatListBulletedAdd';
 import { saveRule, getRuleList, listenRulesChanges } from "@/utils/rules";
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
-import { useForm, Controller, SubmitHandler, UseFormReset } from "react-hook-form";
-import { Box, TextField, Button, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText, Chip, Divider, Autocomplete, Fab, IconButton, Menu, MenuItem, ListItemIcon, Stack, Collapse } from '@mui/material';
+import { useForm, Controller, type SubmitHandler, type UseFormReset } from "react-hook-form";
+import {
+  Box,
+  Fab,
+  List,
+  Chip,
+  Menu,
+  Stack,
+  Button,
+  Avatar,
+  Divider,
+  Collapse,
+  MenuItem,
+  ListItem,
+  TextField,
+  Typography,
+  IconButton,
+  Autocomplete,
+  ListItemIcon,
+  ListItemText,
+  ListItemAvatar,
+} from '@mui/material';
 
 const EMPTY_RULE: RulesType = { blocked: false, blockedKeys: [], isActive: false, site: "" };
 

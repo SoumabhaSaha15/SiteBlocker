@@ -36,8 +36,8 @@ export enum AppList {
 
 export const MenuList = [
   { name: 'Blocked Sites', icon: <NotInterestedIcon />, appKey: AppList.HOME },
-  { name: 'Rules', icon: <BulletedIcon />, appKey: AppList.RULES },
   { name: 'Settings', icon: <SettingsIcon />, appKey: AppList.EXTRA_CONFIG },
+  { name: 'Rules', icon: <BulletedIcon />, appKey: AppList.RULES },
   { name: 'Redirect', icon: <RepeatIcon />, appKey: AppList.REDIRECT },
   // { name: 'Active Hours', icon: <AccessTimeIcon />, appKey: AppList.ACTIVE_HOURS },
   { name: 'Block keys', icon: <AbcIcon />, appKey: AppList.BLOCK_KEYS },

@@ -254,9 +254,11 @@ function PasswordForm({ setData }: {
 }
 
 export default function PasswordProtectedApp() {
+
   const { enqueueSnackbar } = useSnackbar();
   const [protection, setProtection] = useState<null | boolean>(null);
   const [lock, setLock] = useState<boolean>(true);
+
   useEffect(() => {
     let cancelled = false; //used to get rid of race condition occurs for slow-fetch [not likely]
     getPasswordProtected()
@@ -280,6 +282,7 @@ export default function PasswordProtectedApp() {
       unsubscribe();
     };
   }, [enqueueSnackbar]);
+
   return (
     <TransitionGroup>
       {protection === null ? (
