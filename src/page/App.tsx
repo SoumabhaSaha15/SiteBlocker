@@ -2,13 +2,13 @@ import BrandIcon from "@/shared/BrandIcon";
 import { useEffect, useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import DoneIcon from '@mui/icons-material/Done';
-import LockIcon from '@mui/icons-material/Lock';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { zodResolver } from "@hookform/resolvers/zod";
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { TransitionGroup } from 'react-transition-group';
 import { useSnackbar, type OptionsObject } from 'notistack';
+import PasswordInputField from "@/shared/PasswordInputField";
 import { AppList, MenuList, AppMap } from '@/page/apps/index';
 import { getSyncedData, downloadJSONFile } from "@/utils/sync";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -25,7 +25,7 @@ import {
   SvgIcon,
   Collapse,
   ListItem,
-  TextField,
+  // TextField,
   ListItemText,
   ListItemButton,
   CircularProgress
@@ -156,11 +156,12 @@ function App() {
       {/* Main Content Area */}
       <Box
         component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-        }}
+        className="grow p-0 w-[calc(100%-15rem)]"
+        // sx={{
+        //   flexGrow: 1,
+        //   p: 3,
+        //   width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
+        // }}
       >
         <Toolbar />
         <TransitionGroup>
@@ -186,11 +187,15 @@ function PasswordForm({ setData }: {
   const formSubmit: SubmitHandler<PasswordFormData> = async (data) => void setData(data, reset);
 
   return (
-    <Box className="grid min-h-dvh place-items-center w-full p-4 gap-6">
+    <Box
+      className="grid min-h-dvh place-items-center w-full p-4 gap-6"
+      sx={{ backgroundColor: theme => theme.palette.background.default }}
+    >
       <Box
         component={"form"}
-        className="flex flex-col max-w-160 items-center w-full p-4 gap-6"
+        className="flex flex-col max-w-160 items-center w-full p-4 gap-4 rounded-xl"
         onSubmit={handleSubmit(formSubmit, console.dir)}
+        sx={{ backgroundColor:"background.paper" }}
       >
         <Typography
           variant='h5'
@@ -200,21 +205,15 @@ function PasswordForm({ setData }: {
           children={"App locked! 🔒"}
         />
 
-        <TextField
+        <PasswordInputField
           {...register("password")}
           autoFocus
           margin="dense"
           id="Password"
           label="Password"
-          type="password"
           fullWidth
           sx={{ maxWidth: "min(640px,100%)" }}
-          slotProps={{
-            input: {
-              className: "rounded-lg",
-              endAdornment: <LockIcon />,
-            },
-          }}
+          slotProps={{ input: { className: "rounded-lg" } }}
           variant="outlined"
           disabled={isSubmitting}
           error={!!errors.password}
@@ -229,9 +228,8 @@ function PasswordForm({ setData }: {
           startIcon={<DoneIcon />}
           className="rounded-lg"
           disabled={isSubmitting}
-        >
-          Submit
-        </Button>
+          children="Submit"
+        />
 
         <Button
           type="button"
@@ -245,9 +243,9 @@ function PasswordForm({ setData }: {
             getSyncedData()
               .then(data => downloadJSONFile('site_blocker.json', data));
           }}
-        >
-          Export data
-        </Button>
+          children="Export data"
+        />
+
       </Box>
     </Box>
   );

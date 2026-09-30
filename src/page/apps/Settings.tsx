@@ -1,8 +1,10 @@
 import Switch from '@/shared/Switch';
 import { useState, useEffect } from 'react';
+import DoneIcon from '@mui/icons-material/Done';
 import PasswordIcon from '@mui/icons-material/Lock';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSnackbar, type OptionsObject } from 'notistack';
+import PasswordInputField from '@/shared/PasswordInputField';
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
 import { useForm, type SubmitHandler, type UseFormReset } from "react-hook-form";
@@ -17,7 +19,6 @@ import {
   Dialog,
   Divider,
   ListItem,
-  TextField,
   Typography,
   DialogTitle,
   ListItemText,
@@ -67,24 +68,22 @@ function PasswordDialog({ dialogOpen, setData, dialogOnClose }: {
       </DialogTitle>
       <DialogContent className='px-2 py-1'>
         <Box component="form" id="password-setup-form" onSubmit={handleSubmit(setupPassword, console.dir)}>
-          <TextField
+          <PasswordInputField
             {...register("password")}
             autoFocus
             fullWidth
             margin="dense"
             label="Password"
-            type="password"
             disabled={isSubmitting}
             slotProps={{ input: { className: "rounded-lg" } }}
             error={!!errors.password}
             helperText={errors.password?.message}
           />
-          <TextField
+          <PasswordInputField
             {...register("confirmPassword")}
             fullWidth
             margin="dense"
             label="Confirm password"
-            type="password"
             slotProps={{ input: { className: "rounded-lg" } }}
             disabled={isSubmitting}
             error={!!errors.confirmPassword}
@@ -100,9 +99,9 @@ function PasswordDialog({ dialogOpen, setData, dialogOnClose }: {
           size='large'
           className='rounded-lg w-full'
           disabled={isSubmitting}
-        >
-          Save
-        </Button>
+          startIcon={<DoneIcon />}
+          children="Submit"
+        />
       </DialogActions>
     </Dialog>
   );
@@ -115,7 +114,6 @@ export default function Settings() {
   const [isActive, setIsActive] = useState<WorkingStatus>(false);
   const [protection, setProtection] = useState<boolean | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-
 
   useEffect(() => {
     let cancelled = false; //used to get rid of race condition occurs for slow-fetch [not likely]
@@ -138,7 +136,6 @@ export default function Settings() {
       unsubscribe();
     };
   }, [enqueueSnackbar]);
-
 
   useEffect(() => {
     getWorkingStatus().then(setIsActive);

@@ -1,12 +1,12 @@
+import { useEffect, useState } from 'react';
 import Save from '@mui/icons-material/Save';
-import PasswordIcon from '@mui/icons-material/Lock';
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, Typography } from '@mui/material';
+import PasswordInputField from '@/shared/PasswordInputField';
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { enqueueSnackbar, type OptionsObject } from "notistack";
-import {  Box,Button,TextField,Typography} from '@mui/material';
-import { setAppPassword, verifyAppPassword, getPasswordProtected } from "@/utils/password";
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/validator/password';
-import { useEffect, useState } from 'react';
+import { setAppPassword, verifyAppPassword, getPasswordProtected } from "@/utils/password";
 
 const SNACK_OPTION: OptionsObject = {
   variant: "default",
@@ -14,7 +14,7 @@ const SNACK_OPTION: OptionsObject = {
   anchorOrigin: { horizontal: "center", vertical: "bottom" },
 }
 export default function Password() {
-  const [isDisabled,setIsDisabled] = useState<boolean>(true);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const {
     register,
     handleSubmit,
@@ -24,10 +24,10 @@ export default function Password() {
     resolver: zodResolver(resetPasswordSchema)
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     getPasswordProtected()
-      .then((data)=>setIsDisabled(!data));
-  },[])
+      .then((data) => setIsDisabled(!data));
+  }, [])
 
   const formSubmit: SubmitHandler<ResetPasswordSchema> = async ({ oldPassword, newPassword }) => {
     const verified = await verifyAppPassword(oldPassword);
@@ -50,76 +50,62 @@ export default function Password() {
   }
 
   return (
-    <Box
-      component={"form"}
-      className="flex flex-col min-h-full items-center w-full p-4 gap-6"
-      onSubmit={handleSubmit(formSubmit)}
-    >
-      <Typography
-        variant='h5'
-        component="h5"
-        sx={{ borderColor: "divider", borderWidth: 1, backgroundColor: "secondary.main", color: "secondary.contrastText" }}
-        className='w-full max-w-160 p-2 rounded-lg text-center'
-        children={"Reset password 🔐"}
-      />
-      <TextField
-        {...register("oldPassword")}
-        slotProps={{
-          input: {
-            className: "rounded-lg",
-            endAdornment: <PasswordIcon />
-          }
-        }}
-        type='password'
-        sx={{ minWidth: "min(640px,100%)" }}
-        label="Current password"
-        variant='outlined'
-        disabled={isSubmitting}
-        error={!!errors.oldPassword}
-        helperText={errors.oldPassword?.message}
-      />
-      <TextField
-        type='password'
-        {...register("newPassword")}
-        slotProps={{
-          input: {
-            className: "rounded-lg",
-            endAdornment: <PasswordIcon />
-          }
-        }}
-        sx={{ minWidth: "min(640px,100%)" }}
-        label="New password"
-        variant='outlined'
-        disabled={isSubmitting}
-        error={!!errors.newPassword}
-        helperText={errors.newPassword?.message}
-      />
-      <TextField
-        {...register("confirmPassword")}
-        slotProps={{
-          input: {
-            className: "rounded-lg",
-            endAdornment: <PasswordIcon />
-          }
-        }}
-        type='password'
-        sx={{ minWidth: "min(640px,100%)" }}
-        label="Confirm password"
-        variant='outlined'
-        error={!!errors.confirmPassword}
-        helperText={errors.confirmPassword?.message}
-      />
-      <Button
-        variant='contained'
-        sx={{ minWidth: "min(640px,100%)" }}
-        size='large'
-        className='rounded-lg'
-        disabled={isDisabled || isSubmitting}
-        type='submit'
-        startIcon={<Save />}
+    <Box className="min-h-[calc(100dvh-4rem)] grid place-items-center">
+      <Box
+        component={"form"}
+        className="flex flex-col items-center w-full max-w-160 p-4 gap-4 rounded-xl"
+        sx={{ backgroundColor: "background.paper" }}
+        onSubmit={handleSubmit(formSubmit)}
       >
-        Save
-      </Button>
+        <Typography
+          variant='h5'
+          component="h5"
+          sx={{ borderColor: "divider", borderWidth: 1, backgroundColor: "secondary.main", color: "secondary.contrastText" }}
+          className='w-full max-w-160 p-2 rounded-lg text-center'
+          children={"Reset password 🔐"}
+        />
+
+        <PasswordInputField
+          {...register("oldPassword")}
+          slotProps={{ input: { className: "rounded-lg" } }}
+          sx={{ minWidth: "min(640px,100%)" }}
+          label="Current password"
+          variant='outlined'
+          disabled={isDisabled || isSubmitting}
+          error={!!errors.oldPassword}
+          helperText={errors.oldPassword?.message}
+        />
+        <PasswordInputField
+          {...register("newPassword")}
+          slotProps={{ input: { className: "rounded-lg" } }}
+          sx={{ minWidth: "min(640px,100%)" }}
+          label="New password"
+          variant='outlined'
+          disabled={isDisabled || isSubmitting}
+          error={!!errors.newPassword}
+          helperText={errors.newPassword?.message}
+        />
+        <PasswordInputField
+          {...register("confirmPassword")}
+          slotProps={{ input: { className: "rounded-lg" } }}
+          sx={{ minWidth: "min(640px,100%)" }}
+          label="Confirm password"
+          variant='outlined'
+          disabled={isDisabled || isSubmitting}
+          error={!!errors.confirmPassword}
+          helperText={errors.confirmPassword?.message}
+        />
+        <Button
+          variant='contained'
+          sx={{ minWidth: "min(640px,100%)" }}
+          size='large'
+          className='rounded-lg'
+          disabled={isDisabled || isSubmitting}
+          type='submit'
+          startIcon={<Save />}
+          children={(isDisabled) ? "Enable the app-lock first" : "Save"}
+        />
+      </Box>
     </Box>
   );
 }

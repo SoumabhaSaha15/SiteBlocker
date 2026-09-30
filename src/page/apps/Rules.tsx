@@ -278,15 +278,17 @@ const RulesForm = ({ defaultData, setData }: {
 
   const formSubmit: SubmitHandler<RulesType> = async (data) => void setData(data, reset);
   return (
+    <Box className="min-h-[calc(100dvh-4rem)] grid place-items-center">
     <Box
       component={"form"}
-      className="flex flex-col min-h-full items-center w-full p-4 gap-6"
+      sx={{ backgroundColor: "background.paper" }}
+      className="flex flex-col items-center w-full max-w-160 p-4 gap-4 rounded-xl"
       onSubmit={handleSubmit(formSubmit, console.dir)}
     >
       <Typography
         variant='h5'
         component="h5"
-        sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
+        sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText" }}
         className='w-full max-w-160 p-2 rounded-lg text-center'
         children={"Rules form"}
       />
@@ -439,6 +441,7 @@ const RulesForm = ({ defaultData, setData }: {
       >
         Save
       </Button>
+    </Box>
     </Box>
   )
 }
