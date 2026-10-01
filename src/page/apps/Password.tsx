@@ -50,7 +50,7 @@ export default function Password() {
   }
 
   return (
-    <Box className="min-h-[calc(100dvh-4rem)] grid place-items-center">
+    <Box className="min-h-[calc(100dvh-4rem)] grid place-items-center p-4">
       <Box
         component={"form"}
         className="flex flex-col items-center w-full max-w-160 p-4 gap-4 rounded-xl"

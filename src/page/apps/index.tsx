@@ -18,9 +18,6 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import BulletedIcon from '@mui/icons-material/FormatListBulleted';
 
-// const Apps = {
-//   Home, Rules, ExtraConfig, Redirect, ActiveHours, BlockByKeys, Sync, AboutUs, Password
-// }
 export enum AppList {
   HOME,
   RULES,
@@ -43,7 +40,7 @@ export const MenuList = [
   { name: 'Block keys', icon: <AbcIcon />, appKey: AppList.BLOCK_KEYS },
   { name: 'Sync', icon: <SyncIcon />, appKey: AppList.SYNC },
   { name: 'Password', icon: <LockIcon />, appKey: AppList.PASSWORD },
-  { name: 'About us', icon: <Avatar alt="Soumabha Saha" src="/picture.png" className='size-6' />, appKey: AppList.ABOUT_US },
+  { name: 'About us', icon: <Avatar alt="Soumabha Saha" src="/icon/icon.svg" className='size-6' />, appKey: AppList.ABOUT_US },
 ];
 
 

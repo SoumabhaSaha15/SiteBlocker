@@ -1,4 +1,4 @@
-import BrandIcon from "@/shared/BrandIcon";
+// import BrandIcon from "@/shared/BrandIcon";
 import { useEffect, useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import DoneIcon from '@mui/icons-material/Done';
@@ -22,7 +22,7 @@ import {
   Drawer,
   AppBar,
   Toolbar,
-  SvgIcon,
+  // SvgIcon,
   Collapse,
   ListItem,
   // TextField,
@@ -91,27 +91,20 @@ function App() {
       >
         <Toolbar>
           <IconButton
-            color="inherit"
+            // color="primary"
             aria-label="open drawer"
-            edge="start"
             onClick={handleDrawerToggle}
-            sx={{ display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <SvgIcon
-            viewBox="0 0 32 32"
-            component={BrandIcon}
+            // className="rounded-sm"
+            sx={{display: { sm: 'none' }}}
+            children={<MenuIcon />}
           />
           <Typography
-            variant="h6"
             noWrap
-            component="div"
-            className="ml-1"
-            sx={{ color: "primary.contrastText" }}
-          >
-            Site Blocker
-          </Typography>
+            variant="h6"
+            component="h6"
+            sx={{ color: "primary.contrastText"}}
+            children={"Site Blocker"}
+          />
         </Toolbar>
       </AppBar>
 
@@ -156,12 +149,7 @@ function App() {
       {/* Main Content Area */}
       <Box
         component="main"
-        className="grow p-0 w-[calc(100%-15rem)]"
-        // sx={{
-        //   flexGrow: 1,
-        //   p: 3,
-        //   width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-        // }}
+        className="grow p-0 w-[calc(100%-15rem)]" // DRAWER_WIDTH = 15rem || 240px
       >
         <Toolbar />
         <TransitionGroup>

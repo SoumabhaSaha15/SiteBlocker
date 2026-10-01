@@ -278,7 +278,7 @@ const RulesForm = ({ defaultData, setData }: {
 
   const formSubmit: SubmitHandler<RulesType> = async (data) => void setData(data, reset);
   return (
-    <Box className="min-h-[calc(100dvh-4rem)] grid place-items-center">
+    <Box className="min-h-[calc(100dvh-4rem)] grid place-items-center p-4">
     <Box
       component={"form"}
       sx={{ backgroundColor: "background.paper" }}
