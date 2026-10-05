@@ -1,6 +1,6 @@
 import React from "react";
 import App  from "@/page/App";
-import darkTheme from "@/config/theme";
+import theme from "@/config/theme";
 import ReactDOM from "react-dom/client";
 import { SnackbarProvider } from 'notistack';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.body).render(
   <React.StrictMode>
     <StyledEngineProvider enableCssLayer>
       <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <SnackbarProvider maxSnack={3} style={{ borderRadius: 16 }}>
           <App />

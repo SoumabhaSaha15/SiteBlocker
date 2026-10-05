@@ -1,4 +1,3 @@
-// import BrandIcon from "@/shared/BrandIcon";
 import { useEffect, useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import DoneIcon from '@mui/icons-material/Done';
@@ -22,10 +21,8 @@ import {
   Drawer,
   AppBar,
   Toolbar,
-  // SvgIcon,
   Collapse,
   ListItem,
-  // TextField,
   ListItemText,
   ListItemButton,
   CircularProgress
@@ -62,9 +59,18 @@ function App() {
           {MenuList.map(({ name, icon, appKey }) => (
             <ListItem key={name} disablePadding>
               <ListItemButton
+                selected={app === appKey}
                 onClick={() => {
                   setApp(appKey);
                   setMobileOpen(false);
+                }}
+                sx={{
+                  '&.Mui-selected': {
+                    backgroundColor: "action.selected",
+                    '&:hover': {
+                      backgroundColor: "action.hover",
+                    },
+                  },
                 }}
               >
                 <ListItemIcon sx={{ color: (theme) => theme.palette.primary.main }} className="mr-2">
@@ -85,24 +91,22 @@ function App() {
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: "secondary.main",
+          backgroundColor: "primary.main",
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
         <Toolbar>
           <IconButton
-            // color="primary"
             aria-label="open drawer"
             onClick={handleDrawerToggle}
-            // className="rounded-sm"
-            sx={{display: { sm: 'none' }}}
+            sx={{ display: { sm: 'none' } }}
             children={<MenuIcon />}
           />
           <Typography
             noWrap
             variant="h6"
             component="h6"
-            sx={{ color: "primary.contrastText"}}
+            sx={{ color: "primary.contrastText" }}
             children={"Site Blocker"}
           />
         </Toolbar>
@@ -153,7 +157,7 @@ function App() {
       >
         <Toolbar />
         <TransitionGroup>
-          <Collapse timeout={{ enter: 500, exit: 500 }} key={app}>
+          <Collapse timeout={{ enter: 500 }} key={app}>
             {AppMap[app]}
           </Collapse>
         </TransitionGroup>
@@ -183,7 +187,7 @@ function PasswordForm({ setData }: {
         component={"form"}
         className="flex flex-col max-w-160 items-center w-full p-4 gap-4 rounded-xl"
         onSubmit={handleSubmit(formSubmit, console.dir)}
-        sx={{ backgroundColor:"background.paper" }}
+        sx={{ backgroundColor: "background.paper" }}
       >
         <Typography
           variant='h5'
@@ -272,14 +276,14 @@ export default function PasswordProtectedApp() {
   return (
     <TransitionGroup>
       {protection === null ? (
-        <Collapse timeout={{ enter: 500, exit: 500 }} key="app-loading">
+        <Collapse timeout={{ enter: 500 }} key="app-loading" unmountOnExit>
           <Box className="grid min-h-dvh place-items-center">
             <CircularProgress aria-label="Loading…" />
           </Box>
         </Collapse>
       ) : (
         (protection && lock) ? (
-          <Collapse timeout={{ enter: 500, exit: 500 }} key="password-guard">
+          <Collapse timeout={{ enter: 500 }} key="password-guard" unmountOnExit>
             <PasswordForm
               setData={async (data, reset) => {
                 try {
@@ -296,7 +300,7 @@ export default function PasswordProtectedApp() {
             />
           </Collapse>
         ) : (
-          <Collapse timeout={{ enter: 500, exit: 500 }} key="app">
+          <Collapse timeout={{ enter: 500 }} key="app" unmountOnExit>
             <App />
           </Collapse>
         ))}

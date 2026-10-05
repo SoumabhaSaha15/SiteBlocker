@@ -1,11 +1,11 @@
 import path from "path";
 import { defineConfig } from "vite";
-import zip from 'vite-plugin-zip-pack';
+// import zip from 'vite-plugin-zip-pack';
 import react from "@vitejs/plugin-react";
 import { crx } from "@crxjs/vite-plugin";
-import manifest from "./manifest.config";
+import manifest from "./manifest.config.ts";
 import tailwindcss from "@tailwindcss/vite";
-import pkg from './package.json' with { type: "json" };
+// import pkg from './package.json' with { type: "json" };
 
 export default defineConfig({
   resolve: {
@@ -16,14 +16,18 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     react(),
-    crx({ manifest }),
-    zip({ outDir: 'release', outFileName: `site-blocker-${pkg.version}.zip` }),
+    crx({
+      manifest, contentScripts: {
+        standaloneFiles: ['src/content/main.tsx'],
+      },
+      liveReload:true
+    }),
+    // zip({ outDir: 'release', outFileName: `site-blocker-${pkg.version}.zip` }),
   ],
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         index: "src/page/index.html",
-        redirect: "src/redirect/index.html",
       },
       output: {
         manualChunks(id) {

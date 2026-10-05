@@ -1,17 +1,13 @@
-// import { useState } from 'react'
-
 import {Button} from '@mui/material';
+import type { ResolvedResult } from "@/types/interfaces";
 
-function App() {
-  // const [show, setShow] = useState(false)
-  // const toggle = () => setShow(!show)
-
+function App(props:Required<ResolvedResult>) {
+  console.log(props);
   return (
       <Button
         variant="contained"
         color='primary'
       >
-        cscr
       </Button>
   )
 }

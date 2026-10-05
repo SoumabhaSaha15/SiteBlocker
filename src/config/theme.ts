@@ -57,6 +57,15 @@ const darkTheme = createTheme(
     },
     typography: { fontFamily: '"Roboto", serif' },
     shape: { borderRadius: 8 },
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 640,
+        md: 768,
+        lg: 1024,
+        xl: 1536,
+      }
+    },
     components: {
       MuiButton: {
         styleOverrides: {
