@@ -17,9 +17,7 @@ export default defineConfig({
     tailwindcss(),
     react(),
     crx({
-      manifest, contentScripts: {
-        standaloneFiles: ['src/content/main.tsx'],
-      },
+      manifest,
       liveReload:true
     }),
     // zip({ outDir: 'release', outFileName: `site-blocker-${pkg.version}.zip` }),
@@ -28,6 +26,7 @@ export default defineConfig({
     rolldownOptions: {
       input: {
         index: "src/page/index.html",
+        redirect: "src/redirect/index.html",
       },
       output: {
         manualChunks(id) {

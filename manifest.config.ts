@@ -13,11 +13,6 @@ export default defineManifest({
     96: "icon/96.png",
     128: "icon/128.png"
   },
-  content_scripts: [{
-    js: ['src/content/main.tsx'],
-    matches: ['https://*/*', 'http://*/*'],
-    run_at:"document_start",
-  }],
   action: {},
   background: {
     service_worker: "src/background.ts"

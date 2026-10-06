@@ -40,7 +40,7 @@ export const MenuList = [
   { name: 'Block keys', icon: <AbcIcon />, appKey: AppList.BLOCK_KEYS },
   { name: 'Sync', icon: <SyncIcon />, appKey: AppList.SYNC },
   { name: 'Password', icon: <LockIcon />, appKey: AppList.PASSWORD },
-  { name: 'About us', icon: <Avatar alt="Soumabha Saha" src="/icon/icon.svg" className='size-6' />, appKey: AppList.ABOUT_US },
+  { name: 'About us', icon: <Avatar alt="Soumabha Saha" src="/icon.svg" className='size-6' variant='rounded' />, appKey: AppList.ABOUT_US },
 ];
 
 

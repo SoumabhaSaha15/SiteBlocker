@@ -1,7 +1,8 @@
 import browser from "webextension-polyfill";
 import { blacklistSite } from "@/utils/sites"
-import ResolveSite from "@/helper/resolve-site";
+// import { renderApp } from "./content/main";
 import { getRedirect } from "@/utils/redirect";
+import ResolveSite from "@/helper/resolve-site";
 import { getWorkingStatus } from "@/utils/blocker";
 import type { ResolvedResult } from "@/types/interfaces";
 

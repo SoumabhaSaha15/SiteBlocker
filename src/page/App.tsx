@@ -157,7 +157,7 @@ function App() {
       >
         <Toolbar />
         <TransitionGroup>
-          <Collapse timeout={{ enter: 500 }} key={app}>
+          <Collapse timeout={{ enter: 500, exit:500 }} key={app}>
             {AppMap[app]}
           </Collapse>
         </TransitionGroup>
@@ -276,14 +276,14 @@ export default function PasswordProtectedApp() {
   return (
     <TransitionGroup>
       {protection === null ? (
-        <Collapse timeout={{ enter: 500 }} key="app-loading" unmountOnExit>
+        <Collapse timeout={{ enter: 500, exit:500  }} key="app-loading" unmountOnExit>
           <Box className="grid min-h-dvh place-items-center">
             <CircularProgress aria-label="Loading…" />
           </Box>
         </Collapse>
       ) : (
         (protection && lock) ? (
-          <Collapse timeout={{ enter: 500 }} key="password-guard" unmountOnExit>
+          <Collapse timeout={{ enter: 500, exit:500  }} key="password-guard" unmountOnExit>
             <PasswordForm
               setData={async (data, reset) => {
                 try {
@@ -300,7 +300,7 @@ export default function PasswordProtectedApp() {
             />
           </Collapse>
         ) : (
-          <Collapse timeout={{ enter: 500 }} key="app" unmountOnExit>
+          <Collapse timeout={{ enter: 500, exit:500 }} key="app" unmountOnExit>
             <App />
           </Collapse>
         ))}
