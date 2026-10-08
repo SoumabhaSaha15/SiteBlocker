@@ -44,8 +44,8 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={<Typography variant="body2" className="font-medium" color="text.secondary">Empty list</Typography>}
-                secondary={<Typography variant="caption" color="text.disabled" className="block">There is no blacklisted site.</Typography>}
+                primary={<Typography variant="body2" className="font-medium truncate" color="text.secondary">Empty list</Typography>}
+                secondary={<Typography variant="caption" color="text.disabled" className="block truncate">There is no blacklisted site.</Typography>}
               />
             </ListItem>
           </Collapse>
@@ -80,7 +80,7 @@ const SiteList = memo(function SiteList({ sites, onDelete }: SiteListProps) {
                   />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={<Typography variant="body2" className="font-medium">{urlObject.hostname}</Typography>}
+                  primary={<Typography variant="body2" className="font-medium truncate">{urlObject.hostname}</Typography>}
                   secondary={
                     <Link
                       variant="caption"
@@ -132,12 +132,12 @@ export default function BlockedSites() {
   }, []);
 
   return (
-    <Box className="flex flex-col items-center gap-6 p-4 w-full">
+    <Box className="flex flex-col items-center gap-6 p-4 w-full min-h-[calc(100dvh-4rem)]">
       <Typography
         variant='h5'
         component="h5"
         sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-        className='w-full max-w-160 p-2 rounded-lg text-center'
+        className='w-full max-w-160 p-2 rounded-lg text-center truncate'
         children={"Blocked Sites"}
       />
       {/* URL Input */}

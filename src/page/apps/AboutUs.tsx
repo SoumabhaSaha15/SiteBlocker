@@ -47,20 +47,19 @@ const openLink = (url: string) => window.open(url, '_blank')?.focus();
 
 export default function AboutUs() {
   return (
-    <Box className="flex flex-col items-center gap-6 p-4 w-full">
+    <Box className="flex flex-col items-center gap-6 p-4 w-full min-h-[calc(100dvh-4rem)]">
       {/* Profile Card */}
       <Card
         elevation={0}
-        className="flex flex-row-reverse w-full max-w-160 rounded-2xl overflow-hidden"
+        className="flex flex-row-reverse w-full max-w-160 rounded-2xl overflow-hidden border"
         sx={{
-          border: 1,
           borderColor: 'divider',
           bgcolor: 'background.paper',
         }}
       >
         <Box className="flex flex-col flex-1 min-w-0 justify-between p-2">
           <CardContent className="p-4 pb-2">
-            <Typography variant="h6" className="font-semibold">
+            <Typography variant="h6" className="font-semibold truncate">
               Soumabha Saha
             </Typography>
             <Typography variant="body2" color="text.secondary" className="mt-1">
@@ -117,7 +116,7 @@ export default function AboutUs() {
                 className="px-2"
                 sx={{
                   '&:hover': {
-                    bgcolor: 'action.hover',
+                    backgroundColor: 'action.hover',
                   },
                 }}
               >
@@ -127,14 +126,12 @@ export default function AboutUs() {
                     src={getIcon(origin)}
                     variant='square'
                     className="w-10 h-10 rounded-md"
-                    sx={{
-                      bgcolor: theme => theme.palette.background.paper,
-                    }}
+                    sx={{ backgroundColor: "background.paper" }}
                   />
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <Typography variant="body2" className="font-medium">
+                    <Typography variant="body2" className="font-medium truncate">
                       {hostname}
                     </Typography>
                   }

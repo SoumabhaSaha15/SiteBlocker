@@ -1,7 +1,7 @@
+import Switch from '@/components/Switch';
+import { useSnackbar } from 'notistack';
 import { getIcon } from '@/utils/sites';
-import Switch from '@/shared/Switch';
 import Save from '@mui/icons-material/Save';
-import { enqueueSnackbar } from 'notistack';
 import DoneIcon from '@mui/icons-material/Done';
 import EditIcon from "@mui/icons-material/Edit";
 import LinkIcon from '@mui/icons-material/Link';
@@ -13,9 +13,9 @@ import { useEffect, useState, Fragment, useId } from 'react';
 import RuleIcon from '@mui/icons-material/FormatListBulleted';
 import { rulesSchema, type RulesType } from '@/validator/rules';
 import AddRuleIcon from '@mui/icons-material/FormatListBulletedAdd';
-import { saveRule, getRuleList, listenRulesChanges } from "@/utils/rules";
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
+import { saveRule, getRuleList, listenRulesChanges, deleteRule } from "@/utils/rules";
 import { useForm, Controller, type SubmitHandler, type UseFormReset } from "react-hook-form";
 import {
   Box,
@@ -45,6 +45,7 @@ export default function Rules() {
   const [mode, setMode] = useState<boolean>(false);
   const [rules, setRules] = useState<RulesType[]>([]);
   const [formData, setFormData] = useState<RulesType>(EMPTY_RULE);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     getRuleList().then(data => setRules(data));
@@ -73,7 +74,7 @@ export default function Rules() {
             </Collapse>
           ) : (
             <Collapse timeout={{ enter: 500, exit: 500 }} key="rules-list">
-              <Box className="flex flex-col min-h-full items-center w-full p-4 gap-6">
+              <Box className="flex flex-col min-h-[calc(100dvh-4rem)] items-center w-full p-4 gap-6">
                 <Typography
                   variant='h5'
                   component="h5"
@@ -106,7 +107,13 @@ export default function Rules() {
                     <Fragment key={index}>
                       <RulePreview
                         rule={item}
-                        handleDelete={() => { }}
+                        handleDelete={() => {
+                          deleteRule(item.site).then(()=>{
+                            enqueueSnackbar("Rule saved ✅.",{
+                              anchorOrigin:{horizontal:"center",vertical:"bottom"}
+                            });
+                          })
+                        }}
                         handleEdit={() => {
                           setFormData(item);
                           setMode(prev => !prev);
@@ -228,27 +235,37 @@ const RulePreview = ({ rule, handleDelete, handleEdit }: RulePreviewProps) => {
           alt={rule.site}
           src={getIcon(rule.site)}
           variant="square"
-          className="w-12 h-12 rounded-xl"
+          className="w-10 h-10 rounded-md"
           slotProps={{ img: { className: "object-contain" } }}
           sx={{ bgcolor: (theme) => theme.palette.background.paper }}
         />
       </ListItemAvatar>
       <ListItemText
         primary={
-          <Typography variant="body2" className="font-medium" color="text.secondary">
+          <Typography variant="body2" className="font-medium truncate" color="text.secondary">
             {rule.site}
           </Typography>
         }
         secondary={
           <Typography component="div" variant="body2" color="text.secondary">
             <Stack direction="row" spacing={1} sx={{ mt: 0.5 }}>
-              <Chip label={`censored: ${rule.blockedKeys.length}`} color="primary" size="small" />
-              <Chip label={rule.blocked ? "blocked" : "allowed"} size="small" />
               <Chip
-                label={rule.isActive ? "active" : "inactive"}
+                label={`words: ${rule.blockedKeys.length}`}
+                className='truncate'
+                color="primary"
+                size="small"
+              />
+              <Chip
+                className='truncate'
+                label={rule.blocked ? "blocked" : "allowed"}
                 color={rule.isActive ? "success" : "error"}
                 size="small"
               />
+              {/* <Chip
+                label={rule.isActive ? "active" : "inactive"}
+                color={rule.isActive ? "success" : "error"}
+                size="small"
+              /> */}
             </Stack>
           </Typography>
         }

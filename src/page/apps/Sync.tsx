@@ -26,7 +26,7 @@ export default function Sync() {
   }, []);
 
   return (
-    <Box className="flex flex-col gap-6 p-4 w-full items-center-safe">
+    <Box className="flex flex-col gap-6 p-4 w-full items-center-safe min-h-[calc(100dvh-4rem)]">
       <Typography
         variant='h5'
         component="h5"
@@ -77,7 +77,6 @@ export default function Sync() {
             className='w-full rounded-lg'
             size='large'
             type='submit'
-            color='secondary'
             startIcon={<DownloadIcon />}
             onClick={() => downloadJSONFile('site_blocker.json', data)}
           >
@@ -90,7 +89,6 @@ export default function Sync() {
             className='w-full rounded-lg'
             size='large'
             type='submit'
-            color='secondary'
             startIcon={<UploadIcon />}
           >
             Upload json

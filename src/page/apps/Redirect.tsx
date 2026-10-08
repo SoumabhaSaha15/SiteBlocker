@@ -183,7 +183,7 @@ export default function Redirect() {
   }, []);
 
   return (
-    <Box className="flex flex-col items-center gap-6 p-4 w-full">
+    <Box className="flex flex-col items-center gap-6 p-4 w-full min-h-[calc(100dvh-4rem)]">
       <Typography
         variant='h5'
         component="h5"

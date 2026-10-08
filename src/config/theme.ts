@@ -1,9 +1,8 @@
 import { createTheme } from '@mui/material/styles';
 
-const brandBlue = '#1499ff'; // Extracted from BrandIcon SVG[cite: 5]
+const brandBlue = '#1499ff';
 const darkTheme = createTheme(
   {
-    // cssVariables:true,
     spacing: 4,
     colorSchemes: {
       light: {
@@ -86,10 +85,13 @@ const darkTheme = createTheme(
       MuiListItem: {
         styleOverrides: {
           root: {
-            paddingTop: '4px',
-            paddingBottom: '4px',
-            paddingLeft: '4px',
-            paddingRight: '4px',
+            padding: '2px 4px',
+            '&:first-of-type': {
+              paddingTop: '4px',
+            },
+            '&:last-of-type': {
+              paddingBottom: '4px',
+            },
           },
         },
       },

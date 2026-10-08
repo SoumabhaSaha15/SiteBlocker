@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Save from '@mui/icons-material/Save';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Typography } from '@mui/material';
-import PasswordInputField from '@/shared/PasswordInputField';
+import PasswordInputField from '@/components/PasswordInputField';
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { enqueueSnackbar, type OptionsObject } from "notistack";
 import { resetPasswordSchema, type ResetPasswordSchema } from '@/validator/password';
@@ -60,8 +60,8 @@ export default function Password() {
         <Typography
           variant='h5'
           component="h5"
-          sx={{ borderColor: "divider", borderWidth: 1, backgroundColor: "secondary.main", color: "secondary.contrastText" }}
-          className='w-full max-w-160 p-2 rounded-lg text-center'
+          sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText" }}
+          className='w-full max-w-160 p-2 rounded-lg text-center truncate'
           children={"Reset password 🔐"}
         />
 

@@ -15,7 +15,7 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
-    react(),
+    react({compiler:true}),
     crx({
       manifest,
       liveReload:true

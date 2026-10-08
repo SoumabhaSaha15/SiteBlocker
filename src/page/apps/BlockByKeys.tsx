@@ -1,15 +1,13 @@
-// import React from 'react'
-import { TextField, Divider, InputAdornment, IconButton, Box, Typography } from '@mui/material';
-// import AbcIcon from '@mui/icons-material/Abc';
 import Add from '@mui/icons-material/Add';
+import { TextField, Divider, InputAdornment, IconButton, Box, Typography } from '@mui/material';
 export default function BlockByKeys() {
   return (
-    <Box className="flex flex-col items-center gap-6 p-4 w-full">
+    <Box className="flex flex-col items-center gap-6 p-4 w-full min-h-[calc(100dvh-4rem)]">
       <Typography
         variant='h5'
         component="h5"
         sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-        className='w-full max-w-160 p-2 rounded-lg text-center'
+        className='w-full max-w-160 p-2 rounded-lg text-center truncate'
         children={"Block Keys/Words"}
       />
       <TextField
@@ -23,9 +21,6 @@ export default function BlockByKeys() {
                 <IconButton
                   size="small"
                   edge="start"
-                  // disabled={!url}
-                  // onClick={() => { addUrl(url); }}
-                  // className="rounded-lg! transition-all"
                   sx={{
                     borderRadius:1,
                     color: "primary.contrastText",
@@ -45,15 +40,10 @@ export default function BlockByKeys() {
             ),
           },
         }}
-        // onChange={({ target }) => setUrl(target.value)}
-        // onKeyUp={({ key }) => key === "Enter" && addUrl(url)}
         type="url"
-        // value={url}
         label="Add sites"
         variant="outlined"
         placeholder="https://example.com"
-      // error={!!error}
-      // helperText={error}
       />
 
       <Divider className="w-full max-w-160" sx={{ borderColor: "divider", borderWidth: 1 }} />

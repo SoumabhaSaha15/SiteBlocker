@@ -1,11 +1,12 @@
-import Switch from '@/shared/Switch';
+import Switch from '@/components/Switch';
 import { useState, useEffect } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import PasswordIcon from '@mui/icons-material/Lock';
 import { zodResolver } from "@hookform/resolvers/zod";
+import SecurityIcon from '@mui/icons-material/Security';
+import ExtensionIcon from '@mui/icons-material/Extension';
 import { useSnackbar, type OptionsObject } from 'notistack';
-import PasswordInputField from '@/shared/PasswordInputField';
-import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
+import PasswordInputField from '@/components/PasswordInputField';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
 import { useForm, type SubmitHandler, type UseFormReset } from "react-hook-form";
 import { passwordSetupSchema, type PasswordSetupFormData } from '@/validator/password';
@@ -145,7 +146,7 @@ export default function Settings() {
   return (
     <>
       <Box
-        className="flex flex-col min-h-full items-center w-full p-4 gap-6"
+        className="flex flex-col min-h-[calc(100dvh-4rem)] items-center w-full p-4 gap-6"
         color="secondary"
       >
         <Typography
@@ -185,8 +186,8 @@ export default function Settings() {
             <ListItemText
               id="switch-list-label-working-status"
               primary={
-                <Typography variant="body1" className="font-medium">
-                  Running
+                <Typography variant="body1" className="font-medium truncate">
+                  App Running
                 </Typography>
               }
               secondary={
@@ -221,20 +222,19 @@ export default function Settings() {
                 sx={{ backgroundColor: (protection === null ? "gray" : (protection ? "green" : "red")) }}
               >
                 <PasswordIcon fontSize='medium' />
-                {/* {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />} */}
               </Avatar>
             </ListItemAvatar>
             <ListItemText
               id="switch-list-label-password"
               primary={
-                <Typography variant="body1" className="font-medium">
+                <Typography variant="body1" className="font-medium truncate">
                   App lock
                 </Typography>
               }
               secondary={
                 <Typography
                   variant="body2"
-                  className="font-medium"
+                  className="font-medium truncate"
                 >
                   {protection === null ? "Loading..." : (protection ? "Enabled" : "Disabled")}
                 </Typography>
@@ -248,27 +248,23 @@ export default function Settings() {
               <Switch />
             }>
             <ListItemAvatar className="min-w-0 mr-3">
-              <Avatar
-                // variant="rounded"
-                className="w-10 h-10 rounded-md"
-              // sx={{ bgcolor: (field.value ? "green" : "red") }}
-              >
-                <PowerSettingsNewIcon fontSize='medium' />
+              <Avatar className="w-10 h-10 rounded-md">
+                <ExtensionIcon fontSize='medium' />
               </Avatar>
             </ListItemAvatar>
             <ListItemText
               id="switch-list-label-password"
               primary={
-                <Typography variant="body1" className="font-medium">
-                  Is rule active?
+                <Typography variant="body1" className="font-medium truncate">
+                  Block entension page
                 </Typography>
               }
               secondary={
                 <Typography
                   variant="body2"
-                  className="font-medium"
+                  className="font-medium truncate"
                 >
-                  {/* {field.value ? "Yes" : "No"} */}
+                  Yes
                 </Typography>
               }
             />
@@ -280,34 +276,31 @@ export default function Settings() {
               <Switch checked />
             }>
             <ListItemAvatar className="min-w-0 mr-3">
-              <Avatar
-                // variant="rounded"
-                className="w-10 h-10 rounded-md"
-              >
-                <RemoveCircleTwoToneIcon fontSize='medium' />
+              <Avatar className="w-10 h-10 rounded-md" >
+                <SecurityIcon fontSize='medium' />
                 {/* {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />} */}
               </Avatar>
             </ListItemAvatar>
             <ListItemText
               id="switch-list-label-password"
               primary={
-                <Typography variant="body1" className="font-medium">
-                  Preffered action
+                <Typography variant="body1" className="font-medium truncate">
+                  Context menu shortcut
                 </Typography>
               }
               secondary={
                 <Typography
                   variant="body2"
-                  className="font-medium"
+                  className="font-medium truncate"
                 >
                   Block
-                  {/* {field.value ? "Block" : "Allow"} */}
                 </Typography>
               }
             />
           </ListItem>
         </List>
       </Box >
+
       <PasswordDialog
         dialogOpen={isOpen}
         setData={async (data, reset) => {
