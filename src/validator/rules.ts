@@ -1,14 +1,10 @@
 import { z } from "zod";
-
+import keywordsValidator from "@/validator/keys";
 export const rulesSchema = z.strictObject({
   isActive: z.boolean(),
   site: z.httpUrl().transform((url) => new URL(url).origin),
   blocked: z.boolean(),
-  blockedKeys: z
-    .array(
-      z.string().regex(/^[a-z]+$/, "Only lowercase letters, no spaces")
-    )
-    .min(1, "Minimum 1 key is required")
+  blockedKeys: z.array(keywordsValidator).min(1, "Minimum 1 key is required")
 });
 
 export const rulesArraySchema = z.array(rulesSchema);

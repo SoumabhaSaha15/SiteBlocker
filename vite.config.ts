@@ -15,10 +15,10 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
-    react({compiler:true}),
+    react({ compiler: true }),
     crx({
       manifest,
-      liveReload:true
+      liveReload: true
     }),
     // zip({ outDir: 'release', outFileName: `site-blocker-${pkg.version}.zip` }),
   ],
@@ -43,11 +43,20 @@ export default defineConfig({
       },
     },
   },
+  // server: {
+  //   cors: {
+  //     origin: [
+  //       /chrome-extension:\/\//,
+  //     ],
+  //   },
+  // },
+
   server: {
-    cors: {
-      origin: [
-        /chrome-extension:\/\//,
-      ],
+    port: 5173,
+    strictPort: true,
+    hmr: {
+      port: 5173,
+      host: 'localhost',
     },
   },
 });

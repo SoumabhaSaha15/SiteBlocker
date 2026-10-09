@@ -1,10 +1,23 @@
 import browser from "webextension-polyfill";
 import { blacklistSite } from "@/utils/sites"
-// import { renderApp } from "./content/main";
 import { getRedirect } from "@/utils/redirect";
 import ResolveSite from "@/helper/resolve-site";
 import { getWorkingStatus } from "@/utils/blocker";
 import type { ResolvedResult } from "@/types/interfaces";
+import { KEYS } from "@/config/storage-keys";
+browser.runtime.onInstalled.addListener((details)=>{
+  if(details.reason==="install")  {
+    browser.storage.local
+      .set({
+        [KEYS.blockExtensionPage]:false,
+        [KEYS.contextMenuShortcut]:true
+      })
+      .then(()=>{
+        console.log("Keys initialized.");
+      });
+  }
+
+});
 
 browser.action.onClicked.addListener(() => {
   browser.tabs.create({
