@@ -1,22 +1,32 @@
-import Switch from '@/components/Switch';
-import { useSnackbar } from 'notistack';
-import { getIcon } from '@/utils/sites';
-import Save from '@mui/icons-material/Save';
-import DoneIcon from '@mui/icons-material/Done';
+import Switch from "@/components/Switch";
+import { useSnackbar } from "notistack";
+import { getIcon } from "@/utils/sites";
+import Save from "@mui/icons-material/Save";
+import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
-import LinkIcon from '@mui/icons-material/Link';
+import LinkIcon from "@mui/icons-material/Link";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { zodResolver } from "@hookform/resolvers/zod";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { TransitionGroup } from 'react-transition-group';
-import { useEffect, useState, Fragment, useId } from 'react';
-import RuleIcon from '@mui/icons-material/FormatListBulleted';
-import { rulesSchema, type RulesType } from '@/validator/rules';
-import AddRuleIcon from '@mui/icons-material/FormatListBulletedAdd';
-import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNewTwoTone';
-import { saveRule, getRuleList, listenRulesChanges, deleteRule } from "@/utils/rules";
-import { useForm, Controller, type SubmitHandler, type UseFormReset } from "react-hook-form";
+import { TransitionGroup } from "react-transition-group";
+import { useEffect, useState, Fragment, useId } from "react";
+import RuleIcon from "@mui/icons-material/FormatListBulleted";
+import { rulesSchema, type RulesType } from "@/validator/rules";
+import AddRuleIcon from "@mui/icons-material/FormatListBulletedAdd";
+import RemoveCircleTwoToneIcon from "@mui/icons-material/RemoveCircleTwoTone";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNewTwoTone";
+import {
+  saveRule,
+  getRuleList,
+  listenRulesChanges,
+  deleteRule,
+} from "@/utils/rules";
+import {
+  useForm,
+  Controller,
+  type SubmitHandler,
+  type UseFormReset,
+} from "react-hook-form";
 import {
   Box,
   Fab,
@@ -37,9 +47,14 @@ import {
   ListItemIcon,
   ListItemText,
   ListItemAvatar,
-} from '@mui/material';
+} from "@mui/material";
 
-const EMPTY_RULE: RulesType = { blocked: false, blockedKeys: [], isActive: false, site: "" };
+const EMPTY_RULE: RulesType = {
+  blocked: false,
+  blockedKeys: [],
+  isActive: false,
+  site: "",
+};
 
 export default function Rules() {
   const [mode, setMode] = useState<boolean>(false);
@@ -48,107 +63,142 @@ export default function Rules() {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    getRuleList().then(data => setRules(data));
+    getRuleList().then((data) => setRules(data));
     return listenRulesChanges(setRules);
   }, []);
 
   return (
     <>
       <TransitionGroup>
-        {
-          mode ? (
-            <Collapse timeout={{ enter: 500, exit: 500 }} key="rules-form">
-              <RulesForm
-                defaultData={formData}
-                setData={(data, resetData) => {
-                  // console.log(data);
-                  saveRule(data)
-                    .then(() => {
-                      resetData();
-                      enqueueSnackbar("Rule saved ✅.");
-                    })
-                    .catch((err: Error) => enqueueSnackbar(err.message, { variant: "error" }))
-                    .finally(() => setMode(prev => !prev));
+        {mode ? (
+          <Collapse timeout={{ enter: 500, exit: 500 }} key="rules-form">
+            <RulesForm
+              defaultData={formData}
+              setData={(data, resetData) => {
+                // console.log(data);
+                saveRule(data)
+                  .then(() => {
+                    resetData();
+                    enqueueSnackbar("Rule saved ✅.");
+                  })
+                  .catch((err: Error) =>
+                    enqueueSnackbar(err.message, { variant: "error" }),
+                  )
+                  .finally(() => setMode((prev) => !prev));
+              }}
+            />
+          </Collapse>
+        ) : (
+          <Collapse timeout={{ enter: 500, exit: 500 }} key="rules-list">
+            <Box className="flex flex-col min-h-[calc(100dvh-4rem)] items-center w-full p-4 gap-6">
+              <Typography
+                variant="h5"
+                component="h5"
+                sx={{
+                  borderColor: "divider",
+                  backgroundColor: "secondary.main",
+                  color: "secondary.contrastText",
                 }}
+                className="w-full max-w-160 p-2 rounded-lg text-center"
+                children={"Rules list"}
               />
-            </Collapse>
-          ) : (
-            <Collapse timeout={{ enter: 500, exit: 500 }} key="rules-list">
-              <Box className="flex flex-col min-h-[calc(100dvh-4rem)] items-center w-full p-4 gap-6">
-                <Typography
-                  variant='h5'
-                  component="h5"
-                  sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-                  className='w-full max-w-160 p-2 rounded-lg text-center'
-                  children={"Rules list"}
-                />
 
-                <List
-                  dense={false}
-                  className="w-full max-w-160 rounded-lg border"
-                  sx={{
-                    borderColor: "divider",
-                    bgcolor: "background.paper",
-                  }}
-                >
-                  {(!rules.length) ? (
-                    <ListItem className="h-14 px-2">
-                      <ListItemAvatar className="min-w-0 mr-3">
-                        <Avatar className="w-10 h-10 rounded-md" sx={{ backgroundColor: "red" }}>
-                          <RuleIcon fontSize="medium" />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={<Typography variant="body2" className="font-medium" color="text.secondary">No Rules</Typography>}
-                        secondary={<Typography variant="caption" color="text.disabled" className="block">No rules created</Typography>}
-                      />
-                    </ListItem>
-                  ) : rules.map((item, index) => (
+              <List
+                dense={false}
+                className="w-full max-w-160 rounded-lg border"
+                sx={{
+                  borderColor: "divider",
+                  bgcolor: "background.paper",
+                }}
+              >
+                {!rules.length ? (
+                  <ListItem className="h-14 px-2">
+                    <ListItemAvatar className="min-w-0 mr-3">
+                      <Avatar
+                        className="w-10 h-10 rounded-md"
+                        sx={{ backgroundColor: "red" }}
+                      >
+                        <RuleIcon fontSize="medium" />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Typography
+                          variant="body2"
+                          className="font-medium"
+                          color="text.secondary"
+                        >
+                          No Rules
+                        </Typography>
+                      }
+                      secondary={
+                        <Typography
+                          variant="caption"
+                          color="text.disabled"
+                          className="block"
+                        >
+                          No rules created
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                ) : (
+                  rules.map((item, index) => (
                     <Fragment key={index}>
                       <RulePreview
                         rule={item}
                         handleDelete={() => {
-                          deleteRule(item.site).then(()=>{
-                            enqueueSnackbar("Rule saved ✅.",{
-                              anchorOrigin:{horizontal:"center",vertical:"bottom"}
+                          deleteRule(item.site).then(() => {
+                            enqueueSnackbar("Rule saved ✅.", {
+                              anchorOrigin: {
+                                horizontal: "center",
+                                vertical: "bottom",
+                              },
                             });
-                          })
+                          });
                         }}
                         handleEdit={() => {
                           setFormData(item);
-                          setMode(prev => !prev);
+                          setMode((prev) => !prev);
                         }}
                       />
                       {rules.length - 1 !== index && (
-                        <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1 }} />
+                        <Divider
+                          component="li"
+                          sx={{
+                            borderColor: "divider",
+                            width: "100%",
+                            borderWidth: 1,
+                          }}
+                        />
                       )}
                     </Fragment>
-                  ))}
-                </List>
-              </Box>
-            </Collapse>
-          )
-        }
+                  ))
+                )}
+              </List>
+            </Box>
+          </Collapse>
+        )}
       </TransitionGroup>
 
       <Fab
         variant="extended"
-        color='primary'
-        className='border rounded-md'
-        sx={{ position: 'absolute', bottom: 16, right: 16, }}
+        color="primary"
+        className="border rounded-md"
+        sx={{ position: "absolute", bottom: 16, right: 16 }}
         onClick={() => {
-          setMode(prev => !prev);
+          setMode((prev) => !prev);
           setFormData(EMPTY_RULE);
         }}
       >
         {mode ? (
           <>
-            <RuleIcon className='mr-1' />
+            <RuleIcon className="mr-1" />
             See rules
           </>
         ) : (
           <>
-            <AddRuleIcon className='mr-1' />
+            <AddRuleIcon className="mr-1" />
             Add rule
           </>
         )}
@@ -158,15 +208,15 @@ export default function Rules() {
 }
 
 type RulePreviewProps = {
-  rule: RulesType,
-  handleDelete: () => void,
-  handleEdit: () => void,
+  rule: RulesType;
+  handleDelete: () => void;
+  handleEdit: () => void;
 };
 
 const RulePreview = ({ rule, handleDelete, handleEdit }: RulePreviewProps) => {
-
   const id = useId();
-  const buttonId = `${id}-button`, menuId = `${id}-menu`;
+  const buttonId = `${id}-button`,
+    menuId = `${id}-menu`;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -176,289 +226,324 @@ const RulePreview = ({ rule, handleDelete, handleEdit }: RulePreviewProps) => {
     setAnchorEl(null);
   };
 
-  return (<>
-    <ListItem className="h-14"
-      secondaryAction={
-        <>
-          <IconButton
-            edge="end"
-            size="small"
-            aria-label="delete"
-            id={buttonId}
-            aria-controls={open ? menuId : undefined}
-            aria-haspopup="true"
-            aria-expanded={open}
-            onClick={handleClick}
-            className="rounded-md!"
-          >
-            <MoreVertIcon fontSize="small" />
-          </IconButton>
-          <Menu
-            id={menuId}
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            slotProps={{
-              list: {
-                'aria-labelledby': buttonId,
-              },
-            }}
-          >
-            <MenuItem onClick={() => {
-              handleDelete();
-              handleClose();
-            }}>
-              <ListItemIcon sx={{ color: "error.main", }}>
-                <DeleteIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>
-                Remove
-              </ListItemText>
-            </MenuItem>
-            <MenuItem onClick={() => {
-              handleEdit();
-              handleClose();
-            }}>
-              <ListItemIcon>
-                <EditIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>
-                Edit
-              </ListItemText>
-            </MenuItem>
-          </Menu>
-        </>
-      }
-    >
-      <ListItemAvatar className="min-w-0 mx-3">
-        <Avatar
-          alt={rule.site}
-          src={getIcon(rule.site)}
-          variant="square"
-          className="w-10 h-10 rounded-md"
-          slotProps={{ img: { className: "object-contain" } }}
-          sx={{ bgcolor: (theme) => theme.palette.background.paper }}
-        />
-      </ListItemAvatar>
-      <ListItemText
-        primary={
-          <Typography variant="body2" className="font-medium truncate" color="text.secondary">
-            {rule.site}
-          </Typography>
+  return (
+    <>
+      <ListItem
+        className="h-14"
+        secondaryAction={
+          <>
+            <IconButton
+              edge="end"
+              size="small"
+              aria-label="delete"
+              id={buttonId}
+              aria-controls={open ? menuId : undefined}
+              aria-haspopup="true"
+              aria-expanded={open}
+              onClick={handleClick}
+              className="rounded-md!"
+            >
+              <MoreVertIcon fontSize="small" />
+            </IconButton>
+            <Menu
+              id={menuId}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              slotProps={{
+                list: {
+                  "aria-labelledby": buttonId,
+                },
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  handleDelete();
+                  handleClose();
+                }}
+              >
+                <ListItemIcon sx={{ color: "error.main" }}>
+                  <DeleteIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Remove</ListItemText>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleEdit();
+                  handleClose();
+                }}
+              >
+                <ListItemIcon>
+                  <EditIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Edit</ListItemText>
+              </MenuItem>
+            </Menu>
+          </>
         }
-        secondary={
-          <Typography component="div" variant="body2" color="text.secondary">
-            <Stack direction="row" spacing={1} sx={{ mt: 0.5 }}>
-              <Chip
-                label={`words: ${rule.blockedKeys.length}`}
-                className='truncate'
-                color="primary"
-                size="small"
-              />
-              <Chip
-                className='truncate'
-                label={rule.blocked ? "blocked" : "allowed"}
-                color={rule.isActive ? "success" : "error"}
-                size="small"
-              />
-              {/* <Chip
+      >
+        <ListItemAvatar className="min-w-0 mx-3">
+          <Avatar
+            alt={rule.site}
+            src={getIcon(rule.site)}
+            variant="square"
+            className="w-10 h-10 rounded-md"
+            slotProps={{ img: { className: "object-contain" } }}
+            sx={{ bgcolor: (theme) => theme.palette.background.paper }}
+          />
+        </ListItemAvatar>
+        <ListItemText
+          primary={
+            <Typography
+              variant="body2"
+              className="font-medium truncate"
+              color="text.secondary"
+            >
+              {rule.site}
+            </Typography>
+          }
+          secondary={
+            <Typography component="div" variant="body2" color="text.secondary">
+              <Stack direction="row" spacing={1} sx={{ mt: 0.5 }}>
+                <Chip
+                  label={`words: ${rule.blockedKeys.length}`}
+                  className="truncate"
+                  color="primary"
+                  size="small"
+                />
+                <Chip
+                  className="truncate"
+                  label={rule.blocked ? "blocked" : "allowed"}
+                  color={rule.isActive ? "success" : "error"}
+                  size="small"
+                />
+                {/* <Chip
                 label={rule.isActive ? "active" : "inactive"}
                 color={rule.isActive ? "success" : "error"}
                 size="small"
               /> */}
-            </Stack>
-          </Typography>
-        }
-      />
-    </ListItem>
-  </>);
-}
+              </Stack>
+            </Typography>
+          }
+        />
+      </ListItem>
+    </>
+  );
+};
 
-const RulesForm = ({ defaultData, setData }: {
-  defaultData: RulesType,
-  setData: (data: RulesType, reset: UseFormReset<RulesType>) => void
+const RulesForm = ({
+  defaultData,
+  setData,
+}: {
+  defaultData: RulesType;
+  setData: (data: RulesType, reset: UseFormReset<RulesType>) => void;
 }) => {
   const {
     register,
     handleSubmit,
     reset,
-    formState: {
-      errors,
-      isSubmitting,
-      isDirty,
-    },
-    control
+    formState: { errors, isSubmitting, isDirty },
+    control,
   } = useForm<RulesType>({
     resolver: zodResolver(rulesSchema),
-    defaultValues: defaultData
+    defaultValues: defaultData,
   });
 
-  const formSubmit: SubmitHandler<RulesType> = async (data) => void setData(data, reset);
+  const formSubmit: SubmitHandler<RulesType> = async (data) =>
+    void setData(data, reset);
   return (
     <Box className="min-h-[calc(100dvh-4rem)] grid place-items-center p-4">
-    <Box
-      component={"form"}
-      sx={{ backgroundColor: "background.paper" }}
-      className="flex flex-col items-center w-full max-w-160 p-4 gap-4 rounded-xl"
-      onSubmit={handleSubmit(formSubmit, console.dir)}
-    >
-      <Typography
-        variant='h5'
-        component="h5"
-        sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText" }}
-        className='w-full max-w-160 p-2 rounded-lg text-center'
-        children={"Rules form"}
-      />
+      <Box
+        component={"form"}
+        sx={{ backgroundColor: "background.paper" }}
+        className="flex flex-col items-center w-full max-w-160 p-4 gap-4 rounded-xl"
+        onSubmit={handleSubmit(formSubmit, console.dir)}
+      >
+        <Typography
+          variant="h5"
+          component="h5"
+          sx={{
+            borderColor: "divider",
+            backgroundColor: "secondary.main",
+            color: "secondary.contrastText",
+          }}
+          className="w-full max-w-160 p-2 rounded-lg text-center"
+          children={"Rules form"}
+        />
 
-      <TextField
-        {...register("site")}
-        slotProps={{
-          input: {
-            className: "rounded-lg",
-            endAdornment: <LinkIcon />
-          }
-        }}
-        fullWidth
-        type='url'
-        className='max-w-160'
-        label="Site URL"
-        variant='outlined'
-        disabled={isSubmitting}
-        error={!!(errors.site)}
-        helperText={errors.site?.message}
-      />
+        <TextField
+          {...register("site")}
+          slotProps={{
+            input: {
+              className: "rounded-lg",
+              endAdornment: <LinkIcon />,
+            },
+          }}
+          fullWidth
+          type="url"
+          className="max-w-160"
+          label="Site URL"
+          variant="outlined"
+          disabled={isSubmitting}
+          error={!!errors.site}
+          helperText={errors.site?.message}
+        />
 
-      <Controller
-        name="blockedKeys"
-        control={control}
-        render={({ field, fieldState: { error, invalid } }) => {
-          return (
-            <Autocomplete
-              multiple
-              freeSolo
-              options={[]}
-              value={field.value}
-              sx={{
-                minWidth: "min(640px,100%)",
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "16px",
-                },
-              }}
-              onChange={(_, newValue) => field.onChange(newValue)}
-              renderValue={(props, getProps) => (props.map((option, index) => {
-                const { key, ...tagProps } = getProps({ index });
-                return (<Chip label={option} size="small" key={key} {...tagProps} />);
-              }))}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="URL Contains (keywords)"
-                  error={invalid}
-                  helperText={Array.isArray(error) ? error.map(e => e.message).filter(item => item !== "").join(",") : error?.message}
+        <Controller
+          name="blockedKeys"
+          control={control}
+          render={({ field, fieldState: { error, invalid } }) => {
+            return (
+              <Autocomplete
+                multiple
+                freeSolo
+                options={[]}
+                value={field.value}
+                sx={{
+                  minWidth: "min(640px,100%)",
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "16px",
+                  },
+                }}
+                onChange={(_, newValue) => field.onChange(newValue)}
+                renderValue={(props, getProps) =>
+                  props.map((option, index) => {
+                    const { key, ...tagProps } = getProps({ index });
+                    return (
+                      <Chip
+                        label={option}
+                        size="small"
+                        key={key}
+                        {...tagProps}
+                      />
+                    );
+                  })
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="URL Contains (keywords)"
+                    error={invalid}
+                    helperText={
+                      Array.isArray(error)
+                        ? error
+                            .map((e) => e.message)
+                            .filter((item) => item !== "")
+                            .join(",")
+                        : error?.message
+                    }
+                  />
+                )}
+              />
+            );
+          }}
+        />
+
+        <List
+          dense={false}
+          className="w-full max-w-160 rounded-lg"
+          sx={{
+            border: 1,
+            borderColor: "divider",
+            bgcolor: "background.paper",
+          }}
+        >
+          <Controller
+            name="isActive"
+            control={control}
+            render={({ field }) => (
+              <ListItem
+                className="h-14 px-2"
+                secondaryAction={
+                  <Switch {...field} checked={Boolean(field.value)} />
+                }
+              >
+                <ListItemAvatar className="min-w-0 mr-3">
+                  <Avatar
+                    // variant="rounded"
+                    className="w-10 h-10 rounded-md"
+                    sx={{ bgcolor: field.value ? "green" : "red" }}
+                  >
+                    <PowerSettingsNewIcon fontSize="medium" />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  id="switch-list-label-password"
+                  primary={
+                    <Typography variant="body1" className="font-medium">
+                      Is rule active?
+                    </Typography>
+                  }
+                  secondary={
+                    <Typography variant="body2" className="font-medium">
+                      {field.value ? "Yes" : "No"}
+                    </Typography>
+                  }
                 />
-              )}
-            />
-          )
-        }}
-      />
-
-      <List
-        dense={false}
-        className="w-full max-w-160 rounded-lg"
-        sx={{
-          border: 1,
-          borderColor: "divider",
-          bgcolor: "background.paper",
-        }}
-      >
-        <Controller
-          name="isActive"
-          control={control}
-          render={({ field }) => (
-            <ListItem
-              className="h-14 px-2"
-              secondaryAction={
-                <Switch {...field} checked={Boolean(field.value)} />
-              }>
-              <ListItemAvatar className="min-w-0 mr-3">
-                <Avatar
-                  // variant="rounded"
-                  className="w-10 h-10 rounded-md"
-                  sx={{ bgcolor: (field.value ? "green" : "red") }}
-                >
-                  <PowerSettingsNewIcon fontSize='medium' />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                id="switch-list-label-password"
-                primary={
-                  <Typography variant="body1" className="font-medium">
-                    Is rule active?
-                  </Typography>
+              </ListItem>
+            )}
+          />
+          <Divider
+            component="li"
+            sx={{
+              borderColor: "divider",
+              width: "100%",
+              borderWidth: 1,
+              my: 0.5,
+            }}
+          />
+          <Controller
+            name="blocked"
+            control={control}
+            render={({ field }) => (
+              <ListItem
+                className="h-14 px-2"
+                secondaryAction={
+                  <Switch {...field} checked={Boolean(field.value)} />
                 }
-                secondary={
-                  <Typography
-                    variant="body2"
-                    className="font-medium"
+              >
+                <ListItemAvatar className="min-w-0 mr-3">
+                  <Avatar
+                    // variant="rounded"
+                    className="w-10 h-10 rounded-md"
                   >
-                    {field.value ? "Yes" : "No"}
-                  </Typography>
-                }
-              />
-            </ListItem>
-          )}
-        />
-        <Divider component="li" sx={{ borderColor: "divider", width: "100%", borderWidth: 1, my: 0.5 }} />
-        <Controller
-          name="blocked"
-          control={control}
-          render={({ field }) => (
-            <ListItem
-              className="h-14 px-2"
-              secondaryAction={
-                <Switch {...field} checked={Boolean(field.value)} />
-              }>
-              <ListItemAvatar className="min-w-0 mr-3">
-                <Avatar
-                  // variant="rounded"
-                  className="w-10 h-10 rounded-md"
-                >
-                  {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />}
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                id="switch-list-label-password"
-                primary={
-                  <Typography variant="body1" className="font-medium">
-                    Preffered action
-                  </Typography>
-                }
-                secondary={
-                  <Typography
-                    variant="body2"
-                    className="font-medium"
-                  >
-                    {field.value ? "Block" : "Allow"}
-                  </Typography>
-                }
-              />
-            </ListItem>
-          )}
-        />
-      </List>
+                    {field.value ? (
+                      <RemoveCircleTwoToneIcon fontSize="medium" />
+                    ) : (
+                      <DoneIcon fontSize="medium" />
+                    )}
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  id="switch-list-label-password"
+                  primary={
+                    <Typography variant="body1" className="font-medium">
+                      Preffered action
+                    </Typography>
+                  }
+                  secondary={
+                    <Typography variant="body2" className="font-medium">
+                      {field.value ? "Block" : "Allow"}
+                    </Typography>
+                  }
+                />
+              </ListItem>
+            )}
+          />
+        </List>
 
-      <Button
-        variant='contained'
-        sx={{ minWidth: "min(640px,100%)" }}
-        size='large'
-        type='submit'
-        className='rounded-lg'
-        disabled={isSubmitting || !isDirty}
-        startIcon={<Save />}
-      >
-        Save
-      </Button>
+        <Button
+          variant="contained"
+          sx={{ minWidth: "min(640px,100%)" }}
+          size="large"
+          type="submit"
+          className="rounded-lg"
+          disabled={isSubmitting || !isDirty}
+          startIcon={<Save />}
+        >
+          Save
+        </Button>
+      </Box>
     </Box>
-    </Box>
-  )
-}
+  );
+};

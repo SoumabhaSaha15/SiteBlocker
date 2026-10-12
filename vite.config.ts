@@ -18,7 +18,7 @@ export default defineConfig({
     react({ compiler: true }),
     crx({
       manifest,
-      liveReload: true
+      liveReload: true,
     }),
     // zip({ outDir: 'release', outFileName: `site-blocker-${pkg.version}.zip` }),
   ],
@@ -56,7 +56,7 @@ export default defineConfig({
     strictPort: true,
     hmr: {
       port: 5173,
-      host: 'localhost',
+      host: "localhost",
     },
   },
 });

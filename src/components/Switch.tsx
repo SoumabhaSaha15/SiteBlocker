@@ -1,13 +1,13 @@
-import { styled } from '@mui/material/styles';
-import Switch from '@mui/material/Switch';
+import { styled } from "@mui/material/styles";
+import Switch from "@mui/material/Switch";
 // import { SwitchProps } from '@mui/material/Switch';
 const Android12Switch = styled(Switch)(() => ({
   padding: 8,
-  '& .MuiSwitch-track': {
+  "& .MuiSwitch-track": {
     borderRadius: 22 / 2,
   },
-  '& .MuiSwitch-thumb': {
-    boxShadow: 'none',
+  "& .MuiSwitch-thumb": {
+    boxShadow: "none",
     width: 16,
     height: 16,
     margin: 2,

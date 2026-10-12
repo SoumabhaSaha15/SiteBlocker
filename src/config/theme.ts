@@ -1,134 +1,132 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
-const brandBlue = '#1499ff';
-const darkTheme = createTheme(
-  {
-    spacing: 4,
-    colorSchemes: {
-      light: {
-        palette: {
-          primary: {
-            main: brandBlue,
-            light: '#5cb8ff',
-            dark: '#0070c7',
-            contrastText: '#ffffff',
-          },
-          secondary: {
-            main: '#2a3b50', // Slate blue accent
-            light: '#4f647e',
-            dark: '#142131',
-            contrastText: '#ffffff',
-          },
-          background: {
-            default: '#f4f8fc', // Soft tinted canvas matching the brand blue
-            paper: '#ffffff',   // Crisp white for elevated cards and modals
-          },
-          text: {
-            primary: '#0e1726',
-            secondary: '#556376',
-          },
-          divider: 'rgba(20, 153, 255, 0.12)',
+const brandBlue = "#1499ff";
+const darkTheme = createTheme({
+  spacing: 4,
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: brandBlue,
+          light: "#5cb8ff",
+          dark: "#0070c7",
+          contrastText: "#ffffff",
         },
+        secondary: {
+          main: "#2a3b50", // Slate blue accent
+          light: "#4f647e",
+          dark: "#142131",
+          contrastText: "#ffffff",
+        },
+        background: {
+          default: "#f4f8fc", // Soft tinted canvas matching the brand blue
+          paper: "#ffffff", // Crisp white for elevated cards and modals
+        },
+        text: {
+          primary: "#0e1726",
+          secondary: "#556376",
+        },
+        divider: "rgba(20, 153, 255, 0.12)",
       },
-      dark: {
-        palette: {
-          primary: {
-            main: brandBlue,
-            light: '#70beff',
-            dark: '#0077d4',
-            contrastText: '#001c3d',
-          },
-          secondary: {
-            main: '#9ecaff',
-            contrastText: '#002952',
-          },
-          background: {
-            default: '#080d14', // Deep navy-black body canvas
-            paper: '#101824',   // Elevated dark container with clear contrast
-          },
-          text: {
-            primary: '#e9f1fa',
-            secondary: '#8fa2b8',
-          },
-          divider: 'rgba(255, 255, 255, 0.08)',
+    },
+    dark: {
+      palette: {
+        primary: {
+          main: brandBlue,
+          light: "#70beff",
+          dark: "#0077d4",
+          contrastText: "#001c3d",
+        },
+        secondary: {
+          main: "#9ecaff",
+          contrastText: "#002952",
+        },
+        background: {
+          default: "#080d14", // Deep navy-black body canvas
+          paper: "#101824", // Elevated dark container with clear contrast
+        },
+        text: {
+          primary: "#e9f1fa",
+          secondary: "#8fa2b8",
+        },
+        divider: "rgba(255, 255, 255, 0.08)",
+      },
+    },
+  },
+  typography: { fontFamily: '"Roboto", serif' },
+  shape: { borderRadius: 8 },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1536,
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 12, // Pill-shaped buttons
+          textTransform: "none", // MD3 drops all-caps button text
         },
       },
     },
-    typography: { fontFamily: '"Roboto", serif' },
-    shape: { borderRadius: 8 },
-    breakpoints: {
-      values: {
-        xs: 0,
-        sm: 640,
-        md: 768,
-        lg: 1024,
-        xl: 1536,
-      }
+    MuiList: {
+      styleOverrides: {
+        root: {
+          paddingTop: 0,
+          paddingBottom: 0,
+        },
+      },
     },
-    components: {
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            borderRadius: 12, // Pill-shaped buttons
-            textTransform: 'none', // MD3 drops all-caps button text
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          padding: "2px 4px",
+          "&:first-of-type": {
+            paddingTop: "4px",
+          },
+          "&:last-of-type": {
+            paddingBottom: "4px",
           },
         },
       },
-      MuiList: {
-        styleOverrides: {
-          root: {
-            paddingTop: 0,
-            paddingBottom: 0,
-          },
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          borderBottomLeftRadius: 12,
+          borderTopLeftRadius: 12,
+          borderBottomRightRadius: 12,
+          borderTopRightRadius: 12,
+          boxShadow: "none", // MD3 relies on tonal elevation over deep shadows
         },
       },
-      MuiListItem: {
-        styleOverrides: {
-          root: {
-            padding: '2px 4px',
-            '&:first-of-type': {
-              paddingTop: '4px',
-            },
-            '&:last-of-type': {
-              paddingBottom: '4px',
-            },
-          },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 24,
+          boxShadow: "none", // MD3 relies on tonal elevation over deep shadows
         },
       },
-      MuiListItemButton: {
-        styleOverrides: {
-          root: {
-            borderBottomLeftRadius: 12,
-            borderTopLeftRadius: 12,
-            borderBottomRightRadius: 12,
-            borderTopRightRadius: 12,
-            boxShadow: 'none', // MD3 relies on tonal elevation over deep shadows
-          },
+    },
+    MuiFab: {
+      styleOverrides: {
+        extended: {
+          textTransform: "none",
         },
       },
-      MuiCard: {
-        styleOverrides: {
-          root: {
-            borderRadius: 24,
-            boxShadow: 'none', // MD3 relies on tonal elevation over deep shadows
-          },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
         },
       },
-      MuiFab: {
-        styleOverrides: {
-          extended: {
-            textTransform: 'none',
-          },
-        },
-      },
-      MuiTab: {
-        styleOverrides: {
-          root: {
-            textTransform: 'none',
-          },
-        },
-      },
-    }
-  }
-);
+    },
+  },
+});
 export default darkTheme;

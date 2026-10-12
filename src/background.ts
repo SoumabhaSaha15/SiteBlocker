@@ -1,22 +1,22 @@
 import browser from "webextension-polyfill";
-import { blacklistSite } from "@/utils/sites"
+import { blacklistSite } from "@/utils/sites";
 import { getRedirect } from "@/utils/redirect";
 import ResolveSite from "@/helper/resolve-site";
 import { getWorkingStatus } from "@/utils/blocker";
 import type { ResolvedResult } from "@/types/interfaces";
 import { KEYS } from "@/config/storage-keys";
-browser.runtime.onInstalled.addListener((details)=>{
-  if(details.reason==="install")  {
+browser.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "install") {
     browser.storage.local
       .set({
-        [KEYS.blockExtensionPage]:false,
-        [KEYS.contextMenuShortcut]:true
+        [KEYS.workingStatus]: true,
+        [KEYS.blockExtensionPage]: false,
+        [KEYS.contextMenuShortcut]: true,
       })
-      .then(()=>{
+      .then(() => {
         console.log("Keys initialized.");
       });
   }
-
 });
 
 browser.action.onClicked.addListener(() => {
@@ -24,7 +24,6 @@ browser.action.onClicked.addListener(() => {
     url: browser.runtime.getURL("src/page/index.html"),
   });
 });
-
 
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === "loading" && tab.url) {
@@ -34,8 +33,12 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (!isRunning) return;
     let result: ResolvedResult = await ResolveSite(tab.url);
     if (!result.blocked) return;
-    const defaultGuard = new URL(browser.runtime.getURL("src/redirect/index.html"));
-    defaultGuard.search = (new URLSearchParams(result as unknown as Record<string, string>)).toString();
+    const defaultGuard = new URL(
+      browser.runtime.getURL("src/redirect/index.html"),
+    );
+    defaultGuard.search = new URLSearchParams(
+      result as unknown as Record<string, string>,
+    ).toString();
     const redirect = await getRedirect();
     let target = defaultGuard.toString();
     if (redirect) {
@@ -54,12 +57,12 @@ browser.runtime.onInstalled.addListener(() => {
   browser.contextMenus.create({
     id: CTX_MENU_ID,
     title: "Block this site",
-    contexts: ["selection", "page", "link"] // Choose where it appears
+    contexts: ["selection", "page", "link"], // Choose where it appears
   });
   browser.contextMenus.create({
     id: CTX_ACTION_REPO_ID,
     title: "Visit GitHub Repository",
-    contexts: ["action"]
+    contexts: ["action"],
   });
 });
 
@@ -67,13 +70,12 @@ browser.contextMenus.onClicked.addListener((info) => {
   switch (info.menuItemId) {
     case CTX_MENU_ID: {
       const url = URL.parse(info.pageUrl!);
-      if (url)
-        return void blacklistSite(url.origin);
+      if (url) return void blacklistSite(url.origin);
       break;
     }
     case CTX_ACTION_REPO_ID: {
       browser.tabs.create({
-        url: "https://github.com/SoumabhaSaha15/SiteBlocker"
+        url: "https://github.com/SoumabhaSaha15/SiteBlocker",
       });
       break;
     }

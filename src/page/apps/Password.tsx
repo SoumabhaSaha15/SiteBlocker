@@ -1,18 +1,25 @@
-import { useEffect, useState } from 'react';
-import Save from '@mui/icons-material/Save';
+import { useEffect, useState } from "react";
+import Save from "@mui/icons-material/Save";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, Typography } from '@mui/material';
-import PasswordInputField from '@/components/PasswordInputField';
+import { Box, Button, Typography } from "@mui/material";
+import PasswordInputField from "@/components/PasswordInputField";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { enqueueSnackbar, type OptionsObject } from "notistack";
-import { resetPasswordSchema, type ResetPasswordSchema } from '@/validator/password';
-import { setAppPassword, verifyAppPassword, getPasswordProtected } from "@/utils/password";
+import {
+  resetPasswordSchema,
+  type ResetPasswordSchema,
+} from "@/validator/password";
+import {
+  setAppPassword,
+  verifyAppPassword,
+  getPasswordProtected,
+} from "@/utils/password";
 
 const SNACK_OPTION: OptionsObject = {
   variant: "default",
   autoHideDuration: 2000,
   anchorOrigin: { horizontal: "center", vertical: "bottom" },
-}
+};
 export default function Password() {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const {
@@ -21,15 +28,17 @@ export default function Password() {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<ResetPasswordSchema>({
-    resolver: zodResolver(resetPasswordSchema)
+    resolver: zodResolver(resetPasswordSchema),
   });
 
   useEffect(() => {
-    getPasswordProtected()
-      .then((data) => setIsDisabled(!data));
-  }, [])
+    getPasswordProtected().then((data) => setIsDisabled(!data));
+  }, []);
 
-  const formSubmit: SubmitHandler<ResetPasswordSchema> = async ({ oldPassword, newPassword }) => {
+  const formSubmit: SubmitHandler<ResetPasswordSchema> = async ({
+    oldPassword,
+    newPassword,
+  }) => {
     const verified = await verifyAppPassword(oldPassword);
     if (verified) {
       setAppPassword(newPassword);
@@ -37,17 +46,16 @@ export default function Password() {
       enqueueSnackbar({
         key: crypto.randomUUID(),
         message: "Password updated ✅",
-        ...SNACK_OPTION
+        ...SNACK_OPTION,
       });
-    }
-    else {
+    } else {
       enqueueSnackbar({
         key: crypto.randomUUID(),
         message: "Incorrect password ❌",
-        ...SNACK_OPTION
+        ...SNACK_OPTION,
       });
     }
-  }
+  };
 
   return (
     <Box className="min-h-[calc(100dvh-4rem)] grid place-items-center p-4">
@@ -58,10 +66,14 @@ export default function Password() {
         onSubmit={handleSubmit(formSubmit)}
       >
         <Typography
-          variant='h5'
+          variant="h5"
           component="h5"
-          sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText" }}
-          className='w-full max-w-160 p-2 rounded-lg text-center truncate'
+          sx={{
+            borderColor: "divider",
+            backgroundColor: "secondary.main",
+            color: "secondary.contrastText",
+          }}
+          className="w-full max-w-160 p-2 rounded-lg text-center truncate"
           children={"Reset password 🔐"}
         />
 
@@ -70,7 +82,7 @@ export default function Password() {
           slotProps={{ input: { className: "rounded-lg" } }}
           sx={{ minWidth: "min(640px,100%)" }}
           label="Current password"
-          variant='outlined'
+          variant="outlined"
           disabled={isDisabled || isSubmitting}
           error={!!errors.oldPassword}
           helperText={errors.oldPassword?.message}
@@ -80,7 +92,7 @@ export default function Password() {
           slotProps={{ input: { className: "rounded-lg" } }}
           sx={{ minWidth: "min(640px,100%)" }}
           label="New password"
-          variant='outlined'
+          variant="outlined"
           disabled={isDisabled || isSubmitting}
           error={!!errors.newPassword}
           helperText={errors.newPassword?.message}
@@ -90,20 +102,20 @@ export default function Password() {
           slotProps={{ input: { className: "rounded-lg" } }}
           sx={{ minWidth: "min(640px,100%)" }}
           label="Confirm password"
-          variant='outlined'
+          variant="outlined"
           disabled={isDisabled || isSubmitting}
           error={!!errors.confirmPassword}
           helperText={errors.confirmPassword?.message}
         />
         <Button
-          variant='contained'
+          variant="contained"
           sx={{ minWidth: "min(640px,100%)" }}
-          size='large'
-          className='rounded-lg'
+          size="large"
+          className="rounded-lg"
           disabled={isDisabled || isSubmitting}
-          type='submit'
+          type="submit"
           startIcon={<Save />}
-          children={(isDisabled) ? "Enable the app-lock first" : "Save"}
+          children={isDisabled ? "Enable the app-lock first" : "Save"}
         />
       </Box>
     </Box>

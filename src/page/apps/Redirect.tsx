@@ -23,14 +23,22 @@ import {
   Typography,
   ListItemIcon,
 } from "@mui/material";
-import { setRedirect, deleteRedirect, getRedirect, listenRedirectChanges } from "@/utils/redirect";
+import {
+  setRedirect,
+  deleteRedirect,
+  getRedirect,
+  listenRedirectChanges,
+} from "@/utils/redirect";
 
 interface RedirectSiteProps {
   site: Redirect | null;
   setUrl: (value: string | ((prevState: string) => string)) => void;
 }
 
-const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSiteProps) {
+const RedirectSite = memo(function RedirectSite({
+  site,
+  setUrl,
+}: RedirectSiteProps) {
   const id = "redirect";
   const link = useMemo(() => {
     if (!site) return null;
@@ -40,11 +48,13 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
       return null;
     }
   }, [site]);
-  const buttonId = `${id}-button`, menuId = `${id}-menu`;
+  const buttonId = `${id}-button`,
+    menuId = `${id}-menu`;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+    setAnchorEl(event.currentTarget);
 
   const handleClose = () => setAnchorEl(null);
 
@@ -57,14 +67,13 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
     }
   };
 
-
   return (
     <List
       dense={false}
       className="w-full max-w-160 rounded-lg overflow-clip border"
       sx={{ borderColor: "divider", bgcolor: "background.paper" }}
     >
-      {(!link) ? (
+      {!link ? (
         <ListItem className="px-2">
           <ListItemAvatar className="min-w-0 mr-3">
             <Avatar
@@ -77,19 +86,28 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
           </ListItemAvatar>
           <ListItemText
             primary={
-              <Typography variant="body2" className="font-medium" color="text.secondary">
+              <Typography
+                variant="body2"
+                className="font-medium"
+                color="text.secondary"
+              >
                 Redirects unavailable
               </Typography>
             }
             secondary={
-              <Typography variant="caption" color="text.disabled" className="block">
+              <Typography
+                variant="caption"
+                color="text.disabled"
+                className="block"
+              >
                 There is no redirect site provided.
               </Typography>
             }
           />
         </ListItem>
       ) : (
-        <ListItem className="px-2"
+        <ListItem
+          className="px-2"
           secondaryAction={
             <>
               <IconButton
@@ -112,25 +130,21 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
                 onClose={handleClose}
                 slotProps={{
                   list: {
-                    'aria-labelledby': buttonId,
+                    "aria-labelledby": buttonId,
                   },
                 }}
               >
                 <MenuItem onClick={handleDelete}>
-                  <ListItemIcon sx={{ color: "error.main", }}>
+                  <ListItemIcon sx={{ color: "error.main" }}>
                     <DeleteIcon fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText>
-                    Remove
-                  </ListItemText>
+                  <ListItemText>Remove</ListItemText>
                 </MenuItem>
                 <MenuItem onClick={handleEdit}>
                   <ListItemIcon>
                     <EditIcon fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText>
-                    Edit
-                  </ListItemText>
+                  <ListItemText>Edit</ListItemText>
                 </MenuItem>
               </Menu>
             </>
@@ -147,18 +161,31 @@ const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSitePr
           </ListItemAvatar>
           <ListItemText
             primary={
-              <Typography variant="body2" className="font-medium" color="text.secondary">
+              <Typography
+                variant="body2"
+                className="font-medium"
+                color="text.secondary"
+              >
                 {link.hostname}
               </Typography>
             }
             secondary={
-              <Link variant="caption" color="text.disabled" className="block" href={link.href} target="_blank" rel="noopener noreferrer">
+              <Link
+                variant="caption"
+                color="text.disabled"
+                className="block"
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {link.origin}
               </Link>
             }
           />
-        </ListItem>)}
-    </List>);
+        </ListItem>
+      )}
+    </List>
+  );
 });
 
 export default function Redirect() {
@@ -173,7 +200,9 @@ export default function Redirect() {
         setError(null);
       })
       .catch((err) => {
-        setError(err instanceof z.ZodError ? (z.prettifyError(err)) : (err.message));
+        setError(
+          err instanceof z.ZodError ? z.prettifyError(err) : err.message,
+        );
       });
   };
 
@@ -185,10 +214,14 @@ export default function Redirect() {
   return (
     <Box className="flex flex-col items-center gap-6 p-4 w-full min-h-[calc(100dvh-4rem)]">
       <Typography
-        variant='h5'
+        variant="h5"
         component="h5"
-        sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-        className='w-full max-w-160 p-2 rounded-lg text-center'
+        sx={{
+          borderColor: "divider",
+          backgroundColor: "secondary.main",
+          color: "secondary.contrastText",
+        }}
+        className="w-full max-w-160 p-2 rounded-lg text-center"
         children={"Redirect"}
       />
       <TextField
@@ -237,7 +270,10 @@ export default function Redirect() {
         error={!!error}
         helperText={error}
       />
-      <Divider className="w-full max-w-160" sx={{ borderColor: "divider", borderWidth: 1 }} />
+      <Divider
+        className="w-full max-w-160"
+        sx={{ borderColor: "divider", borderWidth: 1 }}
+      />
       <RedirectSite site={redirectSite} setUrl={setUrl} />
     </Box>
   );

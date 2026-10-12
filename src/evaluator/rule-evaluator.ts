@@ -12,7 +12,11 @@ const RuleEvaluator = async (search: Set<string>): Promise<RuleEvaluatorFn> => {
     const matchFound = !search.isDisjointFrom(blockedKeys);
 
     return matchFound === rule.blocked
-      ? { blocked: true, reason: 'RULE_RESTRICTED', matchedPattern: url.hostname }
+      ? {
+          blocked: true,
+          reason: "RULE_RESTRICTED",
+          matchedPattern: url.hostname,
+        }
       : { blocked: false };
   };
 };

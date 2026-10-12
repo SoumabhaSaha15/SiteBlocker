@@ -1,5 +1,5 @@
 import { defineManifest } from "@crxjs/vite-plugin";
-import pkg from './package.json' with { type: "json" };
+import pkg from "./package.json" with { type: "json" };
 
 export default defineManifest({
   manifest_version: 3,
@@ -11,15 +11,11 @@ export default defineManifest({
     32: "icon/32.png",
     48: "icon/48.png",
     96: "icon/96.png",
-    128: "icon/128.png"
+    128: "icon/128.png",
   },
   action: {},
   background: {
-    service_worker: "src/background.ts"
+    service_worker: "src/background.ts",
   },
-  permissions: [
-    "contextMenus",
-    "storage",
-    "tabs"
-  ]
+  permissions: ["contextMenus", "storage", "tabs"],
 });

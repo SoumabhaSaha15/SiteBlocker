@@ -1,19 +1,23 @@
-import { useEffect, useState } from 'react';
-import MenuIcon from '@mui/icons-material/Menu';
-import DoneIcon from '@mui/icons-material/Done';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
+import { useEffect, useState } from "react";
+import MenuIcon from "@mui/icons-material/Menu";
+import DoneIcon from "@mui/icons-material/Done";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ListItemIcon from '@mui/material/ListItemIcon';
-import { TransitionGroup } from 'react-transition-group';
-import { useSnackbar, type OptionsObject } from 'notistack';
-import { AppList, MenuList, AppMap } from '@/page/apps/index';
+import ListItemIcon from "@mui/material/ListItemIcon";
+import { TransitionGroup } from "react-transition-group";
+import { useSnackbar, type OptionsObject } from "notistack";
+import { AppList, MenuList, AppMap } from "@/page/apps/index";
 import { getSyncedData, downloadJSONFile } from "@/utils/sync";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import PasswordInputField from "@/components/PasswordInputField";
 import { useForm, SubmitHandler, UseFormReset } from "react-hook-form";
 import { passwordSchema, type PasswordFormData } from "@/validator/password";
-import { getPasswordProtected, verifyAppPassword, listenProtectionChanges } from "@/utils/password";
+import {
+  getPasswordProtected,
+  verifyAppPassword,
+  listenProtectionChanges,
+} from "@/utils/password";
 import {
   Box,
   List,
@@ -25,8 +29,8 @@ import {
   ListItem,
   ListItemText,
   ListItemButton,
-  CircularProgress
-} from '@mui/material';
+  CircularProgress,
+} from "@mui/material";
 
 const SNACK_OPTION: OptionsObject = {
   variant: "default",
@@ -37,7 +41,6 @@ const SNACK_OPTION: OptionsObject = {
 const DRAWER_WIDTH = 240;
 
 function App() {
-
   const [app, setApp] = useState<AppList>(AppList.HOME);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -49,7 +52,7 @@ function App() {
 
   const handleDrawerTransitionEnd = () => setIsClosing(false);
 
-  const handleDrawerToggle = () => (!isClosing) && setMobileOpen(!mobileOpen);
+  const handleDrawerToggle = () => !isClosing && setMobileOpen(!mobileOpen);
 
   const drawerContent = (
     <div>
@@ -65,15 +68,18 @@ function App() {
                   setMobileOpen(false);
                 }}
                 sx={{
-                  '&.Mui-selected': {
+                  "&.Mui-selected": {
                     backgroundColor: "action.selected",
-                    '&:hover': {
+                    "&:hover": {
                       backgroundColor: "action.hover",
                     },
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: (theme) => theme.palette.primary.main }} className="mr-2">
+                <ListItemIcon
+                  sx={{ color: (theme) => theme.palette.primary.main }}
+                  className="mr-2"
+                >
                   {icon}
                 </ListItemIcon>
                 <ListItemText primary={name} />
@@ -99,7 +105,7 @@ function App() {
           <IconButton
             aria-label="open drawer"
             onClick={handleDrawerToggle}
-            sx={{ display: { sm: 'none' } }}
+            sx={{ display: { sm: "none" } }}
             children={<MenuIcon />}
           />
           <Typography
@@ -125,8 +131,11 @@ function App() {
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH },
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: DRAWER_WIDTH,
+            },
           }}
           slotProps={{
             root: {
@@ -141,8 +150,11 @@ function App() {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH },
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: DRAWER_WIDTH,
+            },
           }}
           open
         >
@@ -157,7 +169,7 @@ function App() {
       >
         <Toolbar />
         <TransitionGroup>
-          <Collapse timeout={{ enter: 500, exit:500 }} key={app}>
+          <Collapse timeout={{ enter: 500, exit: 500 }} key={app}>
             {AppMap[app]}
           </Collapse>
         </TransitionGroup>
@@ -166,8 +178,13 @@ function App() {
   );
 }
 
-function PasswordForm({ setData }: {
-  setData: (data: PasswordFormData, reset: UseFormReset<PasswordFormData>) => void | Promise<void>
+function PasswordForm({
+  setData,
+}: {
+  setData: (
+    data: PasswordFormData,
+    reset: UseFormReset<PasswordFormData>,
+  ) => void | Promise<void>;
 }) {
   const {
     register,
@@ -176,12 +193,13 @@ function PasswordForm({ setData }: {
     formState: { errors, isSubmitting },
   } = useForm<PasswordFormData>({ resolver: zodResolver(passwordSchema) });
 
-  const formSubmit: SubmitHandler<PasswordFormData> = async (data) => void setData(data, reset);
+  const formSubmit: SubmitHandler<PasswordFormData> = async (data) =>
+    void setData(data, reset);
 
   return (
     <Box
       className="grid min-h-dvh place-items-center w-full p-4 gap-6"
-      sx={{ backgroundColor: theme => theme.palette.background.default }}
+      sx={{ backgroundColor: (theme) => theme.palette.background.default }}
     >
       <Box
         component={"form"}
@@ -190,10 +208,14 @@ function PasswordForm({ setData }: {
         sx={{ backgroundColor: "background.paper" }}
       >
         <Typography
-          variant='h5'
+          variant="h5"
           component="h5"
-          sx={{ borderColor: "divider", backgroundColor: "secondary.main", color: "secondary.contrastText", }}
-          className='w-full max-w-160 p-2 rounded-lg text-center'
+          sx={{
+            borderColor: "divider",
+            backgroundColor: "secondary.main",
+            color: "secondary.contrastText",
+          }}
+          className="w-full max-w-160 p-2 rounded-lg text-center"
           children={"App locked! 🔒"}
         />
 
@@ -232,19 +254,18 @@ function PasswordForm({ setData }: {
           color="error"
           sx={{ minWidth: "min(640px,100%)" }}
           onClick={() => {
-            getSyncedData()
-              .then(data => downloadJSONFile('site_blocker.json', data));
+            getSyncedData().then((data) =>
+              downloadJSONFile("site_blocker.json", data),
+            );
           }}
           children="Export data"
         />
-
       </Box>
     </Box>
   );
 }
 
 export default function PasswordProtectedApp() {
-
   const { enqueueSnackbar } = useSnackbar();
   const [protection, setProtection] = useState<null | boolean>(null);
   const [lock, setLock] = useState<boolean>(true);
@@ -258,7 +279,12 @@ export default function PasswordProtectedApp() {
         setLock(protectedState);
       })
       .catch((err: Error) => {
-        if (!cancelled) enqueueSnackbar({ key: crypto.randomUUID(), message: err.message, ...SNACK_OPTION });
+        if (!cancelled)
+          enqueueSnackbar({
+            key: crypto.randomUUID(),
+            message: err.message,
+            ...SNACK_OPTION,
+          });
       });
 
     const unsubscribe = listenProtectionChanges((change) => {
@@ -276,34 +302,54 @@ export default function PasswordProtectedApp() {
   return (
     <TransitionGroup>
       {protection === null ? (
-        <Collapse timeout={{ enter: 500, exit:500  }} key="app-loading" unmountOnExit>
+        <Collapse
+          timeout={{ enter: 500, exit: 500 }}
+          key="app-loading"
+          unmountOnExit
+        >
           <Box className="grid min-h-dvh place-items-center">
             <CircularProgress aria-label="Loading…" />
           </Box>
         </Collapse>
+      ) : protection && lock ? (
+        <Collapse
+          timeout={{ enter: 500, exit: 500 }}
+          key="password-guard"
+          unmountOnExit
+        >
+          <PasswordForm
+            setData={async (data, reset) => {
+              try {
+                const isverified = await verifyAppPassword(data.password);
+                setLock(!isverified);
+                if (isverified) {
+                  reset();
+                  enqueueSnackbar({
+                    key: crypto.randomUUID(),
+                    message: "App Unlocked ✅",
+                    ...SNACK_OPTION,
+                  });
+                } else
+                  enqueueSnackbar({
+                    key: crypto.randomUUID(),
+                    message: "Incorrect password ❌",
+                    ...SNACK_OPTION,
+                  });
+              } catch (err) {
+                enqueueSnackbar({
+                  key: crypto.randomUUID(),
+                  message: (err as Error).message,
+                  ...SNACK_OPTION,
+                });
+              }
+            }}
+          />
+        </Collapse>
       ) : (
-        (protection && lock) ? (
-          <Collapse timeout={{ enter: 500, exit:500  }} key="password-guard" unmountOnExit>
-            <PasswordForm
-              setData={async (data, reset) => {
-                try {
-                  const isverified = await verifyAppPassword(data.password);
-                  setLock(!isverified);
-                  if (isverified) {
-                    reset();
-                    enqueueSnackbar({ key: crypto.randomUUID(), message: "App Unlocked ✅", ...SNACK_OPTION });
-                  } else enqueueSnackbar({ key: crypto.randomUUID(), message: "Incorrect password ❌", ...SNACK_OPTION });
-                } catch (err) {
-                  enqueueSnackbar({ key: crypto.randomUUID(), message: (err as Error).message, ...SNACK_OPTION });
-                }
-              }}
-            />
-          </Collapse>
-        ) : (
-          <Collapse timeout={{ enter: 500, exit:500 }} key="app" unmountOnExit>
-            <App />
-          </Collapse>
-        ))}
+        <Collapse timeout={{ enter: 500, exit: 500 }} key="app" unmountOnExit>
+          <App />
+        </Collapse>
+      )}
     </TransitionGroup>
-  )
+  );
 }

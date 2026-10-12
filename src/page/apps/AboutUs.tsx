@@ -1,7 +1,7 @@
-import { Fragment } from 'react';
-import { getIcon } from '@/utils/sites';
-import EmailIcon from '@mui/icons-material/Email';
-import LanguageIcon from '@mui/icons-material/Language';
+import { Fragment } from "react";
+import { getIcon } from "@/utils/sites";
+import EmailIcon from "@mui/icons-material/Email";
+import LanguageIcon from "@mui/icons-material/Language";
 import {
   Box,
   Divider,
@@ -18,32 +18,32 @@ import {
   Tooltip,
   Chip,
   Link,
-} from '@mui/material';
+} from "@mui/material";
 
 const PRIMARY_LINKS = [
   {
     tooltip: "My website",
-    link: 'https://soumabha-saha15.vercel.app',
+    link: "https://soumabha-saha15.vercel.app",
     image: LanguageIcon,
   },
   {
     tooltip: "My gmail",
-    link: 'mailto:soumabhasaha1509+portfolio@gmail.com',
+    link: "mailto:soumabhasaha1509+portfolio@gmail.com",
     image: EmailIcon,
   },
 ];
 
 const MY_LINKS = [
-  'https://leetcode.com/u/SoumabhaSaha',
-  'https://github.com/soumabhasaha15',
-  'https://www.facebook.com/WebDude1509',
-  'https://www.linkedin.com/in/soumabha-saha-663816253',
-  'https://hashnode.com/@soumabhasaha15',
-  'https://x.com/SoumabhaSaha15',
-  'https://www.instagram.com/webdude1509',
+  "https://leetcode.com/u/SoumabhaSaha",
+  "https://github.com/soumabhasaha15",
+  "https://www.facebook.com/WebDude1509",
+  "https://www.linkedin.com/in/soumabha-saha-663816253",
+  "https://hashnode.com/@soumabhasaha15",
+  "https://x.com/SoumabhaSaha15",
+  "https://www.instagram.com/webdude1509",
 ];
 
-const openLink = (url: string) => window.open(url, '_blank')?.focus();
+const openLink = (url: string) => window.open(url, "_blank")?.focus();
 
 export default function AboutUs() {
   return (
@@ -53,8 +53,8 @@ export default function AboutUs() {
         elevation={0}
         className="flex flex-row-reverse w-full max-w-160 rounded-2xl overflow-hidden border"
         sx={{
-          borderColor: 'divider',
-          bgcolor: 'background.paper',
+          borderColor: "divider",
+          bgcolor: "background.paper",
         }}
       >
         <Box className="flex flex-col flex-1 min-w-0 justify-between p-2">
@@ -63,22 +63,20 @@ export default function AboutUs() {
               Soumabha Saha
             </Typography>
             <Typography variant="body2" color="text.secondary" className="mt-1">
-              Welcome to my site-blocker browser extension. My links are provided below.
+              Welcome to my site-blocker browser extension. My links are
+              provided below.
             </Typography>
           </CardContent>
 
           {/* Primary Action Buttons */}
           <Box className="flex items-center gap-1.5 px-4 pb-3">
             {PRIMARY_LINKS.map((item) => (
-              <Tooltip title={item.tooltip} key={item.link} placement='top'>
-                <IconButton
-                  onClick={() => openLink(item.link)}
-                  size="small"
-                >
+              <Tooltip title={item.tooltip} key={item.link} placement="top">
+                <IconButton onClick={() => openLink(item.link)} size="small">
                   <Avatar
                     className="w-10 h-10 border"
                     sx={{
-                      borderColor: 'divider',
+                      borderColor: "divider",
                       bgcolor: "background.paper",
                     }}
                     children={<item.image sx={{ color: "primary.main" }} />}
@@ -97,15 +95,19 @@ export default function AboutUs() {
         />
       </Card>
 
-      <Divider className="w-full max-w-160"  children={<Chip label="Other links" size="medium" />} sx={{ borderColor: (theme) => theme.palette.divider }} />
+      <Divider
+        className="w-full max-w-160"
+        children={<Chip label="Other links" size="medium" />}
+        sx={{ borderColor: (theme) => theme.palette.divider }}
+      />
 
       {/* Social / Portfolio Links List */}
       <List
         dense={false}
         className="w-full max-w-160 rounded-lg overflow-clip border"
         sx={{
-          borderColor: 'divider',
-          bgcolor: 'background.paper',
+          borderColor: "divider",
+          bgcolor: "background.paper",
         }}
       >
         {MY_LINKS.map((item, index) => {
@@ -115,8 +117,8 @@ export default function AboutUs() {
               <ListItem
                 className="px-2"
                 sx={{
-                  '&:hover': {
-                    backgroundColor: 'action.hover',
+                  "&:hover": {
+                    backgroundColor: "action.hover",
                   },
                 }}
               >
@@ -124,14 +126,17 @@ export default function AboutUs() {
                   <Avatar
                     alt={hostname}
                     src={getIcon(origin)}
-                    variant='square'
+                    variant="square"
                     className="w-10 h-10 rounded-md"
                     sx={{ backgroundColor: "background.paper" }}
                   />
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <Typography variant="body2" className="font-medium truncate">
+                    <Typography
+                      variant="body2"
+                      className="font-medium truncate"
+                    >
                       {hostname}
                     </Typography>
                   }
@@ -148,7 +153,10 @@ export default function AboutUs() {
                 />
               </ListItem>
               {MY_LINKS.length - 1 !== index && (
-                <Divider component="li" sx={{ borderColor: 'divider', width: "100%" }} />
+                <Divider
+                  component="li"
+                  sx={{ borderColor: "divider", width: "100%" }}
+                />
               )}
             </Fragment>
           );

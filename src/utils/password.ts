@@ -1,16 +1,15 @@
-import { KEYS } from '@/config/storage-keys';
-import browser from 'webextension-polyfill';
+import { KEYS } from "@/config/storage-keys";
+import browser from "webextension-polyfill";
 
 export async function hashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 const PASSWORD_KEY = KEYS.passwordHash;
 const PASSWORD_PROTECTED_KEY = KEYS.passwordProtected;
-
 
 export async function setAppPassword(newPassword: string): Promise<void> {
   const hash = await hashPassword(newPassword);
@@ -22,11 +21,17 @@ export async function getPasswordProtected(): Promise<boolean> {
   return result[PASSWORD_PROTECTED_KEY] === true;
 }
 
-export async function setPasswordProtected(passwordProtected: boolean): Promise<void> {
-  await browser.storage.local.set({ [PASSWORD_PROTECTED_KEY]: passwordProtected });
+export async function setPasswordProtected(
+  passwordProtected: boolean,
+): Promise<void> {
+  await browser.storage.local.set({
+    [PASSWORD_PROTECTED_KEY]: passwordProtected,
+  });
 }
 
-export async function verifyAppPassword(inputPassword: string): Promise<boolean> {
+export async function verifyAppPassword(
+  inputPassword: string,
+): Promise<boolean> {
   const result = await browser.storage.local.get(PASSWORD_KEY);
   const storedHash = result[PASSWORD_KEY];
   if (!storedHash) return false;
@@ -34,16 +39,20 @@ export async function verifyAppPassword(inputPassword: string): Promise<boolean>
   return inputHash === storedHash;
 }
 
-
-export const listenProtectionChanges = (setProtection: (v: boolean ) => void) => {
-  const event = (changes: Record<string, browser.Storage.StorageChange>, area: string) => {
+export const listenProtectionChanges = (
+  setProtection: (v: boolean) => void,
+) => {
+  const event = (
+    changes: Record<string, browser.Storage.StorageChange>,
+    area: string,
+  ) => {
     if (area !== "local") return;
-      const change = changes[PASSWORD_PROTECTED_KEY];
-      if (change) {
-        const protectedState = change.newValue === true;
-        setProtection(protectedState);
-      }
-  }
+    const change = changes[PASSWORD_PROTECTED_KEY];
+    if (change) {
+      const protectedState = change.newValue === true;
+      setProtection(protectedState);
+    }
+  };
   browser.storage.onChanged.addListener(event);
   return () => browser.storage.onChanged.removeListener(event);
-}
+};

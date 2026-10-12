@@ -3,8 +3,9 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { TextField, IconButton, InputAdornment } from "@mui/material";
 
-export default function PasswordInputField(props: React.ComponentProps<typeof TextField>) {
-
+export default function PasswordInputField(
+  props: React.ComponentProps<typeof TextField>,
+) {
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
@@ -22,7 +23,7 @@ export default function PasswordInputField(props: React.ComponentProps<typeof Te
                 onClick={() => setShowPassword((prev) => !prev)}
                 edge="end"
                 className="rounded-md"
-                color='primary'
+                color="primary"
               >
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
