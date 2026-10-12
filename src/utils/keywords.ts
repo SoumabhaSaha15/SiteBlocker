@@ -1,3 +1,4 @@
+import z from "zod";
 import browser from "webextension-polyfill";
 import { KEYS } from "@/config/storage-keys";
 import keywordsValidator, { type Keyword } from "@/validator/keywords";
@@ -15,6 +16,15 @@ export const addRestrictedKeywords = async (kw: string) => {
   await browser.storage.local.set({ [KEYWORDS_KEY]: res[KEYWORDS_KEY] });
 };
 
+export const setRestrictedKeywords = async (keywords: Keyword[]) => {
+  console.log(keywords, "ln20");
+  await browser.storage.local.set({
+    [KEYWORDS_KEY]: z
+      .array(keywordsValidator)
+      .transform((item) => [...new Set(item)])
+      .parse(keywords),
+  });
+};
 export const listenBlockedKeywordChanges = (
   setKeywords: (v: string[] | ((prev: string[]) => string[])) => void,
 ) => {

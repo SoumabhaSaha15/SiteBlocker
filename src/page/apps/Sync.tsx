@@ -7,7 +7,7 @@ import { darkTheme } from "@uiw/react-json-view/dark";
 import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/FileUpload";
 import { lightTheme } from "@uiw/react-json-view/light";
-import { Paper, useTheme, Box, Tab, Button, Typography } from "@mui/material";
+import { Box, Tab, Paper, Button, useTheme, Typography } from "@mui/material";
 import {
   getSyncedData,
   downloadJSONFile,
@@ -92,6 +92,29 @@ export default function Sync() {
           </Button>
         </TabPanel>
         <TabPanel value="2" tabIndex={0} className="min-w-[min(640px,80%)] p-1">
+          <Paper
+            elevation={0}
+            className="w-full rounded-lg p-2"
+            variant="outlined"
+            rows={4}
+            component={"textarea"}
+            placeholder="place your json here"
+            sx={{
+              backgroundColor: isDarkMode
+                ? theme.palette.grey[900]
+                : theme.palette.grey[50],
+              borderColor: "palette.divider",
+              fontFamily: "monospace",
+              fontSize: "0.875rem",
+              overflowX: "auto",
+              resize: "none",
+              "& .w-rjv": {
+                backgroundColor: "transparent !important", // Inherit MUI background into the viewer
+              },
+            }}
+          />
+          <br />
+          <br />
           <Button
             variant="contained"
             className="w-full rounded-lg"

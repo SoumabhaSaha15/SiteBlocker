@@ -1,5 +1,6 @@
 import Add from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
+import { enqueueSnackbar } from "notistack";
 import AbcIcon from "@mui/icons-material/Abc";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { type Keyword } from "@/validator/keywords";
@@ -8,6 +9,7 @@ import {
   getRestrictedKeywords,
   addRestrictedKeywords,
   listenBlockedKeywordChanges,
+  setRestrictedKeywords,
 } from "@/utils/keywords";
 import {
   Box,
@@ -23,6 +25,7 @@ import {
   ListItemAvatar,
   InputAdornment,
 } from "@mui/material";
+import { prettifyError, ZodError } from "zod";
 
 function KeywordsView({ keywords }: { keywords: Keyword[] }) {
   return (
@@ -59,8 +62,9 @@ function KeywordsView({ keywords }: { keywords: Keyword[] }) {
           </Collapse>
         ) : (
           keywords.map((item, index) => {
+            console.log(typeof item);
             return (
-              <Collapse>
+              <Collapse key={item}>
                 <ListItem
                   className="px-1"
                   sx={{ "&:hover": { bgcolor: "action.hover" } }}
@@ -70,7 +74,34 @@ function KeywordsView({ keywords }: { keywords: Keyword[] }) {
                       size="small"
                       color="error"
                       aria-label="delete"
-                      onClick={() => {}}
+                      onClick={() => {
+                        console.log(keywords);
+                        setRestrictedKeywords(
+                          keywords.filter((key) => {
+                            console.log(typeof key);
+                            return key !== item;
+                          }),
+                        )
+                          .then(() => {
+                            enqueueSnackbar(`${item} deleted.`, {
+                              anchorOrigin: {
+                                horizontal: "center",
+                                vertical: "bottom",
+                              },
+                            });
+                          })
+                          .catch((error: unknown) => {
+                            enqueueSnackbar(
+                              `${prettifyError(error as ZodError)} deleted.`,
+                              {
+                                anchorOrigin: {
+                                  horizontal: "center",
+                                  vertical: "bottom",
+                                },
+                              },
+                            );
+                          });
+                      }}
                       sx={{ borderRadius: 1 }}
                     >
                       <DeleteIcon fontSize="small" />
