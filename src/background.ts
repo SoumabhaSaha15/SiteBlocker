@@ -14,9 +14,8 @@ browser.runtime.onInstalled.addListener((details) => {
         [KEYS.blockExtensionPage]: false,
         [KEYS.contextMenuShortcut]: true,
       })
-      .then(() => {
-        console.log("Keys initialized.");
-      });
+      .then(() => console.log("Keys initialized."))
+      .catch(console.error);
   }
 });
 
@@ -54,11 +53,23 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 const CTX_MENU_ID = "webdude-site_blocker";
 const CTX_ACTION_REPO_ID = "webdude-action-repo";
 
-browser.runtime.onInstalled.addListener(() => {
+browser.storage.onChanged.addListener((changes, area) => {
+  if (area === "local" && KEYS.contextMenuShortcut in changes) {
+    browser.contextMenus.update(CTX_MENU_ID, {
+      visible: Boolean(changes[KEYS.contextMenuShortcut].newValue),
+    });
+  }
+});
+
+browser.runtime.onInstalled.addListener(async () => {
+  const { [KEYS.contextMenuShortcut]: enabled = false } =
+    await browser.storage.local.get(KEYS.contextMenuShortcut);
   browser.contextMenus.create({
     id: CTX_MENU_ID,
     title: "Block this site",
     contexts: ["selection", "page", "link"], // Choose where it appears
+    documentUrlPatterns: ["http://*/*", "https://*/*"],
+    visible: !!enabled,
   });
   browser.contextMenus.create({
     id: CTX_ACTION_REPO_ID,

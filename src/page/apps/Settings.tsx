@@ -5,9 +5,14 @@ import PasswordIcon from "@mui/icons-material/Lock";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SecurityIcon from "@mui/icons-material/Security";
 import ExtensionIcon from "@mui/icons-material/Extension";
-import { useSnackbar, type OptionsObject } from "notistack";
+import { type OptionsObject, enqueueSnackbar } from "notistack";
 import PasswordInputField from "@/components/PasswordInputField";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNewTwoTone";
+import {
+  getContextMenuStatus,
+  setContextMenuStatus,
+  listenContextMenuStatusChanges,
+} from "@/utils/settings";
 import {
   useForm,
   type SubmitHandler,
@@ -143,9 +148,9 @@ function PasswordDialog({
 }
 
 export default function Settings() {
-  const { enqueueSnackbar } = useSnackbar();
   const [isActive, setIsActive] = useState<WorkingStatus>(false);
   const [protection, setProtection] = useState<boolean | null>(null);
+  const [isContextMenuvisible, setIsContextMenuVisible] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -157,9 +162,7 @@ export default function Settings() {
       })
       .catch((err: Error) => {
         if (!cancelled)
-          enqueueSnackbar({
-            key: crypto.randomUUID(),
-            message: err.message,
+          enqueueSnackbar(err.message, {
             ...SNACK_OPTION,
           });
       });
@@ -173,11 +176,20 @@ export default function Settings() {
       cancelled = true;
       unsubscribe();
     };
-  }, [enqueueSnackbar]);
+  }, []);
 
   useEffect(() => {
     getWorkingStatus().then(setIsActive);
-    return listenStatusChanges(setIsActive);
+    getContextMenuStatus().then(setIsContextMenuVisible);
+
+    const unsubscribeWorkingStatus = listenStatusChanges(setIsActive);
+    const unsubscribeContextMenuVisibleStatus = listenContextMenuStatusChanges(
+      setIsContextMenuVisible,
+    );
+    return () => {
+      unsubscribeWorkingStatus();
+      unsubscribeContextMenuVisibleStatus();
+    };
   }, []);
 
   return (
@@ -240,12 +252,8 @@ export default function Settings() {
           </ListItem>
           <Divider
             component="li"
-            sx={{
-              borderColor: "divider",
-              width: "100%",
-              borderWidth: 1,
-              my: 0.5,
-            }}
+            className="w-full my-0.5 border"
+            sx={{ borderColor: "divider" }}
           />
           <ListItem
             className="h-14 px-2"
@@ -294,12 +302,8 @@ export default function Settings() {
           </ListItem>
           <Divider
             component="li"
-            sx={{
-              borderColor: "divider",
-              width: "100%",
-              borderWidth: 1,
-              my: 0.5,
-            }}
+            className="w-full my-0.5 border"
+            sx={{ borderColor: "divider" }}
           />
           <ListItem className="h-14 px-2" secondaryAction={<Switch />}>
             <ListItemAvatar className="min-w-0 mr-3">
@@ -323,18 +327,33 @@ export default function Settings() {
           </ListItem>
           <Divider
             component="li"
-            sx={{
-              borderColor: "divider",
-              width: "100%",
-              borderWidth: 1,
-              my: 0.5,
-            }}
+            className="w-full my-0.5 border"
+            sx={{ borderColor: "divider" }}
           />
-          <ListItem className="h-14 px-2" secondaryAction={<Switch checked />}>
+          <ListItem
+            className="h-14 px-2"
+            secondaryAction={
+              <Switch
+                onChange={(_, checked) => {
+                  setContextMenuStatus(checked).then(() => {
+                    enqueueSnackbar(
+                      `Context menu ${checked ? "enabled" : "disabled"}.`,
+                      { ...SNACK_OPTION },
+                    );
+                  });
+                }}
+                checked={isContextMenuvisible}
+              />
+            }
+          >
             <ListItemAvatar className="min-w-0 mr-3">
-              <Avatar className="w-10 h-10 rounded-md">
+              <Avatar
+                className="w-10 h-10 rounded-md"
+                sx={{
+                  backgroundColor: isContextMenuvisible ? "green" : "red",
+                }}
+              >
                 <SecurityIcon fontSize="medium" />
-                {/* {(field.value) ? <RemoveCircleTwoToneIcon fontSize='medium' /> : <DoneIcon fontSize='medium' />} */}
               </Avatar>
             </ListItemAvatar>
             <ListItemText
@@ -346,7 +365,7 @@ export default function Settings() {
               }
               secondary={
                 <Typography variant="body2" className="font-medium truncate">
-                  Block
+                  {isContextMenuvisible ? "Enabled" : "Disabled"}
                 </Typography>
               }
             />
@@ -362,24 +381,18 @@ export default function Settings() {
             await setPasswordProtected(true);
             reset();
             setIsOpen(false);
-            enqueueSnackbar({
-              key: crypto.randomUUID(),
-              message: `Password updated.`,
+            enqueueSnackbar(`Password updated.`, {
               ...SNACK_OPTION,
             });
           } catch (error) {
             console.error(error);
-            enqueueSnackbar({
-              key: crypto.randomUUID(),
-              message: `An error occured`,
+            enqueueSnackbar(`An error occured`, {
               ...SNACK_OPTION,
             });
           }
         }}
         dialogOnClose={(_, reason) => {
-          enqueueSnackbar({
-            key: crypto.randomUUID(),
-            message: `Dialog closed: ${reason}.`,
+          enqueueSnackbar(`Dialog closed: ${reason}.`, {
             ...SNACK_OPTION,
           });
           setIsOpen(false);
