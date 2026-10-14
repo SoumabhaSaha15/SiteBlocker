@@ -26,16 +26,27 @@ browser.action.onClicked.addListener(() => {
 });
 
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  const isRunning = await getWorkingStatus();
+  if (!isRunning) return;
+
   if (changeInfo.status === "loading" && tab.url) {
     const extensionUrlPrefix = browser.runtime.getURL("");
     if (tab.url.startsWith(extensionUrlPrefix)) return;
-    const isRunning = await getWorkingStatus();
-    if (!isRunning) return;
-    let result: ResolvedResult = await ResolveSite(tab.url);
-    if (!result.blocked) return;
     const defaultGuard = new URL(
       browser.runtime.getURL("src/redirect/index.html"),
     );
+    if (tab.url.includes("://extensions")) {
+      const { [KEYS.blockExtensionPage]: blocked = false } =
+        await browser.storage.local.get(KEYS.blockExtensionPage);
+      if (!blocked) return;
+      defaultGuard.search = new URLSearchParams({
+        reason: "EXTENSION_PAGE_BLOCKED",
+        matchedPattern: tab.url || "",
+      }).toString();
+      browser.tabs.update(tabId, { url: defaultGuard.toString() });
+    }
+    let result: ResolvedResult = await ResolveSite(tab.url);
+    if (!result.blocked) return;
     defaultGuard.search = new URLSearchParams(
       result as unknown as Record<string, string>,
     ).toString();

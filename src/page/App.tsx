@@ -56,7 +56,6 @@ function App() {
 
   const drawerContent = (
     <div>
-      <Toolbar />
       <Box className="overflow-auto">
         <List>
           {MenuList.map(({ name, icon, appKey }) => (
@@ -96,6 +95,7 @@ function App() {
       {/* Responsive AppBar */}
       <AppBar
         position="fixed"
+        className="m-1 w-[calc(100%-8px)] rounded-md"
         sx={{
           backgroundColor: "primary.main",
           zIndex: (theme) => theme.zIndex.drawer + 1,
@@ -135,6 +135,10 @@ function App() {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: DRAWER_WIDTH,
+              borderRadius: 2,
+              mt: 17,
+              mx: 1,
+              height: "calc(100dvh - 72px)",
             },
           }}
           slotProps={{
@@ -154,6 +158,10 @@ function App() {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: DRAWER_WIDTH,
+              borderRadius: 2,
+              mt: 19,
+              mx: 1,
+              height: "calc(100dvh - 80px)",
             },
           }}
           open

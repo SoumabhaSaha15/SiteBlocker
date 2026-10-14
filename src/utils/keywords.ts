@@ -17,7 +17,6 @@ export const addRestrictedKeywords = async (kw: string) => {
 };
 
 export const setRestrictedKeywords = async (keywords: Keyword[]) => {
-  console.log(keywords, "ln20");
   await browser.storage.local.set({
     [KEYWORDS_KEY]: z
       .array(keywordsValidator)

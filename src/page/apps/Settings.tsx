@@ -12,6 +12,9 @@ import {
   getContextMenuStatus,
   setContextMenuStatus,
   listenContextMenuStatusChanges,
+  getExtensionPageBlockStatus,
+  setExtensionPageBlockStatus,
+  listenExtensionPageBlockStatusChanges,
 } from "@/utils/settings";
 import {
   useForm,
@@ -150,7 +153,8 @@ function PasswordDialog({
 export default function Settings() {
   const [isActive, setIsActive] = useState<WorkingStatus>(false);
   const [protection, setProtection] = useState<boolean | null>(null);
-  const [isContextMenuvisible, setIsContextMenuVisible] = useState(false);
+  const [isContextMenuVisible, setIsContextMenuVisible] = useState(false);
+  const [isExtensionPageBlocked, setIsExtensionPageBlocked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -181,13 +185,16 @@ export default function Settings() {
   useEffect(() => {
     getWorkingStatus().then(setIsActive);
     getContextMenuStatus().then(setIsContextMenuVisible);
-
+    getExtensionPageBlockStatus().then(setIsExtensionPageBlocked);
     const unsubscribeWorkingStatus = listenStatusChanges(setIsActive);
     const unsubscribeContextMenuVisibleStatus = listenContextMenuStatusChanges(
       setIsContextMenuVisible,
     );
+    const unsubscribeExtensionPageStatus =
+      listenExtensionPageBlockStatusChanges(setIsExtensionPageBlocked);
     return () => {
       unsubscribeWorkingStatus();
+      unsubscribeExtensionPageStatus();
       unsubscribeContextMenuVisibleStatus();
     };
   }, []);
@@ -229,7 +236,6 @@ export default function Settings() {
           >
             <ListItemAvatar className="min-w-0 mr-3">
               <Avatar
-                // variant="rounded"
                 className="w-10 h-10 rounded-md"
                 sx={{ bgcolor: isActive ? "green" : "red" }}
               >
@@ -305,9 +311,29 @@ export default function Settings() {
             className="w-full my-0.5 border"
             sx={{ borderColor: "divider" }}
           />
-          <ListItem className="h-14 px-2" secondaryAction={<Switch />}>
+          <ListItem
+            className="h-14 px-2"
+            secondaryAction={
+              <Switch
+                onChange={(_, check) => {
+                  setExtensionPageBlockStatus(check)
+                    .then(() => {
+                      enqueueSnackbar(
+                        `Extension page ${check ? "Blocked" : "Unblocked"}`,
+                        { ...SNACK_OPTION },
+                      );
+                    })
+                    .catch(console.log);
+                }}
+                checked={isExtensionPageBlocked}
+              />
+            }
+          >
             <ListItemAvatar className="min-w-0 mr-3">
-              <Avatar className="w-10 h-10 rounded-md">
+              <Avatar
+                className="w-10 h-10 rounded-md"
+                sx={{ bgcolor: isExtensionPageBlocked ? "green" : "red" }}
+              >
                 <ExtensionIcon fontSize="medium" />
               </Avatar>
             </ListItemAvatar>
@@ -320,7 +346,7 @@ export default function Settings() {
               }
               secondary={
                 <Typography variant="body2" className="font-medium truncate">
-                  Yes
+                  {isExtensionPageBlocked ? "Yes" : "No"}
                 </Typography>
               }
             />
@@ -342,7 +368,7 @@ export default function Settings() {
                     );
                   });
                 }}
-                checked={isContextMenuvisible}
+                checked={isContextMenuVisible}
               />
             }
           >
@@ -350,7 +376,7 @@ export default function Settings() {
               <Avatar
                 className="w-10 h-10 rounded-md"
                 sx={{
-                  backgroundColor: isContextMenuvisible ? "green" : "red",
+                  backgroundColor: isContextMenuVisible ? "green" : "red",
                 }}
               >
                 <SecurityIcon fontSize="medium" />
@@ -365,7 +391,7 @@ export default function Settings() {
               }
               secondary={
                 <Typography variant="body2" className="font-medium truncate">
-                  {isContextMenuvisible ? "Enabled" : "Disabled"}
+                  {isContextMenuVisible ? "Enabled" : "Disabled"}
                 </Typography>
               }
             />

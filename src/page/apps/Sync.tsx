@@ -5,8 +5,8 @@ import JsonView from "@uiw/react-json-view";
 import TabContext from "@mui/lab/TabContext";
 import { darkTheme } from "@uiw/react-json-view/dark";
 import DownloadIcon from "@mui/icons-material/Download";
-import UploadIcon from "@mui/icons-material/FileUpload";
 import { lightTheme } from "@uiw/react-json-view/light";
+import UploadIcon from "@mui/icons-material/SyncRounded";
 import { Box, Tab, Paper, Button, useTheme, Typography } from "@mui/material";
 import {
   getSyncedData,
@@ -49,7 +49,7 @@ export default function Sync() {
           className="min-w-[min(640px,80%)]"
           sx={{ borderBottom: 1, borderColor: "divider", borderRadius: 1 }}
         >
-          <Tab label="Export Data" value="1" className="rounded-l-lg" />
+          <Tab label="Export Data" value="1" className="rounded-l-sm" />
           <Tab label="Import Data" value="2" />
         </TabList>
         <TabPanel value="1" tabIndex={0} className="min-w-[min(640px,80%)] p-1">
@@ -87,9 +87,8 @@ export default function Sync() {
             type="submit"
             startIcon={<DownloadIcon />}
             onClick={() => downloadJSONFile("site_blocker.json", data)}
-          >
-            Download as json
-          </Button>
+            children="Download as json"
+          />
         </TabPanel>
         <TabPanel value="2" tabIndex={0} className="min-w-[min(640px,80%)] p-1">
           <Paper
@@ -121,9 +120,8 @@ export default function Sync() {
             size="large"
             type="submit"
             startIcon={<UploadIcon />}
-          >
-            Upload json
-          </Button>
+            children="Sync json"
+          />
         </TabPanel>
       </TabContext>
     </Box>

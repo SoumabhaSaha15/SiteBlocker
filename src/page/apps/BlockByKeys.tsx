@@ -2,9 +2,9 @@ import Add from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 import { enqueueSnackbar } from "notistack";
 import AbcIcon from "@mui/icons-material/Abc";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { type Keyword } from "@/validator/keywords";
 import { TransitionGroup } from "react-transition-group";
+import DeleteIcon from "@mui/icons-material/RemoveCircleRounded";
 import {
   getRestrictedKeywords,
   addRestrictedKeywords,
@@ -62,7 +62,6 @@ function KeywordsView({ keywords }: { keywords: Keyword[] }) {
           </Collapse>
         ) : (
           keywords.map((item, index) => {
-            console.log(typeof item);
             return (
               <Collapse key={item}>
                 <ListItem
@@ -75,10 +74,8 @@ function KeywordsView({ keywords }: { keywords: Keyword[] }) {
                       color="error"
                       aria-label="delete"
                       onClick={() => {
-                        console.log(keywords);
                         setRestrictedKeywords(
                           keywords.filter((key) => {
-                            console.log(typeof key);
                             return key !== item;
                           }),
                         )
@@ -171,7 +168,7 @@ export default function BlockByKeys() {
       <TextField
         fullWidth
         className="max-w-160"
-
+        value={word}
         slotProps={{
           input: {
             className: "rounded-2xl",
