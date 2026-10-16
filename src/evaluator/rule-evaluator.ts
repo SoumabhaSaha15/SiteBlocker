@@ -1,8 +1,12 @@
-import { getRuleList } from "@/utils/rules";
+// import { getRuleList } from "@/utils/rules";
+import { type RulesType } from "@/validator/rules";
 import type { RuleEvaluatorFn } from "@/types/interfaces";
 
-const RuleEvaluator = async (search: Set<string>): Promise<RuleEvaluatorFn> => {
-  const rules = await getRuleList();
+const RuleEvaluator = (
+  rules: RulesType[],
+  search: Set<string>,
+): RuleEvaluatorFn => {
+  // const rules = await getRuleList();
 
   return (url: URL) => {
     const rule = rules.find((value) => value.site === url.origin);

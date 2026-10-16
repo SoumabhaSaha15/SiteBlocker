@@ -269,7 +269,7 @@ export default function Settings() {
                   if (check == true) {
                     setIsOpen(true);
                   } else {
-                    setPasswordProtected(false);
+                    setPasswordProtected(false).then().catch(console.error);
                   }
                 }}
                 checked={!!protection}
@@ -320,7 +320,9 @@ export default function Settings() {
                     .then(() => {
                       enqueueSnackbar(
                         `Extension page ${check ? "Blocked" : "Unblocked"}`,
-                        { ...SNACK_OPTION },
+                        {
+                          ...SNACK_OPTION,
+                        },
                       );
                     })
                     .catch(console.log);
@@ -361,12 +363,16 @@ export default function Settings() {
             secondaryAction={
               <Switch
                 onChange={(_, checked) => {
-                  setContextMenuStatus(checked).then(() => {
-                    enqueueSnackbar(
-                      `Context menu ${checked ? "enabled" : "disabled"}.`,
-                      { ...SNACK_OPTION },
-                    );
-                  });
+                  setContextMenuStatus(checked)
+                    .then(() => {
+                      enqueueSnackbar(
+                        `Context menu ${checked ? "enabled" : "disabled"}.`,
+                        {
+                          ...SNACK_OPTION,
+                        },
+                      );
+                    })
+                    .catch(console.error);
                 }}
                 checked={isContextMenuVisible}
               />

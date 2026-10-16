@@ -3,27 +3,33 @@ import TabPanel from "@mui/lab/TabPanel";
 import { useEffect, useState } from "react";
 import JsonView from "@uiw/react-json-view";
 import TabContext from "@mui/lab/TabContext";
+import { prettifyError, ZodError } from "zod";
 import { darkTheme } from "@uiw/react-json-view/dark";
 import DownloadIcon from "@mui/icons-material/Download";
 import { lightTheme } from "@uiw/react-json-view/light";
 import UploadIcon from "@mui/icons-material/SyncRounded";
+import { enqueueSnackbar, type SnackbarOrigin } from "notistack";
 import { Box, Tab, Paper, Button, useTheme, Typography } from "@mui/material";
 import {
   getSyncedData,
   downloadJSONFile,
   listenDataChanges,
+  importDataAsJson,
 } from "@/utils/sync";
 
+const ANCHOR_ORIGIN: SnackbarOrigin = {
+  horizontal: "center",
+  vertical: "bottom",
+};
 export default function Sync() {
   const theme = useTheme();
   const [value, setValue] = useState("1");
-
-  const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
-
+  const [jsonInput, setJsonInput] = useState("");
   const isDarkMode = theme.palette.mode === "dark";
   const [data, setData] = useState<Record<string, unknown>>({});
+  const handleChange = (_event: React.SyntheticEvent, newValue: string) =>
+    setValue(newValue);
+
   useEffect(() => {
     getSyncedData().then(setData);
     return listenDataChanges(setData);
@@ -55,14 +61,10 @@ export default function Sync() {
         <TabPanel value="1" tabIndex={0} className="min-w-[min(640px,80%)] p-1">
           <Paper
             elevation={0}
-            className="w-full rounded-lg"
+            className="w-full rounded-lg p-2"
             variant="outlined"
             sx={{
-              p: 2,
-              backgroundColor: isDarkMode
-                ? theme.palette.grey[900]
-                : theme.palette.grey[50],
-              borderColor: theme.palette.divider,
+              borderColor: "divider",
               fontFamily: "monospace",
               fontSize: "0.875rem",
               overflowX: "auto",
@@ -84,7 +86,6 @@ export default function Sync() {
             variant="contained"
             className="w-full rounded-lg"
             size="large"
-            type="submit"
             startIcon={<DownloadIcon />}
             onClick={() => downloadJSONFile("site_blocker.json", data)}
             children="Download as json"
@@ -93,22 +94,22 @@ export default function Sync() {
         <TabPanel value="2" tabIndex={0} className="min-w-[min(640px,80%)] p-1">
           <Paper
             elevation={0}
-            className="w-full rounded-lg p-2"
+            className="w-full rounded-lg p-2 text-sm font-mono font-medium"
             variant="outlined"
             rows={4}
             component={"textarea"}
+            value={jsonInput}
+            onChange={({ target }) => setJsonInput(target.value)}
             placeholder="place your json here"
             sx={{
-              backgroundColor: isDarkMode
-                ? theme.palette.grey[900]
-                : theme.palette.grey[50],
-              borderColor: "palette.divider",
-              fontFamily: "monospace",
-              fontSize: "0.875rem",
-              overflowX: "auto",
-              resize: "none",
-              "& .w-rjv": {
-                backgroundColor: "transparent !important", // Inherit MUI background into the viewer
+              resize: "vertical",
+              borderColor: "divider",
+              outline: "none",
+              "&:focus": {
+                outline: "none",
+              },
+              "&:focus-visible": {
+                outline: "none",
               },
             }}
           />
@@ -118,9 +119,28 @@ export default function Sync() {
             variant="contained"
             className="w-full rounded-lg"
             size="large"
-            type="submit"
             startIcon={<UploadIcon />}
             children="Sync json"
+            onClick={() => {
+              try {
+                importDataAsJson(jsonInput);
+              } catch (error) {
+                if (error instanceof ZodError) {
+                  prettifyError(error)
+                    .split("✖")
+                    .filter((msg) => !!msg.length)
+                    .forEach((msg) =>
+                      enqueueSnackbar(`✖ ${msg}`, {
+                        anchorOrigin: ANCHOR_ORIGIN,
+                      }),
+                    );
+                } else if (error instanceof Error)
+                  enqueueSnackbar(error.message, {
+                    anchorOrigin: ANCHOR_ORIGIN,
+                  });
+                else console.error(error);
+              }
+            }}
           />
         </TabPanel>
       </TabContext>

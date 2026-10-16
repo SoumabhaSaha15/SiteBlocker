@@ -148,7 +148,7 @@ export default function BlockByKeys() {
   };
 
   useEffect(() => {
-    getRestrictedKeywords().then(setKeywords);
+    getRestrictedKeywords().then(setKeywords).catch(console.error);
     return listenBlockedKeywordChanges(setKeywords);
   }, []);
 

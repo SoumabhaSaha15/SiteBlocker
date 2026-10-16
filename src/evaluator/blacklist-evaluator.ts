@@ -1,9 +1,9 @@
-import { getBlockedSites } from "@/utils/sites";
+// import { getBlockedSites } from "@/utils/sites";
 import type { BlacklistEvaluatorFn } from "@/types/interfaces";
 
-const BlacklistEvaluator = async (): Promise<BlacklistEvaluatorFn> => {
-  const sites = await getBlockedSites();
-  const blacklist = new Set(sites);
+const BlacklistEvaluator = (blacklist: Set<string>): BlacklistEvaluatorFn => {
+  // const sites = await getBlockedSites();
+  // const blacklist = new Set(sites);
 
   return (url: URL) => {
     const isBlacklisted = blacklist.has(url.origin);

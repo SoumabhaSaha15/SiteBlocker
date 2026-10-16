@@ -1,5 +1,5 @@
-import { KEYS } from "@/config/storage-keys";
 import browser from "webextension-polyfill";
+import { KEYS } from "@/config/storage-keys";
 import {
   type RulesType,
   rulesSchema,

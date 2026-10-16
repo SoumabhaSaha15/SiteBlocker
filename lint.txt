@@ -1,0 +1,417 @@
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+    ,-[src/page/apps/AboutUs.tsx:82:21]
+ 81 |                     }}
+ 82 |                     children={<item.image sx={{ color: "primary.main" }} />}
+    :                     ^^^^^^^^
+ 83 |                   />
+    `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/AboutUs.tsx:100:9]
+  99 |         className="w-full max-w-160"
+ 100 |         children={<Chip label="Other links" size="medium" />}
+     :         ^^^^^^^^
+ 101 |         sx={{ borderColor: (theme) => theme.palette.divider }}
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/AboutUs.tsx:149:23]
+ 148 |                       rel="noopener noreferrer"
+ 149 |                       children={origin}
+     :                       ^^^^^^^^
+ 150 |                       className="truncate max-w-70 sm:max-w-none block"
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+    ,-[src/page/apps/Sync.tsx:49:9]
+ 48 |         className="w-full max-w-160 p-2 rounded-lg text-center"
+ 49 |         children={"Data Sync"}
+    :         ^^^^^^^^
+ 50 |       />
+    `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+    ,-[src/page/apps/Sync.tsx:91:13]
+ 90 |             onClick={() => downloadJSONFile("site_blocker.json", data)}
+ 91 |             children="Download as json"
+    :             ^^^^^^^^
+ 92 |           />
+    `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/Sync.tsx:123:13]
+ 122 |             startIcon={<UploadIcon />}
+ 123 |             children="Sync json"
+     :             ^^^^^^^^
+ 124 |             onClick={() => {
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  x eslint(no-redeclare): 'Redirect' is already defined.
+   ,-[src/page/apps/Redirect.tsx:6:15]
+ 5 | import DeleteIcon from "@mui/icons-material/Delete";
+ 6 | import type { Redirect } from "@/validator/redirect";
+   :               ^^^^|^^^
+   :                   `-- 'Redirect' is already defined.
+ 7 | import MoreVertIcon from "@mui/icons-material/MoreVert";
+   `----
+     ,-[src/page/apps/Redirect.tsx:191:25]
+ 190 | 
+ 191 | export default function Redirect() {
+     :                         ^^^^|^^^
+     :                             `-- It can not be redeclared here.
+ 192 |   const [url, setUrl] = useState<string>("");
+     `----
+  help: Use a different variable name or remove the duplicate declaration.
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/Redirect.tsx:225:9]
+ 224 |         className="w-full max-w-160 p-2 rounded-lg text-center"
+ 225 |         children={"Redirect"}
+     :         ^^^^^^^^
+ 226 |       />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/App.tsx:109:13]
+ 108 |             sx={{ display: { sm: "none" } }}
+ 109 |             children={<MenuIcon />}
+     :             ^^^^^^^^
+ 110 |           />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/App.tsx:116:13]
+ 115 |             sx={{ color: "primary.contrastText" }}
+ 116 |             children={"Site Blocker"}
+     :             ^^^^^^^^
+ 117 |           />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/App.tsx:227:11]
+ 226 |           className="w-full max-w-160 p-2 rounded-lg text-center"
+ 227 |           children={"App locked! 🔒"}
+     :           ^^^^^^^^
+ 228 |         />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/App.tsx:253:11]
+ 252 |           disabled={isSubmitting}
+ 253 |           children="Submit"
+     :           ^^^^^^^^
+ 254 |         />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/App.tsx:269:11]
+ 268 |           }}
+ 269 |           children="Export data"
+     :           ^^^^^^^^
+ 270 |         />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/Settings.tsx:105:11]
+ 104 |           className="w-full p-2 rounded-lg text-center"
+ 105 |           children={"Setup password"}
+     :           ^^^^^^^^
+ 106 |         />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/Settings.tsx:146:11]
+ 145 |           startIcon={<DoneIcon />}
+ 146 |           children="Submit"
+     :           ^^^^^^^^
+ 147 |         />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/Settings.tsx:217:11]
+ 216 |           className="w-full max-w-160 p-2 rounded-lg text-center"
+ 217 |           children={"Settings"}
+     :           ^^^^^^^^
+ 218 |         />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/Rules.tsx:103:17]
+ 102 |                 className="w-full max-w-160 p-2 rounded-lg text-center"
+ 103 |                 children={"Rules list"}
+     :                 ^^^^^^^^
+ 104 |               />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/Rules.tsx:371:11]
+ 370 |           className="w-full max-w-160 p-2 rounded-lg text-center"
+ 371 |           children={"Rules form"}
+     :           ^^^^^^^^
+ 372 |         />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/BlockedSites.tsx:127:25]
+ 126 |                         target="_blank"
+ 127 |                         children={urlObject.host}
+     :                         ^^^^^^^^
+ 128 |                       />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/BlockedSites.tsx:182:9]
+ 181 |         className="w-full max-w-160 p-2 rounded-lg text-center truncate"
+ 182 |         children={"Blocked Sites"}
+     :         ^^^^^^^^
+ 183 |       />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+    ,-[src/page/apps/Password.tsx:77:11]
+ 76 |           className="w-full max-w-160 p-2 rounded-lg text-center truncate"
+ 77 |           children={"Reset password 🔐"}
+    :           ^^^^^^^^
+ 78 |         />
+    `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/Password.tsx:118:11]
+ 117 |           startIcon={<Save />}
+ 118 |           children={isDisabled ? "Enable the app-lock first" : "Save"}
+     :           ^^^^^^^^
+ 119 |         />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! unicorn(no-empty-file): Empty files are not allowed.
+   ,-[src/types/theme.d.ts:1:1]
+ 1 | ,-> // // theme.d.ts
+ 2 | |   // declare module '@mui/material/styles' {
+ 3 | |   //   interface Shape {
+ 4 | `-> //     borderRadius: number;
+ 5 |     //     xs?: number;
+   `----
+  help: Delete this file or add some code to it.
+
+  ! react(no-children-prop): Avoid passing children using a prop.
+     ,-[src/page/apps/BlockByKeys.tsx:166:9]
+ 165 |         className="w-full max-w-160 p-2 rounded-lg text-center truncate"
+ 166 |         children="Block Keys/Words"
+     :         ^^^^^^^^
+ 167 |       />
+     `----
+  help: The canonical way to pass children in React is to use JSX elements
+
+  ! typescript(no-misused-spread): Using the spread operator on a function without additional properties can cause unexpected behavior.
+    ,-[src/components/PasswordInputField.tsx:18:11]
+ 17 |         input: {
+ 18 |           ...props.slotProps?.input,
+    :           ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 19 |           endAdornment: (
+    `----
+  help: Did you forget to call the function?
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+    ,-[src/background.ts:23:3]
+ 22 |      browser.action.onClicked.addListener(() => {
+ 23 | ,-->   browser.tabs.create({
+ 24 | ||       url: browser.runtime.getURL("src/page/index.html"),
+ 25 | |-->   });
+    : `----- This unhandled promise-like value has type `Promise<Tab>`.
+ 26 |      });
+    `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+     ,-[src/utils/sync.ts:100:5]
+  99 |     if (area !== "local") return;
+ 100 |     getSyncedData().then(setData);
+     :     ^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^
+     :                   `-- This unhandled promise-like value has type `Promise<void>`.
+ 101 |   };
+     `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+    ,-[src/page/apps/Rules.tsx:66:5]
+ 65 |   useEffect(() => {
+ 66 |     getRuleList().then((data) => setRules(data));
+    :     ^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^
+    :                           `-- This unhandled promise-like value has type `Promise<void>`.
+ 67 |     return listenRulesChanges(setRules);
+    `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+     ,-[src/page/apps/Rules.tsx:151:27]
+ 150 |                              handleDelete={() => {
+ 151 | ,-->                           deleteRule(item.site).then(() => {
+ 152 | ||                               enqueueSnackbar("Rule saved ✅.", {
+ 153 | ||                                 anchorOrigin: {
+ 154 | ||                                   horizontal: "center",
+ 155 | ||                                   vertical: "bottom",
+ 156 | ||                                 },
+ 157 | ||                               });
+ 158 | |-->                           });
+     : `----- This unhandled promise-like value has type `Promise<void>`.
+ 159 |                              }}
+     `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+    ,-[src/background.ts:46:7]
+ 45 |       }).toString();
+ 46 |       browser.tabs.update(tabId, { url: defaultGuard.toString() });
+    :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    :                                     `-- This unhandled promise-like value has type `Promise<Tab>`.
+ 47 |     }
+    `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+    ,-[src/background.ts:69:5]
+ 68 |        if (area === "local" && KEYS.contextMenuShortcut in changes) {
+ 69 | ,-->     browser.contextMenus.update(CTX_MENU_ID, {
+ 70 | ||         visible: Boolean(changes[KEYS.contextMenuShortcut].newValue),
+ 71 | |-->     });
+    : `----- This unhandled promise-like value has type `Promise<void>`.
+ 72 |        }
+    `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+     ,-[src/background.ts:100:7]
+  99 |          case CTX_ACTION_REPO_ID: {
+ 100 | ,-->       browser.tabs.create({
+ 101 | ||           url: "https://github.com/SoumabhaSaha15/SiteBlocker",
+ 102 | |-->       });
+     : `----- This unhandled promise-like value has type `Promise<Tab>`.
+ 103 |            break;
+     `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+    ,-[src/page/apps/Password.tsx:35:5]
+ 34 |   useEffect(() => {
+ 35 |     getPasswordProtected().then((data) => setIsDisabled(!data));
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    :                                  `-- This unhandled promise-like value has type `Promise<void>`.
+ 36 |   }, []);
+    `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+    ,-[src/page/apps/Password.tsx:44:7]
+ 43 |     if (verified) {
+ 44 |       setAppPassword(newPassword);
+    :       ^^^^^^^^^^^^^|^^^^^^^^^^^^^^
+    :                    `-- This unhandled promise-like value has type `Promise<void>`.
+ 45 |       reset();
+    `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+     ,-[src/page/apps/Redirect.tsx:210:5]
+ 209 |   useEffect(() => {
+ 210 |     getRedirect().then(setRedirectSite);
+     :     ^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^
+     :                      `-- This unhandled promise-like value has type `Promise<void>`.
+ 211 |     return listenRedirectChanges(setRedirectSite);
+     `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+     ,-[src/page/apps/BlockedSites.tsx:167:5]
+ 166 |   useEffect(() => {
+ 167 |     getBlockedSites().then(setSites);
+     :     ^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^
+     :                     `-- This unhandled promise-like value has type `Promise<void>`.
+ 168 |     return listenBlockedSitesChanges(setSites);
+     `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+     ,-[src/page/apps/Settings.tsx:186:5]
+ 185 |   useEffect(() => {
+ 186 |     getWorkingStatus().then(setIsActive);
+     :     ^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^
+     :                       `-- This unhandled promise-like value has type `Promise<void>`.
+ 187 |     getContextMenuStatus().then(setIsContextMenuVisible);
+     `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+     ,-[src/page/apps/Settings.tsx:187:5]
+ 186 |     getWorkingStatus().then(setIsActive);
+ 187 |     getContextMenuStatus().then(setIsContextMenuVisible);
+     :     ^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^
+     :                               `-- This unhandled promise-like value has type `Promise<void>`.
+ 188 |     getExtensionPageBlockStatus().then(setIsExtensionPageBlocked);
+     `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+     ,-[src/page/apps/Settings.tsx:188:5]
+ 187 |     getContextMenuStatus().then(setIsContextMenuVisible);
+ 188 |     getExtensionPageBlockStatus().then(setIsExtensionPageBlocked);
+     :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     :                                   `-- This unhandled promise-like value has type `Promise<void>`.
+ 189 |     const unsubscribeWorkingStatus = listenStatusChanges(setIsActive);
+     `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+    ,-[src/page/apps/Sync.tsx:34:5]
+ 33 |   useEffect(() => {
+ 34 |     getSyncedData().then(setData);
+    :     ^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^
+    :                   `-- This unhandled promise-like value has type `Promise<void>`.
+ 35 |     return listenDataChanges(setData);
+    `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+     ,-[src/page/apps/Sync.tsx:126:17]
+ 125 |               try {
+ 126 |                 importDataAsJson(jsonInput);
+     :                 ^^^^^^^^^^^^^|^^^^^^^^^^^^^^
+     :                              `-- This unhandled promise-like value has type `Promise<void>`.
+ 127 |               } catch (error) {
+     `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+  ! typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+     ,-[src/page/App.tsx:265:13]
+ 264 |                onClick={() => {
+ 265 | ,-->             getSyncedData().then((data) =>
+ 266 | ||                 downloadJSONFile("site_blocker.json", data),
+ 267 | |-->             );
+     : `----- This unhandled promise-like value has type `Promise<void>`.
+ 268 |                }}
+     `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+Found 41 warnings and 1 error.
+Finished in 2.2s on 42 files with 146 rules using 16 threads.

@@ -1,4 +1,5 @@
-export type BlockReason = "DOMAIN_BLACKLISTED" | "RULE_RESTRICTED" | "SCHEDULE";
+export type BlockReason =
+  "DOMAIN_BLACKLISTED" | "RULE_RESTRICTED" | "SCHEDULE" | "BLOCKED_KEYS";
 
 export interface ResolvedResult {
   blocked: boolean;
