@@ -63,11 +63,7 @@ function SiteList({ sites }: SiteListProps) {
                   </Typography>
                 }
                 secondary={
-                  <Typography
-                    variant="caption"
-                    color="text.disabled"
-                    className="block truncate"
-                  >
+                  <Typography variant="caption" color="text.disabled" className="block truncate">
                     There is no blacklisted site.
                   </Typography>
                 }
@@ -89,9 +85,7 @@ function SiteList({ sites }: SiteListProps) {
                       color="error"
                       aria-label="delete"
                       onClick={() => {
-                        setBlockedSites(
-                          sites.filter((site) => item !== site),
-                        ).catch(console.error);
+                        setBlockedSites(sites.filter((site) => item !== site)).catch(console.error);
                       }}
                       sx={{ borderRadius: 1 }}
                     >
@@ -111,10 +105,7 @@ function SiteList({ sites }: SiteListProps) {
                   </ListItemAvatar>
                   <ListItemText
                     primary={
-                      <Typography
-                        variant="body2"
-                        className="font-medium truncate"
-                      >
+                      <Typography variant="body2" className="font-medium truncate">
                         {urlObject.hostname}
                       </Typography>
                     }
@@ -157,14 +148,13 @@ export default function BlockedSites() {
         setError(null);
       })
       .catch((err: Error) => {
-        const msg =
-          err instanceof z.ZodError ? z.prettifyError(err) : err.message;
+        const msg = err instanceof z.ZodError ? z.prettifyError(err) : err.message;
         setError(msg);
       });
   };
 
   useEffect(() => {
-    getBlockedSites().then(setSites);
+    getBlockedSites().then(setSites).catch(console.error);
     return listenBlockedSitesChanges(setSites);
   }, []);
 
@@ -224,10 +214,7 @@ export default function BlockedSites() {
         error={!!error}
         helperText={error}
       />
-      <Divider
-        className="w-full max-w-160"
-        sx={{ borderColor: "divider", borderWidth: 1 }}
-      />
+      <Divider className="w-full max-w-160" sx={{ borderColor: "divider", borderWidth: 1 }} />
       <SiteList sites={sites} />
     </Box>
   );

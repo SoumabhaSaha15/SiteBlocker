@@ -1,13 +1,22 @@
 import React from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { TextField, IconButton, InputAdornment } from "@mui/material";
+import {
+  TextField,
+  IconButton,
+  InputAdornment,
+  type TextFieldProps,
+  type OutlinedInputProps,
+} from "@mui/material";
 
-export default function PasswordInputField(
-  props: React.ComponentProps<typeof TextField>,
-) {
+type Props = Omit<TextFieldProps, "slotProps"> & {
+  slotProps?: Omit<NonNullable<TextFieldProps["slotProps"]>, "input"> & {
+    input?: Partial<OutlinedInputProps>; // object only, no function form
+  };
+};
+
+export default function PasswordInputField(props: Props) {
   const [showPassword, setShowPassword] = React.useState(false);
-
   return (
     <TextField
       {...props}

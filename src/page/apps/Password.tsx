@@ -5,15 +5,8 @@ import { Box, Button, Typography } from "@mui/material";
 import PasswordInputField from "@/components/PasswordInputField";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { enqueueSnackbar, type OptionsObject } from "notistack";
-import {
-  resetPasswordSchema,
-  type ResetPasswordSchema,
-} from "@/validator/password";
-import {
-  setAppPassword,
-  verifyAppPassword,
-  getPasswordProtected,
-} from "@/utils/password";
+import { resetPasswordSchema, type ResetPasswordSchema } from "@/validator/password";
+import { setAppPassword, verifyAppPassword, getPasswordProtected } from "@/utils/password";
 
 const SNACK_OPTION: OptionsObject = {
   variant: "default",
@@ -32,16 +25,15 @@ export default function Password() {
   });
 
   useEffect(() => {
-    getPasswordProtected().then((data) => setIsDisabled(!data));
+    getPasswordProtected()
+      .then((data) => setIsDisabled(!data))
+      .catch(console.error);
   }, []);
 
-  const formSubmit: SubmitHandler<ResetPasswordSchema> = async ({
-    oldPassword,
-    newPassword,
-  }) => {
+  const formSubmit: SubmitHandler<ResetPasswordSchema> = async ({ oldPassword, newPassword }) => {
     const verified = await verifyAppPassword(oldPassword);
     if (verified) {
-      setAppPassword(newPassword);
+      setAppPassword(newPassword).catch(console.error);
       reset();
       enqueueSnackbar({
         key: crypto.randomUUID(),

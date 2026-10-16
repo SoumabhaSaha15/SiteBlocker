@@ -16,15 +16,8 @@ import {
   setExtensionPageBlockStatus,
   listenExtensionPageBlockStatusChanges,
 } from "@/utils/settings";
-import {
-  useForm,
-  type SubmitHandler,
-  type UseFormReset,
-} from "react-hook-form";
-import {
-  passwordSetupSchema,
-  type PasswordSetupFormData,
-} from "@/validator/password";
+import { useForm, type SubmitHandler, type UseFormReset } from "react-hook-form";
+import { passwordSetupSchema, type PasswordSetupFormData } from "@/validator/password";
 import {
   getWorkingStatus,
   setWorkingStatus,
@@ -69,10 +62,7 @@ function PasswordDialog({
     data: PasswordSetupFormData,
     reset: UseFormReset<PasswordSetupFormData>,
   ) => Promise<void>;
-  dialogOnClose: (
-    e: Record<string, unknown>,
-    reason: "backdropClick" | "escapeKeyDown",
-  ) => void;
+  dialogOnClose: (e: Record<string, unknown>, reason: "backdropClick" | "escapeKeyDown") => void;
 }) {
   const {
     register,
@@ -183,13 +173,12 @@ export default function Settings() {
   }, []);
 
   useEffect(() => {
-    getWorkingStatus().then(setIsActive);
-    getContextMenuStatus().then(setIsContextMenuVisible);
-    getExtensionPageBlockStatus().then(setIsExtensionPageBlocked);
+    getWorkingStatus().then(setIsActive).catch(console.error);
+    getContextMenuStatus().then(setIsContextMenuVisible).catch(console.error);
+    getExtensionPageBlockStatus().then(setIsExtensionPageBlocked).catch(console.error);
     const unsubscribeWorkingStatus = listenStatusChanges(setIsActive);
-    const unsubscribeContextMenuVisibleStatus = listenContextMenuStatusChanges(
-      setIsContextMenuVisible,
-    );
+    const unsubscribeContextMenuVisibleStatus =
+      listenContextMenuStatusChanges(setIsContextMenuVisible);
     const unsubscribeExtensionPageStatus =
       listenExtensionPageBlockStatusChanges(setIsExtensionPageBlocked);
     return () => {
@@ -228,17 +217,11 @@ export default function Settings() {
           <ListItem
             className="h-14 px-2"
             secondaryAction={
-              <Switch
-                onChange={(_, checked) => setWorkingStatus(checked)}
-                checked={isActive}
-              />
+              <Switch onChange={(_, checked) => setWorkingStatus(checked)} checked={isActive} />
             }
           >
             <ListItemAvatar className="min-w-0 mr-3">
-              <Avatar
-                className="w-10 h-10 rounded-md"
-                sx={{ bgcolor: isActive ? "green" : "red" }}
-              >
+              <Avatar className="w-10 h-10 rounded-md" sx={{ bgcolor: isActive ? "green" : "red" }}>
                 <PowerSettingsNewIcon fontSize="medium" />
               </Avatar>
             </ListItemAvatar>
@@ -281,8 +264,7 @@ export default function Settings() {
               <Avatar
                 className="w-10 h-10 rounded-md"
                 sx={{
-                  backgroundColor:
-                    protection === null ? "gray" : protection ? "green" : "red",
+                  backgroundColor: protection === null ? "gray" : protection ? "green" : "red",
                 }}
               >
                 <PasswordIcon fontSize="medium" />
@@ -297,11 +279,7 @@ export default function Settings() {
               }
               secondary={
                 <Typography variant="body2" className="font-medium truncate">
-                  {protection === null
-                    ? "Loading..."
-                    : protection
-                      ? "Enabled"
-                      : "Disabled"}
+                  {protection === null ? "Loading..." : protection ? "Enabled" : "Disabled"}
                 </Typography>
               }
             />
@@ -318,12 +296,9 @@ export default function Settings() {
                 onChange={(_, check) => {
                   setExtensionPageBlockStatus(check)
                     .then(() => {
-                      enqueueSnackbar(
-                        `Extension page ${check ? "Blocked" : "Unblocked"}`,
-                        {
-                          ...SNACK_OPTION,
-                        },
-                      );
+                      enqueueSnackbar(`Extension page ${check ? "Blocked" : "Unblocked"}`, {
+                        ...SNACK_OPTION,
+                      });
                     })
                     .catch(console.log);
                 }}
@@ -365,12 +340,9 @@ export default function Settings() {
                 onChange={(_, checked) => {
                   setContextMenuStatus(checked)
                     .then(() => {
-                      enqueueSnackbar(
-                        `Context menu ${checked ? "enabled" : "disabled"}.`,
-                        {
-                          ...SNACK_OPTION,
-                        },
-                      );
+                      enqueueSnackbar(`Context menu ${checked ? "enabled" : "disabled"}.`, {
+                        ...SNACK_OPTION,
+                      });
                     })
                     .catch(console.error);
                 }}

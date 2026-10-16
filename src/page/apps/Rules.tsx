@@ -15,18 +15,8 @@ import { rulesSchema, type RulesType } from "@/validator/rules";
 import AddRuleIcon from "@mui/icons-material/FormatListBulletedAdd";
 import RemoveCircleTwoToneIcon from "@mui/icons-material/RemoveCircleTwoTone";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNewTwoTone";
-import {
-  saveRule,
-  getRuleList,
-  listenRulesChanges,
-  deleteRule,
-} from "@/utils/rules";
-import {
-  useForm,
-  Controller,
-  type SubmitHandler,
-  type UseFormReset,
-} from "react-hook-form";
+import { saveRule, getRuleList, listenRulesChanges, deleteRule } from "@/utils/rules";
+import { useForm, Controller, type SubmitHandler, type UseFormReset } from "react-hook-form";
 import {
   Box,
   Fab,
@@ -63,7 +53,9 @@ export default function Rules() {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    getRuleList().then((data) => setRules(data));
+    void getRuleList()
+      .then((data) => setRules(data))
+      .catch(console.error);
     return listenRulesChanges(setRules);
   }, []);
 
@@ -81,9 +73,7 @@ export default function Rules() {
                     resetData();
                     enqueueSnackbar("Rule saved ✅.");
                   })
-                  .catch((err: Error) =>
-                    enqueueSnackbar(err.message, { variant: "error" }),
-                  )
+                  .catch((err: Error) => enqueueSnackbar(err.message, { variant: "error" }))
                   .finally(() => setMode((prev) => !prev));
               }}
             />
@@ -114,29 +104,18 @@ export default function Rules() {
                 {!rules.length ? (
                   <ListItem className="h-14 px-2">
                     <ListItemAvatar className="min-w-0 mr-3">
-                      <Avatar
-                        className="w-10 h-10 rounded-md"
-                        sx={{ backgroundColor: "red" }}
-                      >
+                      <Avatar className="w-10 h-10 rounded-md" sx={{ backgroundColor: "red" }}>
                         <RuleIcon fontSize="medium" />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
                       primary={
-                        <Typography
-                          variant="body2"
-                          className="font-medium"
-                          color="text.secondary"
-                        >
+                        <Typography variant="body2" className="font-medium" color="text.secondary">
                           No Rules
                         </Typography>
                       }
                       secondary={
-                        <Typography
-                          variant="caption"
-                          color="text.disabled"
-                          className="block"
-                        >
+                        <Typography variant="caption" color="text.disabled" className="block">
                           No rules created
                         </Typography>
                       }
@@ -148,14 +127,16 @@ export default function Rules() {
                       <RulePreview
                         rule={item}
                         handleDelete={() => {
-                          deleteRule(item.site).then(() => {
-                            enqueueSnackbar("Rule saved ✅.", {
-                              anchorOrigin: {
-                                horizontal: "center",
-                                vertical: "bottom",
-                              },
-                            });
-                          });
+                          deleteRule(item.site)
+                            .then(() => {
+                              enqueueSnackbar("Rule saved ✅.", {
+                                anchorOrigin: {
+                                  horizontal: "center",
+                                  vertical: "bottom",
+                                },
+                              });
+                            })
+                            .catch(console.error);
                         }}
                         handleEdit={() => {
                           setFormData(item);
@@ -294,11 +275,7 @@ const RulePreview = ({ rule, handleDelete, handleEdit }: RulePreviewProps) => {
         </ListItemAvatar>
         <ListItemText
           primary={
-            <Typography
-              variant="body2"
-              className="font-medium truncate"
-              color="text.secondary"
-            >
+            <Typography variant="body2" className="font-medium truncate" color="text.secondary">
               {rule.site}
             </Typography>
           }
@@ -349,8 +326,7 @@ const RulesForm = ({
     defaultValues: defaultData,
   });
 
-  const formSubmit: SubmitHandler<RulesType> = async (data) =>
-    setData(data, reset);
+  const formSubmit: SubmitHandler<RulesType> = async (data) => setData(data, reset);
   return (
     <Box className="min-h-[calc(100dvh-4rem)] grid place-items-center p-4">
       <Box
@@ -409,14 +385,7 @@ const RulesForm = ({
                 renderValue={(props, getProps) =>
                   props.map((option, index) => {
                     const { key, ...tagProps } = getProps({ index });
-                    return (
-                      <Chip
-                        label={option}
-                        size="small"
-                        key={key}
-                        {...tagProps}
-                      />
-                    );
+                    return <Chip label={option} size="small" key={key} {...tagProps} />;
                   })
                 }
                 renderInput={(params) => (
@@ -454,9 +423,7 @@ const RulesForm = ({
             render={({ field }) => (
               <ListItem
                 className="h-14 px-2"
-                secondaryAction={
-                  <Switch {...field} checked={Boolean(field.value)} />
-                }
+                secondaryAction={<Switch {...field} checked={Boolean(field.value)} />}
               >
                 <ListItemAvatar className="min-w-0 mr-3">
                   <Avatar
@@ -498,9 +465,7 @@ const RulesForm = ({
             render={({ field }) => (
               <ListItem
                 className="h-14 px-2"
-                secondaryAction={
-                  <Switch {...field} checked={Boolean(field.value)} />
-                }
+                secondaryAction={<Switch {...field} checked={Boolean(field.value)} />}
               >
                 <ListItemAvatar className="min-w-0 mr-3">
                   <Avatar

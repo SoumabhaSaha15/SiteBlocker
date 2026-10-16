@@ -23,22 +23,14 @@ import {
   Typography,
   ListItemIcon,
 } from "@mui/material";
-import {
-  setRedirect,
-  deleteRedirect,
-  getRedirect,
-  listenRedirectChanges,
-} from "@/utils/redirect";
+import { setRedirect, deleteRedirect, getRedirect, listenRedirectChanges } from "@/utils/redirect";
 
 interface RedirectSiteProps {
   site: Redirect | null;
   setUrl: (value: string | ((prevState: string) => string)) => void;
 }
 
-const RedirectSite = memo(function RedirectSite({
-  site,
-  setUrl,
-}: RedirectSiteProps) {
+const RedirectSite = memo(function RedirectSite({ site, setUrl }: RedirectSiteProps) {
   const id = "redirect";
   const link = useMemo(() => {
     if (!site) return null;
@@ -86,20 +78,12 @@ const RedirectSite = memo(function RedirectSite({
           </ListItemAvatar>
           <ListItemText
             primary={
-              <Typography
-                variant="body2"
-                className="font-medium"
-                color="text.secondary"
-              >
+              <Typography variant="body2" className="font-medium" color="text.secondary">
                 Redirects unavailable
               </Typography>
             }
             secondary={
-              <Typography
-                variant="caption"
-                color="text.disabled"
-                className="block"
-              >
+              <Typography variant="caption" color="text.disabled" className="block">
                 There is no redirect site provided.
               </Typography>
             }
@@ -161,11 +145,7 @@ const RedirectSite = memo(function RedirectSite({
           </ListItemAvatar>
           <ListItemText
             primary={
-              <Typography
-                variant="body2"
-                className="font-medium"
-                color="text.secondary"
-              >
+              <Typography variant="body2" className="font-medium" color="text.secondary">
                 {link.hostname}
               </Typography>
             }
@@ -188,7 +168,7 @@ const RedirectSite = memo(function RedirectSite({
   );
 });
 
-export default function Redirect() {
+export default function RedirectPage() {
   const [url, setUrl] = useState<string>("");
   const [redirectSite, setRedirectSite] = useState<Redirect | null>(null);
   const [error, setError] = useState<null | string>(null);
@@ -200,14 +180,12 @@ export default function Redirect() {
         setError(null);
       })
       .catch((err) => {
-        setError(
-          err instanceof z.ZodError ? z.prettifyError(err) : err.message,
-        );
+        setError(err instanceof z.ZodError ? z.prettifyError(err) : err.message);
       });
   };
 
   useEffect(() => {
-    getRedirect().then(setRedirectSite);
+    getRedirect().then(setRedirectSite).catch(console.error);
     return listenRedirectChanges(setRedirectSite);
   }, []);
 
@@ -270,10 +248,7 @@ export default function Redirect() {
         error={!!error}
         helperText={error}
       />
-      <Divider
-        className="w-full max-w-160"
-        sx={{ borderColor: "divider", borderWidth: 1 }}
-      />
+      <Divider className="w-full max-w-160" sx={{ borderColor: "divider", borderWidth: 1 }} />
       <RedirectSite site={redirectSite} setUrl={setUrl} />
     </Box>
   );

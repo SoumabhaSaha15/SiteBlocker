@@ -10,12 +10,7 @@ import { lightTheme } from "@uiw/react-json-view/light";
 import UploadIcon from "@mui/icons-material/SyncRounded";
 import { enqueueSnackbar, type SnackbarOrigin } from "notistack";
 import { Box, Tab, Paper, Button, useTheme, Typography } from "@mui/material";
-import {
-  getSyncedData,
-  downloadJSONFile,
-  listenDataChanges,
-  importDataAsJson,
-} from "@/utils/sync";
+import { getSyncedData, downloadJSONFile, listenDataChanges, importDataAsJson } from "@/utils/sync";
 
 const ANCHOR_ORIGIN: SnackbarOrigin = {
   horizontal: "center",
@@ -27,11 +22,10 @@ export default function Sync() {
   const [jsonInput, setJsonInput] = useState("");
   const isDarkMode = theme.palette.mode === "dark";
   const [data, setData] = useState<Record<string, unknown>>({});
-  const handleChange = (_event: React.SyntheticEvent, newValue: string) =>
-    setValue(newValue);
+  const handleChange = (_event: React.SyntheticEvent, newValue: string) => setValue(newValue);
 
   useEffect(() => {
-    getSyncedData().then(setData);
+    void getSyncedData().then(setData).catch(console.error);
     return listenDataChanges(setData);
   }, []);
 
@@ -123,7 +117,7 @@ export default function Sync() {
             children="Sync json"
             onClick={() => {
               try {
-                importDataAsJson(jsonInput);
+                importDataAsJson(jsonInput).catch(console.error);
               } catch (error) {
                 if (error instanceof ZodError) {
                   prettifyError(error)

@@ -19,8 +19,8 @@ browser.runtime.onInstalled.addListener((details) => {
   }
 });
 
-browser.action.onClicked.addListener(() => {
-  browser.tabs.create({
+browser.action.onClicked.addListener(async () => {
+  await browser.tabs.create({
     url: browser.runtime.getURL("src/page/index.html"),
   });
 });
@@ -32,18 +32,17 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === "loading" && tab.url) {
     const extensionUrlPrefix = browser.runtime.getURL("");
     if (tab.url.startsWith(extensionUrlPrefix)) return;
-    const defaultGuard = new URL(
-      browser.runtime.getURL("src/redirect/index.html"),
-    );
+    const defaultGuard = new URL(browser.runtime.getURL("src/redirect/index.html"));
     if (tab.url.includes("://extensions")) {
-      const { [KEYS.blockExtensionPage]: blocked = false } =
-        await browser.storage.local.get(KEYS.blockExtensionPage);
+      const { [KEYS.blockExtensionPage]: blocked = false } = await browser.storage.local.get(
+        KEYS.blockExtensionPage,
+      );
       if (!blocked) return;
       defaultGuard.search = new URLSearchParams({
         reason: "EXTENSION_PAGE_BLOCKED",
         matchedPattern: tab.url || "",
       }).toString();
-      browser.tabs.update(tabId, { url: defaultGuard.toString() });
+      browser.tabs.update(tabId, { url: defaultGuard.toString() }).catch(console.error);
     }
     let result: ResolvedResult = await ResolveSite(tab.url);
     if (!result.blocked) return;
@@ -64,17 +63,18 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 const CTX_MENU_ID = "webdude-site_blocker";
 const CTX_ACTION_REPO_ID = "webdude-action-repo";
 
-browser.storage.onChanged.addListener((changes, area) => {
+browser.storage.onChanged.addListener(async (changes, area) => {
   if (area === "local" && KEYS.contextMenuShortcut in changes) {
-    browser.contextMenus.update(CTX_MENU_ID, {
+    await browser.contextMenus.update(CTX_MENU_ID, {
       visible: Boolean(changes[KEYS.contextMenuShortcut].newValue),
     });
   }
 });
 
 browser.runtime.onInstalled.addListener(async () => {
-  const { [KEYS.contextMenuShortcut]: enabled = false } =
-    await browser.storage.local.get(KEYS.contextMenuShortcut);
+  const { [KEYS.contextMenuShortcut]: enabled = false } = await browser.storage.local.get(
+    KEYS.contextMenuShortcut,
+  );
   browser.contextMenus.create({
     id: CTX_MENU_ID,
     title: "Block this site",
@@ -89,7 +89,7 @@ browser.runtime.onInstalled.addListener(async () => {
   });
 });
 
-browser.contextMenus.onClicked.addListener((info) => {
+browser.contextMenus.onClicked.addListener(async (info) => {
   switch (info.menuItemId) {
     case CTX_MENU_ID: {
       const url = URL.parse(info.pageUrl!);
@@ -97,7 +97,7 @@ browser.contextMenus.onClicked.addListener((info) => {
       break;
     }
     case CTX_ACTION_REPO_ID: {
-      browser.tabs.create({
+      await browser.tabs.create({
         url: "https://github.com/SoumabhaSaha15/SiteBlocker",
       });
       break;

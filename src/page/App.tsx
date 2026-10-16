@@ -13,11 +13,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import PasswordInputField from "@/components/PasswordInputField";
 import { useForm, SubmitHandler, UseFormReset } from "react-hook-form";
 import { passwordSchema, type PasswordFormData } from "@/validator/password";
-import {
-  getPasswordProtected,
-  verifyAppPassword,
-  listenProtectionChanges,
-} from "@/utils/password";
+import { getPasswordProtected, verifyAppPassword, listenProtectionChanges } from "@/utils/password";
 import {
   Box,
   List,
@@ -189,10 +185,7 @@ function App() {
 function PasswordForm({
   setData,
 }: {
-  setData: (
-    data: PasswordFormData,
-    reset: UseFormReset<PasswordFormData>,
-  ) => void | Promise<void>;
+  setData: (data: PasswordFormData, reset: UseFormReset<PasswordFormData>) => void | Promise<void>;
 }) {
   const {
     register,
@@ -201,8 +194,7 @@ function PasswordForm({
     formState: { errors, isSubmitting },
   } = useForm<PasswordFormData>({ resolver: zodResolver(passwordSchema) });
 
-  const formSubmit: SubmitHandler<PasswordFormData> = async (data) =>
-    void setData(data, reset);
+  const formSubmit: SubmitHandler<PasswordFormData> = async (data) => void setData(data, reset);
 
   return (
     <Box
@@ -262,9 +254,9 @@ function PasswordForm({
           color="error"
           sx={{ minWidth: "min(640px,100%)" }}
           onClick={() => {
-            getSyncedData().then((data) =>
-              downloadJSONFile("site_blocker.json", data),
-            );
+            getSyncedData()
+              .then((data) => downloadJSONFile("site_blocker.json", data))
+              .catch(console.error);
           }}
           children="Export data"
         />
@@ -310,21 +302,13 @@ export default function PasswordProtectedApp() {
   return (
     <TransitionGroup>
       {protection === null ? (
-        <Collapse
-          timeout={{ enter: 500, exit: 500 }}
-          key="app-loading"
-          unmountOnExit
-        >
+        <Collapse timeout={{ enter: 500, exit: 500 }} key="app-loading" unmountOnExit>
           <Box className="grid min-h-dvh place-items-center">
             <CircularProgress aria-label="Loading…" />
           </Box>
         </Collapse>
       ) : protection && lock ? (
-        <Collapse
-          timeout={{ enter: 500, exit: 500 }}
-          key="password-guard"
-          unmountOnExit
-        >
+        <Collapse timeout={{ enter: 500, exit: 500 }} key="password-guard" unmountOnExit>
           <PasswordForm
             setData={async (data, reset) => {
               try {

@@ -131,6 +131,7 @@ export default defineConfig({
           "react/purity": "error",
           "react/set-state-in-render": "error",
           "react/unsupported-syntax": "warn",
+          "react/no-children-prop": "allow",
           "react/only-export-components": [
             "error",
             {
