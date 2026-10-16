@@ -9,7 +9,7 @@ import pkg from "./package.json" with { type: "json" };
 
 export default defineConfig({
   staged: {
-    // "*": "vp check --fix",
+    "*": "vp check --fix",
   },
   fmt: {},
   lint: {
